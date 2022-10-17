@@ -1,5 +1,5 @@
 import Course from "../../course/entity/course";
-import InvalidValueException from "../../exceptions/invalid-value-exception";
+import InvalidValueException from "../../@shared/exceptions/invalid-value-exception";
 import Messages from "../../util/messages";
 import StudentClass from "../entity/student-class";
 import { v4 as uuid } from "uuid";

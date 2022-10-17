@@ -1,9 +1,9 @@
-import InvalidValueException from "../../exceptions/invalid-value-exception";
+import InvalidValueException from "../../@shared/exceptions/invalid-value-exception";
 import Messages from "../../util/messages";
 import StudentClass from "./student-class";
 import faker from "faker";
 import { v4 as uuid } from "uuid";
-import BadRequestException from "../../exceptions/bad-request-exception";
+import BadRequestException from "../../@shared/exceptions/bad-request-exception";
 
 describe("Student Class Unit tests", () => {
   it("Fail when create a student class without an ID", () => {
