@@ -1,7 +1,7 @@
 import { Course } from "@/domain/course/entity";
 import { v4 as uuid } from "uuid";
 import faker from "faker";
-import StudentClassService from "./student-class.service";
+import StudentClassService from "../student-class.service";
 import { InvalidValueException } from "@/domain/@shared/exceptions";
 import Messages from "@/domain/@shared/util/messages";
 describe("Student Class Service unit tests", () => {

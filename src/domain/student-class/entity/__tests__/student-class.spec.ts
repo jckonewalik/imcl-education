@@ -3,7 +3,7 @@ import {
   BadRequestException,
 } from "@/domain/@shared/exceptions";
 import Messages from "@/domain/@shared/util/messages";
-import { StudentClass } from "./student-class";
+import { StudentClass } from "../student-class";
 import faker from "faker";
 import { v4 as uuid } from "uuid";
 

@@ -1,6 +1,6 @@
 import { Course } from "@/domain/course/entity";
 import CourseRepository from "@/domain/course/repository/course.repository";
-import CreateCourseUseCase from "./create-course";
+import CreateCourseUseCase from "../create-course";
 import faker from "faker";
 
 class MockCourseRepository implements CourseRepository {
