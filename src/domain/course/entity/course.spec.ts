@@ -55,4 +55,33 @@ describe("Course Unit tests", () => {
     course.inactivate();
     expect(course.active).toBe(false);
   });
+
+  it("Fail when add a duplicated lesson number", () => {
+    const course = new Course(uuid(), faker.name.jobArea(), true);
+    course.addLesson(1, faker.random.words());
+    const t = () => {
+      course.addLesson(1, faker.random.words());
+    };
+    expect(t).toThrow(BadRequestException);
+    expect(t).toThrow(Messages.DUPLICATED_LESSON_NUMBER);
+  });
+  it("Add a lesson", () => {
+    const course = new Course(uuid(), faker.name.jobArea(), true);
+    expect(course.lessons.length).toBe(0);
+    const lessonName = faker.random.words();
+    course.addLesson(1, lessonName);
+    expect(course.lessons.length).toBe(1);
+    expect(course.lessons[0].active).toBe(true);
+    expect(course.lessons[0].number).toBe(1);
+    expect(course.lessons[0].name).toBe(lessonName);
+  });
+
+  it("Remove a lesson", () => {
+    const course = new Course(uuid(), faker.name.jobArea(), true);
+    course.addLesson(1, faker.random.words());
+    const lesson = course.lessons[0];
+
+    course.removeLesson(lesson);
+    expect(course.lessons.length).toBe(0);
+  });
 });
