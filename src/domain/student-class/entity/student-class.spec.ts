@@ -1,5 +1,5 @@
 import InvalidValueException from "../../@shared/exceptions/invalid-value-exception";
-import Messages from "../../util/messages";
+import Messages from "../../@shared/util/messages";
 import StudentClass from "./student-class";
 import faker from "faker";
 import { v4 as uuid } from "uuid";

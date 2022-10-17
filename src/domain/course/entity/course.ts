@@ -1,6 +1,6 @@
 import BadRequestException from "../../@shared/exceptions/bad-request-exception";
 import InvalidValueException from "../../@shared/exceptions/invalid-value-exception";
-import Messages from "../../util/messages";
+import Messages from "../../@shared/util/messages";
 import Lesson from "./lesson";
 import { v4 as uuid } from "uuid";
 export default class Course {

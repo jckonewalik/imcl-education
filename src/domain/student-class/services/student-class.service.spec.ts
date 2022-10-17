@@ -3,7 +3,7 @@ import { v4 as uuid } from "uuid";
 import faker from "faker";
 import StudentClassService from "./student-class.service";
 import InvalidValueException from "../../@shared/exceptions/invalid-value-exception";
-import Messages from "../../util/messages";
+import Messages from "../../@shared/util/messages";
 describe("Student Class Service unit tests", () => {
   it("Fail when create a new class using an inactive course", () => {
     const course = new Course(uuid(), faker.name.jobArea(), false);
