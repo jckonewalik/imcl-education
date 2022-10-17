@@ -1,8 +1,10 @@
-import BadRequestException from "../../@shared/exceptions/bad-request-exception";
-import InvalidValueException from "../../@shared/exceptions/invalid-value-exception";
-import Messages from "../../@shared/util/messages";
+import {
+  BadRequestException,
+  InvalidValueException,
+} from "@/domain/@shared/exceptions";
+import Messages from "@/domain/@shared/util/messages";
 
-export default class Lesson {
+export class Lesson {
   private _id: string;
   private _courseId: string;
   private _number: number;

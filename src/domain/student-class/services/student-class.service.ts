@@ -1,7 +1,7 @@
-import Course from "../../course/entity/course";
-import InvalidValueException from "../../@shared/exceptions/invalid-value-exception";
-import Messages from "../../@shared/util/messages";
-import StudentClass from "../entity/student-class";
+import { Course } from "@/domain/course/entity";
+import { InvalidValueException } from "@/domain/@shared/exceptions";
+import Messages from "@/domain/@shared/util/messages";
+import { StudentClass } from "@/domain/student-class/entity";
 import { v4 as uuid } from "uuid";
 export default class StudentClassService {
   static newStudentClass(course: Course, name: string): StudentClass {

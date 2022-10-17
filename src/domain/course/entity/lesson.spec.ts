@@ -1,9 +1,11 @@
-import InvalidValueException from "../../@shared/exceptions/invalid-value-exception";
-import Messages from "../../@shared/util/messages";
-import Lesson from "./lesson";
+import {
+  InvalidValueException,
+  BadRequestException,
+} from "@/domain/@shared/exceptions";
+import Messages from "@/domain/@shared/util/messages";
+import { Lesson } from "./lesson";
 import faker from "faker";
 import { v4 as uuid } from "uuid";
-import BadRequestException from "../../@shared/exceptions/bad-request-exception";
 
 describe("Lesson Unit tests", () => {
   it("Fail when create a lesson without an ID", () => {

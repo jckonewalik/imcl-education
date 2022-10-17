@@ -1,5 +1,5 @@
-import Course from "../../../domain/course/entity/course";
-import CourseRepository from "../../../domain/course/repository/course.repository";
+import { Course } from "@/domain/course/entity";
+import CourseRepository from "@/domain/course/repository/course.repository";
 import { CreateCourseDto } from "./create-course.dto";
 import { v4 as uuid } from "uuid";
 

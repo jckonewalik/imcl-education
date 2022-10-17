@@ -1,9 +1,11 @@
-import BadRequestException from "../../@shared/exceptions/bad-request-exception";
-import InvalidValueException from "../../@shared/exceptions/invalid-value-exception";
-import Messages from "../../@shared/util/messages";
-import Lesson from "./lesson";
+import {
+  BadRequestException,
+  InvalidValueException,
+} from "@/domain/@shared/exceptions";
+import Messages from "@/domain/@shared/util/messages";
+import { Lesson } from "./lesson";
 import { v4 as uuid } from "uuid";
-export default class Course {
+export class Course {
   private _id: string;
   private _name: string;
   private _active: boolean;
@@ -24,6 +26,7 @@ export default class Course {
     this._id = id;
     this._name = name;
     this._active = active;
+    this._lessons = lessons;
   }
 
   get id(): string {
