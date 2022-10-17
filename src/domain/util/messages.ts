@@ -7,4 +7,5 @@ export default class Messages {
   static MISSING_STUDENT_CLASS_NAME = "Informe o nome da turma";
   static CLASS_ALREADY_ACTIVE = "A turma ja esta ativa";
   static CLASS_ALREADY_INACTIVE = "A turma ja esta inativa";
+  static REQUIRES_ACTIVE_COURSE = "Informe um curso ativo";
 }

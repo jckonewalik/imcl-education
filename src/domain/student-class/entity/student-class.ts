@@ -41,4 +41,16 @@ export default class StudentClass {
   get active(): boolean {
     return this._active;
   }
+
+  get name(): string {
+    return this._name;
+  }
+
+  get id(): string {
+    return this._id;
+  }
+
+  get courseId(): string {
+    return this._courseId;
+  }
 }
