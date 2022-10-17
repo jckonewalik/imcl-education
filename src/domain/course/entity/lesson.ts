@@ -52,4 +52,16 @@ export default class Lesson {
   get active(): boolean {
     return this._active;
   }
+
+  get number(): number {
+    return this._number;
+  }
+
+  get name(): string {
+    return this._name;
+  }
+
+  get id(): string {
+    return this._id;
+  }
 }

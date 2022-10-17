@@ -13,4 +13,5 @@ export default class Messages {
   static MISSING_LESSON_NAME = "Informe o nome da lição";
   static LESSON_ALREADY_ACTIVE = "A lição já esta ativa";
   static LESSON_ALREADY_INACTIVE = "A lição já esta inativa";
+  static DUPLICATED_LESSON_NUMBER = "Já existe uma lição com esse número";
 }
