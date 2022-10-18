@@ -24,6 +24,10 @@ export class UpdateStudentClassUseCase {
       studentClass.changeName(dto.name);
     }
 
+    if (studentClass.active !== dto.active) {
+      dto.active ? studentClass.activate() : studentClass.inactivate();
+    }
+
     this.updateRepo.update(studentClass);
     return studentClass;
   }
