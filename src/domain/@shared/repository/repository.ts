@@ -7,5 +7,5 @@ export interface UpdateRepository<T> {
 }
 
 export interface FindRepository<T> {
-  find(id: string): Promise<T>;
+  find(id: string): Promise<T | undefined>;
 }
