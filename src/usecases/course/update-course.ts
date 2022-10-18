@@ -1,3 +1,5 @@
+import { EntityNotFoundException } from "@/domain/@shared/exceptions";
+import Messages from "@/domain/@shared/util/messages";
 import { Course } from "@/domain/course/entity";
 import {
   FindCourseRepository,
@@ -13,6 +15,10 @@ export class UpdateCourseUseCase {
 
   async update(dto: UpdateCourseDto): Promise<Course> {
     const course = await this.findRepository.find(dto.id);
+
+    if (!course) {
+      throw new EntityNotFoundException(Messages.INVALID_COURSE);
+    }
 
     if (course.name !== dto.name) {
       course.changeName(dto.name);
