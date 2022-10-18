@@ -1,26 +1,25 @@
 import { Course } from "@/domain/course/entity";
-import CourseRepository from "@/domain/course/repository/course.repository";
 import CreateCourseUseCase from "../create-course";
 import faker from "faker";
+import { CreateCourseRepository } from "@/domain/course/repository/course.repository";
 
-class MockCourseRepository implements CourseRepository {
-  async create(entity: Course): Promise<void> {
-    console.log("creating course ...");
-  }
-  async update(entity: Course): Promise<void> {
-    throw new Error("Method not implemented.");
-  }
-  async find(id: string): Promise<Course> {
-    throw new Error("Method not implemented.");
-  }
-}
+type Suts = {
+  createRepository: CreateCourseRepository;
+};
+
+const getSuts = (): Suts => {
+  const repository = {
+    create: async (course: Course) => {},
+  };
+  return { createRepository: repository };
+};
 
 describe("Create Course Use Case", () => {
   it("Create a new Course", async () => {
-    const repository = new MockCourseRepository();
-    const spyCreate = jest.spyOn(repository, "create");
+    const { createRepository } = getSuts();
+    const spyCreate = jest.spyOn(createRepository, "create");
 
-    const useCase = new CreateCourseUseCase(repository);
+    const useCase = new CreateCourseUseCase(createRepository);
 
     const dto = { name: faker.name.jobArea() };
     const result = await useCase.create(dto);
