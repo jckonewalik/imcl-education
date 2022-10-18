@@ -20,9 +20,7 @@ export class Course {
     if (!id) {
       throw new InvalidValueException(Messages.MISSING_COURSE_ID);
     }
-    if (!name) {
-      throw new InvalidValueException(Messages.MISSING_COURSE_NAME);
-    }
+    this.validateName(name);
     this._id = id;
     this._name = name;
     this._active = active;
@@ -66,6 +64,17 @@ export class Course {
 
   removeLesson(lesson: Lesson): void {
     this._lessons = this._lessons.filter((l) => l.id !== lesson.id);
+  }
+
+  changeName(name: string) {
+    this.validateName(name);
+    this._name = name;
+  }
+
+  private validateName(name: string) {
+    if (!name) {
+      throw new InvalidValueException(Messages.MISSING_COURSE_NAME);
+    }
   }
 
   get lessons(): Lesson[] {
