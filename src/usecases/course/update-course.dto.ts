@@ -1,6 +1,7 @@
 export type UpdateCourseDto = {
   id: string;
   name: string;
+  active: boolean;
   lessons?: UpdateLessonDto[];
 };
 

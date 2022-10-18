@@ -24,6 +24,17 @@ export class UpdateCourseUseCase {
       course.changeName(dto.name);
     }
 
+    if (course.active !== dto.active) {
+      dto.active ? course.activate() : course.inactivate();
+    }
+
+    this.updateLessons(course, dto);
+
+    await this.updateRepository.update(course);
+    return course;
+  }
+
+  private updateLessons(course: Course, dto: UpdateCourseDto) {
     const lessonsToAdd = dto.lessons?.filter((l) => l.action === "A") || [];
     const lessonsToRemove = dto.lessons?.filter((l) => l.action === "D") || [];
     const lessonsToInactivate =
@@ -44,8 +55,5 @@ export class UpdateCourseUseCase {
       const entity = course.lessons.find((l) => l.id === lesson.id);
       entity?.inactivate();
     }
-
-    await this.updateRepository.update(course);
-    return course;
   }
 }
