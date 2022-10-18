@@ -6,17 +6,22 @@ import {
   FindCourseRepository,
   UpdateCourseRepository,
 } from "@/domain/course/repository/course.repository";
+import { EntityNotFoundException } from "@/domain/@shared/exceptions";
+import Messages from "@/domain/@shared/util/messages";
 
+type SutsProps = {
+  course?: Course;
+};
 type Suts = {
   findRepo: FindCourseRepository;
   updateRepo: UpdateCourseRepository;
   sut: UpdateCourseUseCase;
 };
 
-const makeSuts = (course: Course): Suts => {
+const makeSuts = (props: SutsProps): Suts => {
   const findRepo = {
-    async find(id: string): Promise<Course> {
-      return course;
+    async find(id: string): Promise<Course | undefined> {
+      return props.course;
     },
   };
   const updateRepo = {
@@ -29,9 +34,20 @@ const makeSuts = (course: Course): Suts => {
   };
 };
 describe("Update Course Use Case", () => {
+  it("Fail updating invalid course", async () => {
+    const { sut } = makeSuts({ course: undefined });
+    const t = async () => {
+      await sut.update({
+        id: uuid(),
+        name: faker.name.jobArea(),
+      });
+    };
+    await expect(t).rejects.toThrow(EntityNotFoundException);
+    await expect(t).rejects.toThrow(Messages.INVALID_COURSE);
+  });
   it("updating course changing course name", async () => {
     const course = new Course(uuid(), faker.name.jobArea(), true);
-    const { updateRepo, sut } = makeSuts(course);
+    const { updateRepo, sut } = makeSuts({ course });
     const spyUpdate = jest.spyOn(updateRepo, "update");
 
     const newName = faker.random.word();
@@ -45,7 +61,7 @@ describe("Update Course Use Case", () => {
   });
   it("updating course adding new lessons", async () => {
     const course = new Course(uuid(), faker.name.jobArea(), true);
-    const { updateRepo, sut } = makeSuts(course);
+    const { updateRepo, sut } = makeSuts({ course });
     const spyUpdate = jest.spyOn(updateRepo, "update");
 
     const updatedCourse = await sut.update({
@@ -75,7 +91,7 @@ describe("Update Course Use Case", () => {
 
     const lesson1 = course.lessons[0];
 
-    const { updateRepo, sut } = makeSuts(course);
+    const { updateRepo, sut } = makeSuts({ course });
     const spyUpdate = jest.spyOn(updateRepo, "update");
 
     const updatedCourse = await sut.update({
@@ -101,7 +117,7 @@ describe("Update Course Use Case", () => {
 
     const lesson1 = course.lessons[0];
 
-    const { updateRepo, sut } = makeSuts(course);
+    const { updateRepo, sut } = makeSuts({ course });
     const spyUpdate = jest.spyOn(updateRepo, "update");
 
     const updatedCourse = await sut.update({
