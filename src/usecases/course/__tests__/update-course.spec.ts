@@ -40,6 +40,7 @@ describe("Update Course Use Case", () => {
       await sut.update({
         id: uuid(),
         name: faker.name.jobArea(),
+        active: true,
       });
     };
     await expect(t).rejects.toThrow(EntityNotFoundException);
@@ -54,10 +55,25 @@ describe("Update Course Use Case", () => {
     const updatedCourse = await sut.update({
       id: course.id,
       name: newName,
+      active: false,
     });
 
     expect(spyUpdate).toHaveBeenCalledWith(updatedCourse);
     expect(updatedCourse.name).toBe(newName);
+  });
+  it("updating course changing course status", async () => {
+    const course = new Course(uuid(), faker.name.jobArea(), true);
+    const { updateRepo, sut } = makeSuts({ course });
+    const spyUpdate = jest.spyOn(updateRepo, "update");
+
+    const updatedCourse = await sut.update({
+      id: course.id,
+      name: course.name,
+      active: false,
+    });
+
+    expect(spyUpdate).toHaveBeenCalledWith(updatedCourse);
+    expect(updatedCourse.active).toBe(false);
   });
   it("updating course adding new lessons", async () => {
     const course = new Course(uuid(), faker.name.jobArea(), true);
@@ -67,6 +83,7 @@ describe("Update Course Use Case", () => {
     const updatedCourse = await sut.update({
       id: course.id,
       name: course.name,
+      active: course.active,
       lessons: [
         {
           name: faker.random.word(),
@@ -97,6 +114,7 @@ describe("Update Course Use Case", () => {
     const updatedCourse = await sut.update({
       id: course.id,
       name: course.name,
+      active: course.active,
       lessons: [
         {
           id: lesson1.id,
@@ -123,6 +141,7 @@ describe("Update Course Use Case", () => {
     const updatedCourse = await sut.update({
       id: course.id,
       name: course.name,
+      active: course.active,
       lessons: [
         {
           id: lesson1.id,
