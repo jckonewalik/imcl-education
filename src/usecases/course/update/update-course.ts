@@ -14,9 +14,14 @@ export class UpdateCourseUseCase {
   async update(dto: UpdateCourseDto): Promise<Course> {
     const course = await this.findRepository.find(dto.id);
 
-    const lessonsToAdd = dto.lessons.filter((l) => l.action === "A");
-    const lessonsToRemove = dto.lessons.filter((l) => l.action === "D");
-    const lessonsToInactivate = dto.lessons.filter((l) => l.action === "I");
+    if (course.name !== dto.name) {
+      course.changeName(dto.name);
+    }
+
+    const lessonsToAdd = dto.lessons?.filter((l) => l.action === "A") || [];
+    const lessonsToRemove = dto.lessons?.filter((l) => l.action === "D") || [];
+    const lessonsToInactivate =
+      dto.lessons?.filter((l) => l.action === "I") || [];
 
     for (const lesson of lessonsToAdd) {
       course.addLesson(lesson.number, lesson.name);

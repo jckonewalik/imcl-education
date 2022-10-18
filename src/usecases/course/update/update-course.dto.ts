@@ -1,6 +1,7 @@
 export type UpdateCourseDto = {
   id: string;
-  lessons: UpdateLessonDto[];
+  name: string;
+  lessons?: UpdateLessonDto[];
 };
 
 type UpdateLessonDto = {
