@@ -16,4 +16,9 @@ export default class Messages {
   static DUPLICATED_LESSON_NUMBER = "Já existe uma lição com esse número";
   static INVALID_COURSE = "O curso informado não é válido";
   static INVALID_STUDENT_CLASS = "A turma informada não é válida";
+  static MISSING_STUDENT_ID = "Informe o ID do aluno";
+  static MISSING_STUDENT_NAME = "Informe o nome do aluno";
+  static INVALID_PHONE_NUMBER = "O telefone informado não é válido";
+  static STUDENT_ALREADY_ACTIVE = "O aluno já esta ativo";
+  static STUDENT_ALREADY_INACTIVE = "O aluno já esta inativo";
 }
