@@ -7,7 +7,7 @@ type Suts = {
   createRepository: CreateCourseRepository;
 };
 
-const getSuts = (): Suts => {
+const makeSuts = (): Suts => {
   const repository = {
     create: async (course: Course) => {},
   };
@@ -16,7 +16,7 @@ const getSuts = (): Suts => {
 
 describe("Create Course Use Case", () => {
   it("Create a new Course", async () => {
-    const { createRepository } = getSuts();
+    const { createRepository } = makeSuts();
     const spyCreate = jest.spyOn(createRepository, "create");
 
     const useCase = new CreateCourseUseCase(createRepository);
