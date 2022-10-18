@@ -29,6 +29,20 @@ const makeSuts = (course: Course): Suts => {
   };
 };
 describe("Update Course Use Case", () => {
+  it("updating course changing course name", async () => {
+    const course = new Course(uuid(), faker.name.jobArea(), true);
+    const { updateRepo, sut } = makeSuts(course);
+    const spyUpdate = jest.spyOn(updateRepo, "update");
+
+    const newName = faker.random.word();
+    const updatedCourse = await sut.update({
+      id: course.id,
+      name: newName,
+    });
+
+    expect(spyUpdate).toHaveBeenCalledWith(updatedCourse);
+    expect(updatedCourse.name).toBe(newName);
+  });
   it("updating course adding new lessons", async () => {
     const course = new Course(uuid(), faker.name.jobArea(), true);
     const { updateRepo, sut } = makeSuts(course);
@@ -36,6 +50,7 @@ describe("Update Course Use Case", () => {
 
     const updatedCourse = await sut.update({
       id: course.id,
+      name: course.name,
       lessons: [
         {
           name: faker.random.word(),
@@ -65,6 +80,7 @@ describe("Update Course Use Case", () => {
 
     const updatedCourse = await sut.update({
       id: course.id,
+      name: course.name,
       lessons: [
         {
           id: lesson1.id,
@@ -90,6 +106,7 @@ describe("Update Course Use Case", () => {
 
     const updatedCourse = await sut.update({
       id: course.id,
+      name: course.name,
       lessons: [
         {
           id: lesson1.id,
