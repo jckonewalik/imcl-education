@@ -37,6 +37,7 @@ describe("Update Student Class Use Case", () => {
       await sut.update({
         id: uuid(),
         name: faker.name.jobArea(),
+        active: true,
       });
     };
     await expect(t).rejects.toThrow(EntityNotFoundException);
@@ -56,9 +57,31 @@ describe("Update Student Class Use Case", () => {
     const updatedClass = await sut.update({
       id: course.id,
       name: newName,
+      active: course.active,
     });
 
     expect(spyUpdate).toHaveBeenCalledWith(updatedClass);
     expect(updatedClass.name).toBe(newName);
+  });
+
+  it("updating class changing class status", async () => {
+    const course = new Course(uuid(), faker.name.jobArea(), true);
+    const studentClass = StudentClassService.newStudentClass(
+      course,
+      faker.random.word()
+    );
+
+    const { updateRepo, sut } = makeSuts({ studentClass });
+    const spyUpdate = jest.spyOn(updateRepo, "update");
+
+    const newName = faker.random.word();
+    const updatedClass = await sut.update({
+      id: course.id,
+      name: course.name,
+      active: false,
+    });
+
+    expect(spyUpdate).toHaveBeenCalledWith(updatedClass);
+    expect(updatedClass.active).toBe(false);
   });
 });
