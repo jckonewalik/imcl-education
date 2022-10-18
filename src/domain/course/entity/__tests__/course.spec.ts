@@ -86,4 +86,20 @@ describe("Course Unit tests", () => {
     course.removeLesson(lesson);
     expect(course.lessons.length).toBe(0);
   });
+  it("Fail when change name with invalid name", () => {
+    const course = new Course(uuid(), faker.name.jobArea(), true);
+    const t = () => {
+      course.changeName("");
+    };
+    expect(t).toThrow(InvalidValueException);
+    expect(t).toThrow(Messages.MISSING_COURSE_NAME);
+  });
+  it("Change course name", () => {
+    const courseName = faker.name.jobArea();
+    const newName = faker.name.jobArea();
+
+    const course = new Course(uuid(), courseName, true);
+    course.changeName(newName);
+    expect(course.name).toBe(newName);
+  });
 });
