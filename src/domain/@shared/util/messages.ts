@@ -15,4 +15,5 @@ export default class Messages {
   static LESSON_ALREADY_INACTIVE = "A lição já esta inativa";
   static DUPLICATED_LESSON_NUMBER = "Já existe uma lição com esse número";
   static INVALID_COURSE = "O curso informado não é válido";
+  static INVALID_STUDENT_CLASS = "A turma informada não é válida";
 }

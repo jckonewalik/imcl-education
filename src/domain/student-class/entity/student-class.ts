@@ -4,6 +4,7 @@ import {
 } from "@/domain/@shared/exceptions";
 
 import Messages from "@/domain/@shared/util/messages";
+import { validate } from "uuid";
 
 export class StudentClass {
   private _id: string;
@@ -18,9 +19,7 @@ export class StudentClass {
     if (!courseId) {
       throw new InvalidValueException(Messages.MISSING_COURSE_ID);
     }
-    if (!name) {
-      throw new InvalidValueException(Messages.MISSING_STUDENT_CLASS_NAME);
-    }
+    this.validateName(name);
     this._id = id;
     this._courseId = courseId;
     this._name = name;
@@ -39,6 +38,17 @@ export class StudentClass {
       throw new BadRequestException(Messages.CLASS_ALREADY_INACTIVE);
     }
     this._active = false;
+  }
+
+  changeName(name: string) {
+    this.validateName(name);
+    this._name = name;
+  }
+
+  private validateName(name: string) {
+    if (!name) {
+      throw new InvalidValueException(Messages.MISSING_STUDENT_CLASS_NAME);
+    }
   }
 
   get active(): boolean {
