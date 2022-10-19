@@ -21,4 +21,7 @@ export default class Messages {
   static INVALID_PHONE_NUMBER = "O telefone informado não é válido";
   static STUDENT_ALREADY_ACTIVE = "O aluno já esta ativo";
   static STUDENT_ALREADY_INACTIVE = "O aluno já esta inativo";
+  static STUDENT_CLASS_INACTIVE = "A turma não está mais ativa";
+  static STUDENT_INACTIVE = "O aluno não está mais ativo";
+  static MISSING_ENROLLMENT_ID = "Informe o ID da matricula";
 }
