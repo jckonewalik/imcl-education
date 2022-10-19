@@ -7,6 +7,15 @@ import { StudentClass } from "../student-class";
 import faker from "faker";
 import { v4 as uuid } from "uuid";
 
+const makeStudentClass = ({
+  id = uuid(),
+  courseId = uuid(),
+  name = faker.name.jobArea(),
+  active = true,
+}): StudentClass => {
+  return new StudentClass(id, courseId, name, active);
+};
+
 describe("Student Class Unit tests", () => {
   it("Fail when create a student class without an ID", () => {
     const t = () => {
@@ -33,12 +42,7 @@ describe("Student Class Unit tests", () => {
   });
 
   it("Fail when activate a class already active", () => {
-    const studentClass = new StudentClass(
-      uuid(),
-      uuid(),
-      faker.name.jobArea(),
-      true
-    );
+    const studentClass = makeStudentClass({});
 
     const t = () => {
       studentClass.activate();
@@ -48,12 +52,7 @@ describe("Student Class Unit tests", () => {
   });
 
   it("Fail when inactivate a class already inactive", () => {
-    const studentClass = new StudentClass(
-      uuid(),
-      uuid(),
-      faker.name.jobArea(),
-      false
-    );
+    const studentClass = makeStudentClass({ active: false });
 
     const t = () => {
       studentClass.inactivate();
@@ -63,24 +62,14 @@ describe("Student Class Unit tests", () => {
   });
 
   it("Activate a class", () => {
-    const studentClass = new StudentClass(
-      uuid(),
-      uuid(),
-      faker.name.jobArea(),
-      false
-    );
+    const studentClass = makeStudentClass({ active: false });
 
     studentClass.activate();
     expect(studentClass.active).toBe(true);
   });
 
   it("Inactivate a class", () => {
-    const studentClass = new StudentClass(
-      uuid(),
-      uuid(),
-      faker.name.jobArea(),
-      true
-    );
+    const studentClass = makeStudentClass({});
 
     studentClass.inactivate();
     expect(studentClass.active).toBe(false);
