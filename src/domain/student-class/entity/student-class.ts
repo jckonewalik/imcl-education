@@ -15,7 +15,13 @@ export class StudentClass {
   private _active: boolean;
   private _enrollments: Enrollment[] = [];
 
-  constructor(id: string, courseId: string, name: string, active: boolean) {
+  private constructor(
+    id: string,
+    courseId: string,
+    name: string,
+    active: boolean,
+    enrollments: Enrollment[] = []
+  ) {
     if (!id) {
       throw new InvalidValueException(Messages.MISSING_STUDENT_CLASS_ID);
     }
@@ -27,6 +33,7 @@ export class StudentClass {
     this._courseId = courseId;
     this._name = name;
     this._active = active;
+    this._enrollments = enrollments;
   }
 
   activate() {
@@ -88,4 +95,51 @@ export class StudentClass {
     const copy: Enrollment[] = [];
     return copy.concat(this._enrollments);
   }
+
+  static Builder = class {
+    private _id: string = "";
+    private _courseId: string = "";
+    private _name: string = "";
+    private _active: boolean = true;
+    private _enrollments: Enrollment[] = [];
+
+    static builder() {
+      return new StudentClass.Builder();
+    }
+
+    id(id: string) {
+      this._id = id;
+      return this;
+    }
+
+    courseId(courseId: string) {
+      this._courseId = courseId;
+      return this;
+    }
+
+    name(name: string) {
+      this._name = name;
+      return this;
+    }
+
+    active(active: boolean) {
+      this._active = active;
+      return this;
+    }
+
+    enrollments(enrollments: Enrollment[]) {
+      this._enrollments = enrollments;
+      return this;
+    }
+
+    build(): StudentClass {
+      return new StudentClass(
+        this._id,
+        this._courseId,
+        this._name,
+        this._active,
+        this._enrollments
+      );
+    }
+  };
 }

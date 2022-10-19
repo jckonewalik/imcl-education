@@ -15,13 +15,22 @@ const makeStudentClass = ({
   name = faker.name.jobArea(),
   active = true,
 }): StudentClass => {
-  return new StudentClass(id, courseId, name, active);
+  return StudentClass.Builder.builder()
+    .id(id)
+    .courseId(courseId)
+    .name(name)
+    .active(active)
+    .build();
 };
 
 describe("Student Class Unit tests", () => {
   it("Fail when create a student class without an ID", () => {
     const t = () => {
-      new StudentClass("", uuid(), faker.name.jobArea(), true);
+      StudentClass.Builder.builder()
+        .courseId(uuid())
+        .name(faker.name.jobArea())
+        .active(true)
+        .build();
     };
     expect(t).toThrow(InvalidValueException);
     expect(t).toThrow(Messages.MISSING_STUDENT_CLASS_ID);
@@ -29,7 +38,11 @@ describe("Student Class Unit tests", () => {
 
   it("Fail when create a student class without a course ID", () => {
     const t = () => {
-      new StudentClass(uuid(), "", faker.name.jobArea(), true);
+      StudentClass.Builder.builder()
+        .id(uuid())
+        .name(faker.name.jobArea())
+        .active(true)
+        .build();
     };
     expect(t).toThrow(InvalidValueException);
     expect(t).toThrow(Messages.MISSING_COURSE_ID);
@@ -37,7 +50,11 @@ describe("Student Class Unit tests", () => {
 
   it("Fail when create a course without a name", () => {
     const t = () => {
-      new StudentClass(uuid(), uuid(), "", true);
+      StudentClass.Builder.builder()
+        .id(uuid())
+        .courseId(uuid())
+        .active(true)
+        .build();
     };
     expect(t).toThrow(InvalidValueException);
     expect(t).toThrow(Messages.MISSING_STUDENT_CLASS_NAME);

@@ -8,6 +8,11 @@ export default class StudentClassService {
     if (!course.active) {
       throw new InvalidValueException(Messages.REQUIRES_ACTIVE_COURSE);
     }
-    return new StudentClass(uuid(), course.id, name, true);
+    return StudentClass.Builder.builder()
+      .id(uuid())
+      .courseId(course.id)
+      .name(name)
+      .active(true)
+      .build();
   }
 }
