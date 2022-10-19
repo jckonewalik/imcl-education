@@ -24,4 +24,5 @@ export default class Messages {
   static STUDENT_CLASS_INACTIVE = "A turma não está mais ativa";
   static STUDENT_INACTIVE = "O aluno não está mais ativo";
   static MISSING_ENROLLMENT_ID = "Informe o ID da matricula";
+  static STUDENT_ALREADY_ENROLLED = "O aluno já está matriculado nessa turma";
 }

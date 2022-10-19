@@ -4,13 +4,16 @@ import {
 } from "@/domain/@shared/exceptions";
 
 import Messages from "@/domain/@shared/util/messages";
-import { validate } from "uuid";
+import { Student } from "@/domain/student/entity/student";
+import { Enrollment } from "./enrollment";
+import { v4 as uuid } from "uuid";
 
 export class StudentClass {
   private _id: string;
   private _courseId: string;
   private _name: string;
   private _active: boolean;
+  private _enrollments: Enrollment[] = [];
 
   constructor(id: string, courseId: string, name: string, active: boolean) {
     if (!id) {
@@ -45,6 +48,20 @@ export class StudentClass {
     this._name = name;
   }
 
+  enrollStudent(student: Student) {
+    if (!this._active) {
+      throw new BadRequestException(Messages.STUDENT_CLASS_INACTIVE);
+    }
+    if (!student.active) {
+      throw new BadRequestException(Messages.STUDENT_INACTIVE);
+    }
+    if (this._enrollments.find((e) => e.studentId === student.id)) {
+      throw new BadRequestException(Messages.STUDENT_ALREADY_ENROLLED);
+    }
+    const newEnrollment = new Enrollment(uuid(), this._id, student.id);
+    this._enrollments.push(newEnrollment);
+  }
+
   private validateName(name: string) {
     if (!name) {
       throw new InvalidValueException(Messages.MISSING_STUDENT_CLASS_NAME);
@@ -65,5 +82,10 @@ export class StudentClass {
 
   get courseId(): string {
     return this._courseId;
+  }
+
+  get enrollments(): Enrollment[] {
+    const copy: Enrollment[] = [];
+    return copy.concat(this._enrollments);
   }
 }

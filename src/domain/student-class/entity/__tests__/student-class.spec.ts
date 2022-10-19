@@ -6,6 +6,8 @@ import Messages from "@/domain/@shared/util/messages";
 import { StudentClass } from "../student-class";
 import faker from "faker";
 import { v4 as uuid } from "uuid";
+import { Student } from "@/domain/student/entity/student";
+import { Gender } from "@/domain/@shared/enums/gender";
 
 const makeStudentClass = ({
   id = uuid(),
@@ -73,5 +75,55 @@ describe("Student Class Unit tests", () => {
 
     studentClass.inactivate();
     expect(studentClass.active).toBe(false);
+  });
+
+  it("Fail when enroll a new student if the class is inactive", () => {
+    const studentClass = makeStudentClass({ active: false });
+    const student = new Student(uuid(), faker.name.firstName(), Gender.M, true);
+
+    const t = () => {
+      studentClass.enrollStudent(student);
+    };
+
+    expect(t).toThrow(BadRequestException);
+    expect(t).toThrow(Messages.STUDENT_CLASS_INACTIVE);
+  });
+
+  it("Fail when enroll a new student if the student is inactive", () => {
+    const studentClass = makeStudentClass({});
+    const student = new Student(
+      uuid(),
+      faker.name.firstName(),
+      Gender.M,
+      false
+    );
+
+    const t = () => {
+      studentClass.enrollStudent(student);
+    };
+
+    expect(t).toThrow(BadRequestException);
+    expect(t).toThrow(Messages.STUDENT_INACTIVE);
+  });
+
+  it("Enroll a new student", () => {
+    const studentClass = makeStudentClass({});
+    const student = new Student(uuid(), faker.name.firstName(), Gender.M, true);
+    studentClass.enrollStudent(student);
+
+    expect(studentClass.enrollments.length).toBe(1);
+  });
+
+  it("Fail when Enroll a student twice", () => {
+    const studentClass = makeStudentClass({});
+    const student = new Student(uuid(), faker.name.firstName(), Gender.M, true);
+    studentClass.enrollStudent(student);
+
+    const t = () => {
+      studentClass.enrollStudent(student);
+    };
+
+    expect(t).toThrow(BadRequestException);
+    expect(t).toThrow(Messages.STUDENT_ALREADY_ENROLLED);
   });
 });
