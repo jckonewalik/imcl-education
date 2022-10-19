@@ -143,4 +143,23 @@ describe("Student Class Unit tests", () => {
     expect(t).toThrow(BadRequestException);
     expect(t).toThrow(Messages.STUDENT_ALREADY_ENROLLED);
   });
+
+  it("Unenroll a student", () => {
+    const studentClass = makeStudentClass({});
+    const student = new Student(uuid(), faker.name.firstName(), Gender.M, true);
+    studentClass.enrollStudent(student);
+    expect(studentClass.enrollments.length).toBe(1);
+    studentClass.unenrollStudent(student);
+    expect(studentClass.enrollments.length).toBe(0);
+  });
+
+  it("Fail Unenrolling a student not enrolled", () => {
+    const studentClass = makeStudentClass({});
+    const student = new Student(uuid(), faker.name.firstName(), Gender.M, true);
+    const t = () => {
+      studentClass.unenrollStudent(student);
+    };
+    expect(t).toThrow(BadRequestException);
+    expect(t).toThrow(Messages.STUDENT_NOT_ENROLLED);
+  });
 });
