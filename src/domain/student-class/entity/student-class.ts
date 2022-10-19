@@ -69,6 +69,15 @@ export class StudentClass {
     this._enrollments.push(newEnrollment);
   }
 
+  unenrollStudent(student: Student) {
+    if (!this._enrollments.find((e) => e.studentId === student.id)) {
+      throw new BadRequestException(Messages.STUDENT_NOT_ENROLLED);
+    }
+    this._enrollments = this._enrollments.filter(
+      (e) => e.studentId !== student.id
+    );
+  }
+
   private validateName(name: string) {
     if (!name) {
       throw new InvalidValueException(Messages.MISSING_STUDENT_CLASS_NAME);
