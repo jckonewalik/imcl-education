@@ -15,10 +15,7 @@ const makeStudentClass = ({
   name = faker.name.jobArea(),
   active = true,
 }): StudentClass => {
-  return StudentClass.Builder.builder()
-    .id(id)
-    .courseId(courseId)
-    .name(name)
+  return StudentClass.Builder.builder(id, courseId, name)
     .active(active)
     .build();
 };
@@ -26,9 +23,7 @@ const makeStudentClass = ({
 describe("Student Class Unit tests", () => {
   it("Fail when create a student class without an ID", () => {
     const t = () => {
-      StudentClass.Builder.builder()
-        .courseId(uuid())
-        .name(faker.name.jobArea())
+      StudentClass.Builder.builder("", uuid(), faker.name.jobArea())
         .active(true)
         .build();
     };
@@ -38,9 +33,7 @@ describe("Student Class Unit tests", () => {
 
   it("Fail when create a student class without a course ID", () => {
     const t = () => {
-      StudentClass.Builder.builder()
-        .id(uuid())
-        .name(faker.name.jobArea())
+      StudentClass.Builder.builder(uuid(), "", faker.name.jobArea())
         .active(true)
         .build();
     };
@@ -50,11 +43,7 @@ describe("Student Class Unit tests", () => {
 
   it("Fail when create a course without a name", () => {
     const t = () => {
-      StudentClass.Builder.builder()
-        .id(uuid())
-        .courseId(uuid())
-        .active(true)
-        .build();
+      StudentClass.Builder.builder(uuid(), uuid(), "").active(true).build();
     };
     expect(t).toThrow(InvalidValueException);
     expect(t).toThrow(Messages.MISSING_STUDENT_CLASS_NAME);

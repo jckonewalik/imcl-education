@@ -112,23 +112,12 @@ export class StudentClass {
     private _active: boolean = true;
     private _enrollments: Enrollment[] = [];
 
-    static builder() {
-      return new StudentClass.Builder();
-    }
-
-    id(id: string) {
-      this._id = id;
-      return this;
-    }
-
-    courseId(courseId: string) {
-      this._courseId = courseId;
-      return this;
-    }
-
-    name(name: string) {
-      this._name = name;
-      return this;
+    static builder(id: string, courseId: string, name: string) {
+      const builder = new StudentClass.Builder();
+      builder._id = id;
+      builder._courseId = courseId;
+      builder._name = name;
+      return builder;
     }
 
     active(active: boolean) {
