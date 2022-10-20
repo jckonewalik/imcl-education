@@ -7,13 +7,25 @@ import { UpdateStudentClassUseCase } from "../update-student-class";
 import { Course } from "@/domain/course/entity";
 import StudentClassService from "@/domain/student-class/services/student-class.service";
 import { UpdateStudentClassRepository } from "@/domain/student-class/repository";
+import { Student } from "@/domain/student/entity/student";
+import { Gender } from "@/domain/@shared/enums/gender";
 
 type SutsProps = {
   studentClass?: StudentClass;
+  students: Map<string, Student>;
 };
 type Suts = {
   updateRepo: UpdateStudentClassRepository;
   sut: UpdateStudentClassUseCase;
+};
+
+const makeStudentClass = (): StudentClass => {
+  const course = new Course(uuid(), faker.name.jobArea(), true);
+  const studentClass = StudentClassService.newStudentClass(
+    course,
+    faker.random.word()
+  );
+  return studentClass;
 };
 
 const makeSuts = (props: SutsProps): Suts => {
@@ -25,14 +37,22 @@ const makeSuts = (props: SutsProps): Suts => {
   const updateRepo = {
     async update(studentClass: StudentClass): Promise<void> {},
   };
+  const findStudentRepo = {
+    async find(id: string): Promise<Student | undefined> {
+      return props.students.get(id);
+    },
+  };
   return {
     updateRepo,
-    sut: new UpdateStudentClassUseCase(findRepo, updateRepo),
+    sut: new UpdateStudentClassUseCase(findRepo, updateRepo, findStudentRepo),
   };
 };
 describe("Update Student Class Use Case", () => {
   it("Fail updating invalid student class", async () => {
-    const { sut } = makeSuts({ studentClass: undefined });
+    const { sut } = makeSuts({
+      studentClass: undefined,
+      students: new Map<string, Student>(),
+    });
     const t = async () => {
       await sut.update({
         id: uuid(),
@@ -44,20 +64,19 @@ describe("Update Student Class Use Case", () => {
     await expect(t).rejects.toThrow(Messages.INVALID_STUDENT_CLASS);
   });
   it("updating class changing class name", async () => {
-    const course = new Course(uuid(), faker.name.jobArea(), true);
-    const studentClass = StudentClassService.newStudentClass(
-      course,
-      faker.random.word()
-    );
+    const studentClass = makeStudentClass();
 
-    const { updateRepo, sut } = makeSuts({ studentClass });
+    const { updateRepo, sut } = makeSuts({
+      studentClass,
+      students: new Map<string, Student>(),
+    });
     const spyUpdate = jest.spyOn(updateRepo, "update");
 
     const newName = faker.random.word();
     const updatedClass = await sut.update({
-      id: course.id,
+      id: studentClass.id,
       name: newName,
-      active: course.active,
+      active: studentClass.active,
     });
 
     expect(spyUpdate).toHaveBeenCalledWith(updatedClass);
@@ -65,23 +84,66 @@ describe("Update Student Class Use Case", () => {
   });
 
   it("updating class changing class status", async () => {
-    const course = new Course(uuid(), faker.name.jobArea(), true);
-    const studentClass = StudentClassService.newStudentClass(
-      course,
-      faker.random.word()
-    );
+    const studentClass = makeStudentClass();
 
-    const { updateRepo, sut } = makeSuts({ studentClass });
+    const { updateRepo, sut } = makeSuts({
+      studentClass,
+      students: new Map<string, Student>(),
+    });
     const spyUpdate = jest.spyOn(updateRepo, "update");
 
     const newName = faker.random.word();
     const updatedClass = await sut.update({
-      id: course.id,
-      name: course.name,
+      id: studentClass.id,
+      name: studentClass.name,
       active: false,
     });
 
     expect(spyUpdate).toHaveBeenCalledWith(updatedClass);
     expect(updatedClass.active).toBe(false);
+  });
+
+  it("updating class adding new student", async () => {
+    const studentClass = makeStudentClass();
+    const student1 = new Student(
+      uuid(),
+      faker.name.firstName(),
+      Gender.F,
+      true
+    );
+    const student2 = new Student(
+      uuid(),
+      faker.name.firstName(),
+      Gender.F,
+      true
+    );
+
+    const studentsMap = new Map<string, Student>();
+    studentsMap.set(student1.id, student1);
+    studentsMap.set(student2.id, student2);
+
+    const { updateRepo, sut } = makeSuts({
+      studentClass,
+      students: studentsMap,
+    });
+    const spyUpdate = jest.spyOn(updateRepo, "update");
+
+    const updatedStudentClass = await sut.update({
+      id: studentClass.id,
+      name: studentClass.name,
+      active: studentClass.active,
+      students: [
+        {
+          studentId: student1.id,
+          action: "A",
+        },
+        {
+          studentId: student2.id,
+          action: "A",
+        },
+      ],
+    });
+    expect(spyUpdate).toHaveBeenCalledWith(updatedStudentClass);
+    expect(updatedStudentClass.enrollments.length).toBe(2);
   });
 });
