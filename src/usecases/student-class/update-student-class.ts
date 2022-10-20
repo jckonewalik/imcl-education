@@ -5,12 +5,14 @@ import {
   FindStudentClassRepository,
   UpdateStudentClassRepository,
 } from "@/domain/student-class/repository";
+import { FindStudentRepository } from "@/domain/student/repository/student.repository";
 import { UpdateStudentClassDto } from "./update-student-class.dto";
 
 export class UpdateStudentClassUseCase {
   constructor(
     private readonly findRepo: FindStudentClassRepository,
-    private readonly updateRepo: UpdateStudentClassRepository
+    private readonly updateRepo: UpdateStudentClassRepository,
+    private readonly findStudent: FindStudentRepository
   ) {}
 
   async update(dto: UpdateStudentClassDto): Promise<StudentClass> {
@@ -26,6 +28,14 @@ export class UpdateStudentClassUseCase {
 
     if (studentClass.active !== dto.active) {
       dto.active ? studentClass.activate() : studentClass.inactivate();
+    }
+
+    const studentsToEnroll =
+      dto.students?.filter((s) => s.action === "A") || [];
+
+    for (const s of studentsToEnroll) {
+      const student = await this.findStudent.find(s.studentId);
+      studentClass.enrollStudent(student!);
     }
 
     this.updateRepo.update(studentClass);
