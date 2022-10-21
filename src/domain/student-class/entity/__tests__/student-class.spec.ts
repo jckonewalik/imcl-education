@@ -212,4 +212,22 @@ describe("Student Class Unit tests", () => {
     expect(t).toThrow(BadRequestException);
     expect(t).toThrow(Messages.TEACHER_ALREADY_INCLUDED);
   });
+
+  it("Remove a teacher", () => {
+    const studentClass = makeStudentClass({});
+    const teacher = makeTeacher({});
+    studentClass.addTeacher(teacher);
+    expect(studentClass.teacherIds.length).toBe(1);
+    studentClass.removeTeacher(teacher);
+    expect(studentClass.teacherIds.length).toBe(0);
+  });
+  it("Fail removing a teacher not part of the class", () => {
+    const studentClass = makeStudentClass({});
+    const teacher = makeTeacher({});
+    const t = () => {
+      studentClass.removeTeacher(teacher);
+    };
+    expect(t).toThrow(BadRequestException);
+    expect(t).toThrow(Messages.TEACHER_NOT_PRESENT);
+  });
 });
