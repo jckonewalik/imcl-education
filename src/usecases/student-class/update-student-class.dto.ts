@@ -1,3 +1,5 @@
+import { UpdateAction } from "../@shared/enums";
+
 export type UpdateStudentClassDto = {
   id: string;
   name: string;
@@ -7,5 +9,10 @@ export type UpdateStudentClassDto = {
 
 type UpdateStudentDto = {
   studentId: string;
-  action: "A" | "D";
+  action: UpdateAction;
+};
+
+type UpdateTeacherDto = {
+  teacherId: string;
+  action: UpdateAction;
 };

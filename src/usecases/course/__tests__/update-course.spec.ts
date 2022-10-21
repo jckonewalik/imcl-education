@@ -8,6 +8,7 @@ import {
 } from "@/domain/course/repository/course.repository";
 import { EntityNotFoundException } from "@/domain/@shared/exceptions";
 import Messages from "@/domain/@shared/util/messages";
+import { UpdateAction } from "@/usecases/@shared/enums";
 
 type SutsProps = {
   course?: Course;
@@ -88,12 +89,12 @@ describe("Update Course Use Case", () => {
         {
           name: faker.random.word(),
           number: 1,
-          action: "A",
+          action: UpdateAction.A,
         },
         {
           name: faker.random.word(),
           number: 2,
-          action: "A",
+          action: UpdateAction.A,
         },
       ],
     });
@@ -120,7 +121,7 @@ describe("Update Course Use Case", () => {
           id: lesson1.id,
           name: lesson1.name,
           number: lesson1.number,
-          action: "D",
+          action: UpdateAction.D,
         },
       ],
     });
@@ -147,7 +148,7 @@ describe("Update Course Use Case", () => {
           id: lesson1.id,
           name: lesson1.name,
           number: lesson1.number,
-          action: "I",
+          action: UpdateAction.I,
         },
       ],
     });

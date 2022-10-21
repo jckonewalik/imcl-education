@@ -10,6 +10,7 @@ import {
 } from "@/domain/student-class/repository";
 import { Student } from "@/domain/student/entity/student";
 import { FindStudentRepository } from "@/domain/student/repository/student.repository";
+import { UpdateAction } from "../@shared/enums";
 import { UpdateStudentClassDto } from "./update-student-class.dto";
 
 export class UpdateStudentClassUseCase {
@@ -45,9 +46,9 @@ export class UpdateStudentClassUseCase {
     dto: UpdateStudentClassDto
   ) {
     const studentsToEnroll =
-      dto.students?.filter((s) => s.action === "A") || [];
+      dto.students?.filter((s) => s.action === UpdateAction.A) || [];
     const studentsToUnenroll =
-      dto.students?.filter((s) => s.action === "D") || [];
+      dto.students?.filter((s) => s.action === UpdateAction.D) || [];
 
     for (const s of studentsToEnroll) {
       const student = await this.findStudent.find(s.studentId);

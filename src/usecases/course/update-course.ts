@@ -5,6 +5,7 @@ import {
   FindCourseRepository,
   UpdateCourseRepository,
 } from "@/domain/course/repository/course.repository";
+import { UpdateAction } from "../@shared/enums";
 import { UpdateCourseDto } from "./update-course.dto";
 
 export class UpdateCourseUseCase {
@@ -35,10 +36,12 @@ export class UpdateCourseUseCase {
   }
 
   private updateLessons(course: Course, dto: UpdateCourseDto) {
-    const lessonsToAdd = dto.lessons?.filter((l) => l.action === "A") || [];
-    const lessonsToRemove = dto.lessons?.filter((l) => l.action === "D") || [];
+    const lessonsToAdd =
+      dto.lessons?.filter((l) => l.action === UpdateAction.A) || [];
+    const lessonsToRemove =
+      dto.lessons?.filter((l) => l.action === UpdateAction.D) || [];
     const lessonsToInactivate =
-      dto.lessons?.filter((l) => l.action === "I") || [];
+      dto.lessons?.filter((l) => l.action === UpdateAction.I) || [];
 
     for (const lesson of lessonsToAdd) {
       course.addLesson(lesson.number, lesson.name);

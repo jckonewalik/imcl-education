@@ -12,6 +12,7 @@ import StudentClassService from "@/domain/student-class/services/student-class.s
 import { UpdateStudentClassRepository } from "@/domain/student-class/repository";
 import { Student } from "@/domain/student/entity/student";
 import { Gender } from "@/domain/@shared/enums/gender";
+import { UpdateAction } from "@/usecases/@shared/enums";
 
 type SutsProps = {
   studentClass?: StudentClass;
@@ -133,11 +134,11 @@ describe("Update Student Class Use Case", () => {
       students: [
         {
           studentId: student1.id,
-          action: "A",
+          action: UpdateAction.A,
         },
         {
           studentId: student2.id,
-          action: "A",
+          action: UpdateAction.A,
         },
       ],
     });
@@ -161,7 +162,7 @@ describe("Update Student Class Use Case", () => {
         students: [
           {
             studentId: uuid(),
-            action: "A",
+            action: UpdateAction.A,
           },
         ],
       });
@@ -188,7 +189,7 @@ describe("Update Student Class Use Case", () => {
       students: [
         {
           studentId: student1.id,
-          action: "D",
+          action: UpdateAction.D,
         },
       ],
     });
@@ -212,7 +213,7 @@ describe("Update Student Class Use Case", () => {
         students: [
           {
             studentId: uuid(),
-            action: "D",
+            action: UpdateAction.D,
           },
         ],
       });
