@@ -30,4 +30,6 @@ export default class Messages {
   static MISSING_TEACHER_ID = "Informe o ID do professor";
   static MISSING_TEACHER_NAME = "Informe o nome do professor";
   static INVALID_EMAIL = "Email inválido";
+  static TEACHER_INACTIVE = "O professor não está mais ativo";
+  static TEACHER_ALREADY_INCLUDED = "O professor já foi incluído";
 }

@@ -7,12 +7,14 @@ import Messages from "@/domain/@shared/util/messages";
 import { Student } from "@/domain/student/entity/student";
 import { Enrollment } from "./enrollment";
 import { v4 as uuid } from "uuid";
+import { Teacher } from "@/domain/teacher/entity";
 
 export class StudentClass {
   private _id: string;
   private _courseId: string;
   private _name: string;
   private _active: boolean;
+  private _teacherIds: string[] = [];
   private _enrollments: Enrollment[] = [];
 
   private constructor(
@@ -20,6 +22,7 @@ export class StudentClass {
     courseId: string,
     name: string,
     active: boolean,
+    teacherIds: string[] = [],
     enrollments: Enrollment[] = []
   ) {
     if (!id) {
@@ -33,6 +36,7 @@ export class StudentClass {
     this._courseId = courseId;
     this._name = name;
     this._active = active;
+    this._teacherIds = teacherIds;
     this._enrollments = enrollments;
   }
 
@@ -78,6 +82,19 @@ export class StudentClass {
     );
   }
 
+  addTeacher(teacher: Teacher) {
+    if (!this._active) {
+      throw new BadRequestException(Messages.STUDENT_CLASS_INACTIVE);
+    }
+    if (!teacher.active) {
+      throw new BadRequestException(Messages.TEACHER_INACTIVE);
+    }
+    if (this._teacherIds.find((id) => id === teacher.id)) {
+      throw new BadRequestException(Messages.TEACHER_ALREADY_INCLUDED);
+    }
+    this._teacherIds.push(teacher.id);
+  }
+
   private validateName(name: string) {
     if (!name) {
       throw new InvalidValueException(Messages.MISSING_STUDENT_CLASS_NAME);
@@ -105,11 +122,17 @@ export class StudentClass {
     return copy.concat(this._enrollments);
   }
 
+  get teacherIds(): string[] {
+    const copy: string[] = [];
+    return copy.concat(this._teacherIds);
+  }
+
   static Builder = class {
     private _id: string = "";
     private _courseId: string = "";
     private _name: string = "";
     private _active: boolean = true;
+    private _teacherIds: string[] = [];
     private _enrollments: Enrollment[] = [];
 
     static builder(id: string, courseId: string, name: string) {
@@ -130,12 +153,18 @@ export class StudentClass {
       return this;
     }
 
+    teacherIds(teacherIds: string[]) {
+      this._teacherIds = teacherIds;
+      return this;
+    }
+
     build(): StudentClass {
       return new StudentClass(
         this._id,
         this._courseId,
         this._name,
         this._active,
+        this._teacherIds,
         this._enrollments
       );
     }
