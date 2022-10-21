@@ -22,6 +22,25 @@ const makeStudentClass = ({
     .build();
 };
 
+const makeTeacher = ({
+  id = uuid(),
+  name = faker.name.firstName(),
+  gender = Gender.F,
+  email = faker.internet.email(),
+  active = true,
+}) => {
+  return new Teacher(id, name, gender, new Email(email), active);
+};
+
+const makeStudent = ({
+  id = uuid(),
+  name = faker.name.firstName(),
+  gender = Gender.M,
+  active = true,
+}) => {
+  return new Student(id, name, gender, active);
+};
+
 describe("Student Class Unit tests", () => {
   it("Fail when create a student class without an ID", () => {
     const t = () => {
@@ -87,7 +106,7 @@ describe("Student Class Unit tests", () => {
 
   it("Fail when enroll a new student if the class is inactive", () => {
     const studentClass = makeStudentClass({ active: false });
-    const student = new Student(uuid(), faker.name.firstName(), Gender.M, true);
+    const student = makeStudent({});
 
     const t = () => {
       studentClass.enrollStudent(student);
@@ -99,12 +118,7 @@ describe("Student Class Unit tests", () => {
 
   it("Fail when enroll a new student if the student is inactive", () => {
     const studentClass = makeStudentClass({});
-    const student = new Student(
-      uuid(),
-      faker.name.firstName(),
-      Gender.M,
-      false
-    );
+    const student = makeStudent({ active: false });
 
     const t = () => {
       studentClass.enrollStudent(student);
@@ -116,7 +130,7 @@ describe("Student Class Unit tests", () => {
 
   it("Enroll a new student", () => {
     const studentClass = makeStudentClass({});
-    const student = new Student(uuid(), faker.name.firstName(), Gender.M, true);
+    const student = makeStudent({});
     studentClass.enrollStudent(student);
 
     expect(studentClass.enrollments.length).toBe(1);
@@ -124,7 +138,7 @@ describe("Student Class Unit tests", () => {
 
   it("Fail when Enroll a student twice", () => {
     const studentClass = makeStudentClass({});
-    const student = new Student(uuid(), faker.name.firstName(), Gender.M, true);
+    const student = makeStudent({});
     studentClass.enrollStudent(student);
 
     const t = () => {
@@ -137,7 +151,7 @@ describe("Student Class Unit tests", () => {
 
   it("Unenroll a student", () => {
     const studentClass = makeStudentClass({});
-    const student = new Student(uuid(), faker.name.firstName(), Gender.M, true);
+    const student = makeStudent({});
     studentClass.enrollStudent(student);
     expect(studentClass.enrollments.length).toBe(1);
     studentClass.unenrollStudent(student);
@@ -146,7 +160,7 @@ describe("Student Class Unit tests", () => {
 
   it("Fail Unenrolling a student not enrolled", () => {
     const studentClass = makeStudentClass({});
-    const student = new Student(uuid(), faker.name.firstName(), Gender.M, true);
+    const student = makeStudent({});
     const t = () => {
       studentClass.unenrollStudent(student);
     };
@@ -156,13 +170,7 @@ describe("Student Class Unit tests", () => {
 
   it("Fail adding a new teacher if the class is inactive", () => {
     const studentClass = makeStudentClass({ active: false });
-    const teacher = new Teacher(
-      uuid(),
-      faker.name.firstName(),
-      Gender.M,
-      new Email(faker.internet.email()),
-      true
-    );
+    const teacher = makeTeacher({});
 
     const t = () => {
       studentClass.addTeacher(teacher);
@@ -174,13 +182,7 @@ describe("Student Class Unit tests", () => {
 
   it("Fail adding a new teacher if the teacher is inactive", () => {
     const studentClass = makeStudentClass({});
-    const teacher = new Teacher(
-      uuid(),
-      faker.name.firstName(),
-      Gender.M,
-      new Email(faker.internet.email()),
-      false
-    );
+    const teacher = makeTeacher({ active: false });
 
     const t = () => {
       studentClass.addTeacher(teacher);
@@ -192,13 +194,7 @@ describe("Student Class Unit tests", () => {
 
   it("Add a new teacher", () => {
     const studentClass = makeStudentClass({});
-    const teacher = new Teacher(
-      uuid(),
-      faker.name.firstName(),
-      Gender.M,
-      new Email(faker.internet.email()),
-      true
-    );
+    const teacher = makeTeacher({});
     studentClass.addTeacher(teacher);
 
     expect(studentClass.teacherIds.length).toBe(1);
@@ -206,13 +202,7 @@ describe("Student Class Unit tests", () => {
 
   it("Fail adding a teacher twice", () => {
     const studentClass = makeStudentClass({});
-    const teacher = new Teacher(
-      uuid(),
-      faker.name.firstName(),
-      Gender.M,
-      new Email(faker.internet.email()),
-      true
-    );
+    const teacher = makeTeacher({});
     studentClass.addTeacher(teacher);
 
     const t = () => {
