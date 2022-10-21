@@ -13,10 +13,13 @@ import { UpdateStudentClassRepository } from "@/domain/student-class/repository"
 import { Student } from "@/domain/student/entity/student";
 import { Gender } from "@/domain/@shared/enums/gender";
 import { UpdateAction } from "@/usecases/@shared/enums";
+import { Teacher } from "@/domain/teacher/entity";
+import { Email } from "@/domain/@shared/value-objects";
 
 type SutsProps = {
   studentClass?: StudentClass;
-  students: Map<string, Student>;
+  students?: Map<string, Student>;
+  teachers?: Map<string, Teacher>;
 };
 type Suts = {
   updateRepo: UpdateStudentClassRepository;
@@ -43,6 +46,29 @@ const makeStudents = () => {
   return { student1, student2, studentsMap };
 };
 
+const makeTeachers = () => {
+  const teacher1 = new Teacher(
+    uuid(),
+    faker.name.firstName(),
+    Gender.F,
+    new Email(faker.internet.email()),
+    true
+  );
+  const teacher2 = new Teacher(
+    uuid(),
+    faker.name.firstName(),
+    Gender.F,
+    new Email(faker.internet.email()),
+    true
+  );
+
+  const teachersMap = new Map<string, Teacher>();
+  teachersMap.set(teacher1.id, teacher1);
+  teachersMap.set(teacher2.id, teacher2);
+
+  return { teacher1, teacher2, teachersMap };
+};
+
 const makeSuts = (props: SutsProps): Suts => {
   const findRepo = {
     async find(id: string): Promise<StudentClass | undefined> {
@@ -54,12 +80,23 @@ const makeSuts = (props: SutsProps): Suts => {
   };
   const findStudentRepo = {
     async find(id: string): Promise<Student | undefined> {
-      return props.students.get(id);
+      return props.students?.get(id);
     },
   };
+  const findTeacherRepo = {
+    async find(id: string): Promise<Teacher | undefined> {
+      return props.teachers?.get(id);
+    },
+  };
+
   return {
     updateRepo,
-    sut: new UpdateStudentClassUseCase(findRepo, updateRepo, findStudentRepo),
+    sut: new UpdateStudentClassUseCase(
+      findRepo,
+      updateRepo,
+      findStudentRepo,
+      findTeacherRepo
+    ),
   };
 };
 describe("Update Student Class Use Case", () => {
@@ -220,5 +257,109 @@ describe("Update Student Class Use Case", () => {
     };
     await expect(t).rejects.toThrow(BadRequestException);
     await expect(t).rejects.toThrow(Messages.INVALID_STUDENT);
+  });
+
+  it("updating class adding new teacher", async () => {
+    const studentClass = makeStudentClass();
+    const { teacher1, teacher2, teachersMap } = makeTeachers();
+    const { updateRepo, sut } = makeSuts({
+      studentClass,
+      teachers: teachersMap,
+    });
+    const spyUpdate = jest.spyOn(updateRepo, "update");
+
+    const updatedStudentClass = await sut.update({
+      id: studentClass.id,
+      name: studentClass.name,
+      active: studentClass.active,
+      teachers: [
+        {
+          teacherId: teacher1.id,
+          action: UpdateAction.A,
+        },
+        {
+          teacherId: teacher2.id,
+          action: UpdateAction.A,
+        },
+      ],
+    });
+    expect(spyUpdate).toHaveBeenCalledWith(updatedStudentClass);
+    expect(updatedStudentClass.teacherIds.length).toBe(2);
+  });
+
+  it("Fail updating class adding invalid teacher", async () => {
+    const studentClass = makeStudentClass();
+    const { teachersMap } = makeTeachers();
+    const { sut } = makeSuts({
+      studentClass,
+      teachers: teachersMap,
+    });
+
+    const t = async () => {
+      await sut.update({
+        id: studentClass.id,
+        name: studentClass.name,
+        active: studentClass.active,
+        teachers: [
+          {
+            teacherId: uuid(),
+            action: UpdateAction.A,
+          },
+        ],
+      });
+    };
+    await expect(t).rejects.toThrow(BadRequestException);
+    await expect(t).rejects.toThrow(Messages.INVALID_TEACHER);
+  });
+
+  it("updating class removing a teacher", async () => {
+    const studentClass = makeStudentClass();
+    const { teacher1, teacher2, teachersMap } = makeTeachers();
+    studentClass.addTeacher(teacher1);
+    studentClass.addTeacher(teacher2);
+    const { updateRepo, sut } = makeSuts({
+      studentClass,
+      teachers: teachersMap,
+    });
+    const spyUpdate = jest.spyOn(updateRepo, "update");
+
+    const updatedStudentClass = await sut.update({
+      id: studentClass.id,
+      name: studentClass.name,
+      active: studentClass.active,
+      teachers: [
+        {
+          teacherId: teacher1.id,
+          action: UpdateAction.D,
+        },
+      ],
+    });
+    expect(spyUpdate).toHaveBeenCalledWith(updatedStudentClass);
+    expect(updatedStudentClass.teacherIds.length).toBe(1);
+  });
+
+  it("Fail updating class removing invalid teacher", async () => {
+    const studentClass = makeStudentClass();
+    const { teachersMap } = makeTeachers();
+    const { sut } = makeSuts({
+      studentClass,
+      teachers: teachersMap,
+    });
+
+    const t = async () => {
+      await sut.update({
+        id: studentClass.id,
+        name: studentClass.name,
+        active: studentClass.active,
+        teachers: [
+          {
+            teacherId: uuid(),
+            action: UpdateAction.D,
+          },
+        ],
+      });
+    };
+    await expect(t).rejects.toThrow(BadRequestException);
+    await expect(t).rejects.toThrow(Messages.INVALID_TEACHER);
   });
 });
