@@ -95,6 +95,13 @@ export class StudentClass {
     this._teacherIds.push(teacher.id);
   }
 
+  removeTeacher(teacher: Teacher) {
+    if (!this._teacherIds.find((id) => id === teacher.id)) {
+      throw new BadRequestException(Messages.TEACHER_NOT_PRESENT);
+    }
+    this._teacherIds = this._teacherIds.filter((id) => id !== teacher.id);
+  }
+
   private validateName(name: string) {
     if (!name) {
       throw new InvalidValueException(Messages.MISSING_STUDENT_CLASS_NAME);
