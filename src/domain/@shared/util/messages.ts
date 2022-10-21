@@ -26,4 +26,5 @@ export default class Messages {
   static MISSING_ENROLLMENT_ID = "Informe o ID da matricula";
   static STUDENT_ALREADY_ENROLLED = "O aluno já está matriculado nessa turma";
   static STUDENT_NOT_ENROLLED = "O aluno não esta matriculado";
+  static INVALID_STUDENT = "O aluno informado não é válido";
 }
