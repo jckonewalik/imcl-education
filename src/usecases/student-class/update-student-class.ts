@@ -8,8 +8,8 @@ import {
   FindStudentClassRepository,
   UpdateStudentClassRepository,
 } from "@/domain/student-class/repository";
-import { Student } from "@/domain/student/entity/student";
 import { FindStudentRepository } from "@/domain/student/repository/student.repository";
+import { FindTeacherRepository } from "@/domain/teacher/repository/teacher.repository";
 import { UpdateAction } from "../@shared/enums";
 import { UpdateStudentClassDto } from "./update-student-class.dto";
 
@@ -17,7 +17,8 @@ export class UpdateStudentClassUseCase {
   constructor(
     private readonly findRepo: FindStudentClassRepository,
     private readonly updateRepo: UpdateStudentClassRepository,
-    private readonly findStudent: FindStudentRepository
+    private readonly findStudent: FindStudentRepository,
+    private readonly findTeacher: FindTeacherRepository
   ) {}
 
   async update(dto: UpdateStudentClassDto): Promise<StudentClass> {
@@ -36,6 +37,7 @@ export class UpdateStudentClassUseCase {
     }
 
     await this.updateEnrollments(studentClass, dto);
+    await this.updateTeachers(studentClass, dto);
 
     this.updateRepo.update(studentClass);
     return studentClass;
@@ -64,6 +66,32 @@ export class UpdateStudentClassUseCase {
         throw new BadRequestException(Messages.INVALID_STUDENT);
       }
       studentClass.unenrollStudent(student);
+    }
+  }
+
+  private async updateTeachers(
+    studentClass: StudentClass,
+    dto: UpdateStudentClassDto
+  ) {
+    const teachersToAdd =
+      dto.teachers?.filter((s) => s.action === UpdateAction.A) || [];
+    const teachersToRemove =
+      dto.teachers?.filter((s) => s.action === UpdateAction.D) || [];
+
+    for (const t of teachersToAdd) {
+      const teacher = await this.findTeacher.find(t.teacherId);
+      if (!teacher) {
+        throw new BadRequestException(Messages.INVALID_TEACHER);
+      }
+      studentClass.addTeacher(teacher);
+    }
+
+    for (const t of teachersToRemove) {
+      const teacher = await this.findTeacher.find(t.teacherId);
+      if (!teacher) {
+        throw new BadRequestException(Messages.INVALID_TEACHER);
+      }
+      studentClass.removeTeacher(teacher);
     }
   }
 }

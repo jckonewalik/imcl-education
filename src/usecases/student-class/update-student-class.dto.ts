@@ -5,6 +5,7 @@ export type UpdateStudentClassDto = {
   name: string;
   active: boolean;
   students?: UpdateStudentDto[];
+  teachers?: UpdateTeacherDto[];
 };
 
 type UpdateStudentDto = {
