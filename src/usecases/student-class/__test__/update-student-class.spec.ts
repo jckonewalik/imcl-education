@@ -1,6 +1,9 @@
 import { v4 as uuid } from "uuid";
 import faker from "faker";
-import { EntityNotFoundException } from "@/domain/@shared/exceptions";
+import {
+  BadRequestException,
+  EntityNotFoundException,
+} from "@/domain/@shared/exceptions";
 import Messages from "@/domain/@shared/util/messages";
 import { StudentClass } from "@/domain/student-class/entity";
 import { UpdateStudentClassUseCase } from "../update-student-class";
@@ -26,6 +29,17 @@ const makeStudentClass = (): StudentClass => {
     faker.random.word()
   );
   return studentClass;
+};
+
+const makeStudents = () => {
+  const student1 = new Student(uuid(), faker.name.firstName(), Gender.F, true);
+  const student2 = new Student(uuid(), faker.name.firstName(), Gender.F, true);
+
+  const studentsMap = new Map<string, Student>();
+  studentsMap.set(student1.id, student1);
+  studentsMap.set(student2.id, student2);
+
+  return { student1, student2, studentsMap };
 };
 
 const makeSuts = (props: SutsProps): Suts => {
@@ -105,23 +119,7 @@ describe("Update Student Class Use Case", () => {
 
   it("updating class adding new student", async () => {
     const studentClass = makeStudentClass();
-    const student1 = new Student(
-      uuid(),
-      faker.name.firstName(),
-      Gender.F,
-      true
-    );
-    const student2 = new Student(
-      uuid(),
-      faker.name.firstName(),
-      Gender.F,
-      true
-    );
-
-    const studentsMap = new Map<string, Student>();
-    studentsMap.set(student1.id, student1);
-    studentsMap.set(student2.id, student2);
-
+    const { student1, student2, studentsMap } = makeStudents();
     const { updateRepo, sut } = makeSuts({
       studentClass,
       students: studentsMap,
@@ -145,5 +143,81 @@ describe("Update Student Class Use Case", () => {
     });
     expect(spyUpdate).toHaveBeenCalledWith(updatedStudentClass);
     expect(updatedStudentClass.enrollments.length).toBe(2);
+  });
+
+  it("Fail updating class adding invalid student", async () => {
+    const studentClass = makeStudentClass();
+    const { studentsMap } = makeStudents();
+    const { sut } = makeSuts({
+      studentClass,
+      students: studentsMap,
+    });
+
+    const t = async () => {
+      await sut.update({
+        id: studentClass.id,
+        name: studentClass.name,
+        active: studentClass.active,
+        students: [
+          {
+            studentId: uuid(),
+            action: "A",
+          },
+        ],
+      });
+    };
+    await expect(t).rejects.toThrow(BadRequestException);
+    await expect(t).rejects.toThrow(Messages.INVALID_STUDENT);
+  });
+
+  it("updating class removing a student", async () => {
+    const studentClass = makeStudentClass();
+    const { student1, student2, studentsMap } = makeStudents();
+    studentClass.enrollStudent(student1);
+    studentClass.enrollStudent(student2);
+    const { updateRepo, sut } = makeSuts({
+      studentClass,
+      students: studentsMap,
+    });
+    const spyUpdate = jest.spyOn(updateRepo, "update");
+
+    const updatedStudentClass = await sut.update({
+      id: studentClass.id,
+      name: studentClass.name,
+      active: studentClass.active,
+      students: [
+        {
+          studentId: student1.id,
+          action: "D",
+        },
+      ],
+    });
+    expect(spyUpdate).toHaveBeenCalledWith(updatedStudentClass);
+    expect(updatedStudentClass.enrollments.length).toBe(1);
+  });
+
+  it("Fail updating class removing invalid student", async () => {
+    const studentClass = makeStudentClass();
+    const { studentsMap } = makeStudents();
+    const { sut } = makeSuts({
+      studentClass,
+      students: studentsMap,
+    });
+
+    const t = async () => {
+      await sut.update({
+        id: studentClass.id,
+        name: studentClass.name,
+        active: studentClass.active,
+        students: [
+          {
+            studentId: uuid(),
+            action: "D",
+          },
+        ],
+      });
+    };
+    await expect(t).rejects.toThrow(BadRequestException);
+    await expect(t).rejects.toThrow(Messages.INVALID_STUDENT);
   });
 });
