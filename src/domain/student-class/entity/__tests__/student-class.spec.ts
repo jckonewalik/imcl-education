@@ -8,6 +8,8 @@ import faker from "faker";
 import { v4 as uuid } from "uuid";
 import { Student } from "@/domain/student/entity/student";
 import { Gender } from "@/domain/@shared/enums/gender";
+import { Teacher } from "@/domain/teacher/entity";
+import { Email } from "@/domain/@shared/value-objects";
 
 const makeStudentClass = ({
   id = uuid(),
@@ -150,5 +152,74 @@ describe("Student Class Unit tests", () => {
     };
     expect(t).toThrow(BadRequestException);
     expect(t).toThrow(Messages.STUDENT_NOT_ENROLLED);
+  });
+
+  it("Fail adding a new teacher if the class is inactive", () => {
+    const studentClass = makeStudentClass({ active: false });
+    const teacher = new Teacher(
+      uuid(),
+      faker.name.firstName(),
+      Gender.M,
+      new Email(faker.internet.email()),
+      true
+    );
+
+    const t = () => {
+      studentClass.addTeacher(teacher);
+    };
+
+    expect(t).toThrow(BadRequestException);
+    expect(t).toThrow(Messages.STUDENT_CLASS_INACTIVE);
+  });
+
+  it("Fail adding a new teacher if the teacher is inactive", () => {
+    const studentClass = makeStudentClass({});
+    const teacher = new Teacher(
+      uuid(),
+      faker.name.firstName(),
+      Gender.M,
+      new Email(faker.internet.email()),
+      false
+    );
+
+    const t = () => {
+      studentClass.addTeacher(teacher);
+    };
+
+    expect(t).toThrow(BadRequestException);
+    expect(t).toThrow(Messages.TEACHER_INACTIVE);
+  });
+
+  it("Add a new teacher", () => {
+    const studentClass = makeStudentClass({});
+    const teacher = new Teacher(
+      uuid(),
+      faker.name.firstName(),
+      Gender.M,
+      new Email(faker.internet.email()),
+      true
+    );
+    studentClass.addTeacher(teacher);
+
+    expect(studentClass.teacherIds.length).toBe(1);
+  });
+
+  it("Fail adding a teacher twice", () => {
+    const studentClass = makeStudentClass({});
+    const teacher = new Teacher(
+      uuid(),
+      faker.name.firstName(),
+      Gender.M,
+      new Email(faker.internet.email()),
+      true
+    );
+    studentClass.addTeacher(teacher);
+
+    const t = () => {
+      studentClass.addTeacher(teacher);
+    };
+
+    expect(t).toThrow(BadRequestException);
+    expect(t).toThrow(Messages.TEACHER_ALREADY_INCLUDED);
   });
 });
