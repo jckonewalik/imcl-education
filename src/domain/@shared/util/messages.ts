@@ -27,4 +27,7 @@ export default class Messages {
   static STUDENT_ALREADY_ENROLLED = "O aluno já está matriculado nessa turma";
   static STUDENT_NOT_ENROLLED = "O aluno não esta matriculado";
   static INVALID_STUDENT = "O aluno informado não é válido";
+  static MISSING_TEACHER_ID = "Informe o ID do professor";
+  static MISSING_TEACHER_NAME = "Informe o nome do professor";
+  static INVALID_EMAIL = "Email inválido";
 }
