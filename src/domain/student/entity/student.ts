@@ -23,9 +23,7 @@ export class Student {
       throw new InvalidValueException(Messages.MISSING_STUDENT_ID);
     }
 
-    if (!name) {
-      throw new InvalidValueException(Messages.MISSING_STUDENT_NAME);
-    }
+    this.validateName(name);
 
     this._id = id;
     this._name = name;
@@ -66,5 +64,16 @@ export class Student {
       throw new BadRequestException(Messages.STUDENT_ALREADY_INACTIVE);
     }
     this._active = false;
+  }
+
+  changeName(name: string) {
+    this.validateName(name);
+    this._name = name;
+  }
+
+  private validateName(name: string) {
+    if (!name) {
+      throw new InvalidValueException(Messages.MISSING_STUDENT_NAME);
+    }
   }
 }
