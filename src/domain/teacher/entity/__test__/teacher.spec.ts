@@ -25,4 +25,21 @@ describe("Teacher Unit tests", () => {
     expect(t).toThrow(InvalidValueException);
     expect(t).toThrow(Messages.MISSING_TEACHER_NAME);
   });
+
+  it("Fail changing the name with an invalid name", () => {
+    const email = new Email(faker.internet.email());
+    const teacher = new Teacher(
+      uuid(),
+      faker.name.firstName(),
+      Gender.F,
+      email,
+      true
+    );
+
+    const t = () => {
+      teacher.changeName("");
+    };
+    expect(t).toThrow(InvalidValueException);
+    expect(t).toThrow(Messages.MISSING_TEACHER_NAME);
+  });
 });
