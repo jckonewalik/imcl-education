@@ -3,7 +3,7 @@ import {
   CreateTeacherRepository,
   FindTeacherByEmailRepository,
 } from "@/domain/teacher/repository/teacher.repository";
-import { NewTeacherDto } from "./new-teacher.dto";
+import { NewTeacherDto } from "./dto";
 import { v4 as uuid } from "uuid";
 import { Email } from "@/domain/@shared/value-objects";
 import { BadRequestException } from "@/domain/@shared/exceptions";

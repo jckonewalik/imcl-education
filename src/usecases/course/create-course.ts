@@ -1,6 +1,6 @@
 import { Course } from "@/domain/course/entity";
 import { CreateCourseRepository } from "@/domain/course/repository/course.repository";
-import { CreateCourseDto } from "./create-course.dto";
+import { CreateCourseDto } from "./dto";
 import { v4 as uuid } from "uuid";
 
 export default class CreateCourseUseCase {

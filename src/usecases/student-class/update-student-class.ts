@@ -11,7 +11,7 @@ import {
 import { FindStudentRepository } from "@/domain/student/repository/student.repository";
 import { FindTeacherRepository } from "@/domain/teacher/repository/teacher.repository";
 import { UpdateAction } from "../@shared/enums";
-import { UpdateStudentClassDto } from "./update-student-class.dto";
+import { UpdateStudentClassDto } from "./dto";
 
 export class UpdateStudentClassUseCase {
   constructor(

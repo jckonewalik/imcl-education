@@ -6,7 +6,7 @@ import {
   UpdateCourseRepository,
 } from "@/domain/course/repository/course.repository";
 import { UpdateAction } from "../@shared/enums";
-import { UpdateCourseDto } from "./update-course.dto";
+import { UpdateCourseDto } from "./dto";
 
 export class UpdateCourseUseCase {
   constructor(

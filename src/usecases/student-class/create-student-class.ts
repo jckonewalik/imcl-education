@@ -4,7 +4,7 @@ import { FindCourseRepository } from "@/domain/course/repository/course.reposito
 import { StudentClass } from "@/domain/student-class/entity";
 import { CreateStudentClassRepository } from "@/domain/student-class/repository";
 import StudentClassService from "@/domain/student-class/services/student-class.service";
-import { CreateStudentClassDto } from "./create-student-class.dto";
+import { CreateStudentClassDto } from "./dto";
 
 export class CreateStudentClassUseCase {
   constructor(
