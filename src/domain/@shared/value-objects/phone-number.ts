@@ -25,4 +25,11 @@ export class PhoneNumber {
   get isWhatsapp(): boolean {
     return this._isWhatsapp;
   }
+
+  equals(phoneNumber?: PhoneNumber) {
+    return (
+      this._number === phoneNumber?.number &&
+      this.isWhatsapp === phoneNumber?.isWhatsapp
+    );
+  }
 }

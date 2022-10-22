@@ -71,6 +71,10 @@ export class Student {
     this._name = name;
   }
 
+  changePhone(phoneNumber?: PhoneNumber) {
+    this._phone = phoneNumber;
+  }
+
   private validateName(name: string) {
     if (!name) {
       throw new InvalidValueException(Messages.MISSING_STUDENT_NAME);
