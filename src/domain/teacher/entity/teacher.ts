@@ -1,5 +1,8 @@
 import { Gender } from "@/domain/@shared/enums/gender";
-import { InvalidValueException } from "@/domain/@shared/exceptions";
+import {
+  BadRequestException,
+  InvalidValueException,
+} from "@/domain/@shared/exceptions";
 import Messages from "@/domain/@shared/util/messages";
 import { Email } from "@/domain/@shared/value-objects";
 
@@ -32,6 +35,20 @@ export class Teacher {
   changeName(name: string) {
     this.validateName(name);
     this._name = name;
+  }
+
+  activate() {
+    if (this._active) {
+      throw new BadRequestException(Messages.TEACHER_ALREADY_ACTIVE);
+    }
+    this._active = true;
+  }
+
+  inactivate() {
+    if (!this._active) {
+      throw new BadRequestException(Messages.TEACHER_ALREADY_INACTIVE);
+    }
+    this._active = false;
   }
 
   private validateName(name: string) {
