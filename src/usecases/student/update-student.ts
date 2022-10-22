@@ -5,7 +5,7 @@ import { Student } from "@/domain/student/entity/student";
 import {
   FindStudentRepository,
   UpdateStudentRepository,
-} from "@/domain/student/repository/student.repository";
+} from "@/domain/student/repository";
 import { UpdateStudentDto } from "./dto/update-student.dto";
 
 export class UpdateStudentUseCase {

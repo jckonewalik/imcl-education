@@ -1,7 +1,7 @@
 import { Course } from "@/domain/course/entity";
 import CreateCourseUseCase from "../create-course";
 import faker from "faker";
-import { CreateCourseRepository } from "@/domain/course/repository/course.repository";
+import { CreateCourseRepository } from "@/domain/course/repository";
 
 type Suts = {
   createRepository: CreateCourseRepository;

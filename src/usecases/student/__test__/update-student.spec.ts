@@ -1,5 +1,5 @@
 import { Student } from "@/domain/student/entity/student";
-import { UpdateStudentRepository } from "@/domain/student/repository/student.repository";
+import { UpdateStudentRepository } from "@/domain/student/repository";
 import { UpdateStudentUseCase } from "../update-student";
 import { v4 as uuid } from "uuid";
 import faker from "faker";

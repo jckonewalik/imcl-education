@@ -1,7 +1,7 @@
 import { Student } from "@/domain/student/entity/student";
 import { NewStudentDto } from "./dto";
 import { v4 as uuid } from "uuid";
-import { CreateStudentRepository } from "@/domain/student/repository/student.repository";
+import { CreateStudentRepository } from "@/domain/student/repository";
 import { PhoneNumber } from "@/domain/@shared/value-objects";
 
 export class RegisterStudentUseCase {

@@ -4,7 +4,7 @@ import { Course } from "@/domain/course/entity";
 import {
   FindCourseRepository,
   UpdateCourseRepository,
-} from "@/domain/course/repository/course.repository";
+} from "@/domain/course/repository";
 import { UpdateAction } from "../@shared/enums";
 import { UpdateCourseDto } from "./dto";
 

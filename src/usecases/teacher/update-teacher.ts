@@ -9,7 +9,7 @@ import {
   FindTeacherByEmailRepository,
   FindTeacherRepository,
   UpdateTeacherRepository,
-} from "@/domain/teacher/repository/teacher.repository";
+} from "@/domain/teacher/repository";
 import { UpdateTeacherDto } from "./dto";
 
 export class UpdateTeacherUseCase {

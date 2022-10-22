@@ -2,7 +2,7 @@ import { Teacher } from "@/domain/teacher/entity";
 import {
   CreateTeacherRepository,
   FindTeacherByEmailRepository,
-} from "@/domain/teacher/repository/teacher.repository";
+} from "@/domain/teacher/repository";
 import { NewTeacherDto } from "./dto";
 import { v4 as uuid } from "uuid";
 import { Email } from "@/domain/@shared/value-objects";

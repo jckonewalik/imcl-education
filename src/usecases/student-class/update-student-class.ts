@@ -8,8 +8,8 @@ import {
   FindStudentClassRepository,
   UpdateStudentClassRepository,
 } from "@/domain/student-class/repository";
-import { FindStudentRepository } from "@/domain/student/repository/student.repository";
-import { FindTeacherRepository } from "@/domain/teacher/repository/teacher.repository";
+import { FindStudentRepository } from "@/domain/student/repository";
+import { FindTeacherRepository } from "@/domain/teacher/repository";
 import { UpdateAction } from "../@shared/enums";
 import { UpdateStudentClassDto } from "./dto";
 

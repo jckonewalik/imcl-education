@@ -1,7 +1,7 @@
 import { Gender } from "@/domain/@shared/enums/gender";
 import { Email } from "@/domain/@shared/value-objects";
 import { Teacher } from "@/domain/teacher/entity";
-import { CreateTeacherRepository } from "@/domain/teacher/repository/teacher.repository";
+import { CreateTeacherRepository } from "@/domain/teacher/repository";
 import faker from "faker";
 import { RegisterTeacherUseCase } from "../register-teacher";
 import { v4 as uuid } from "uuid";

@@ -1,5 +1,5 @@
 import { Student } from "@/domain/student/entity/student";
-import { CreateStudentRepository } from "@/domain/student/repository/student.repository";
+import { CreateStudentRepository } from "@/domain/student/repository";
 import { RegisterStudentUseCase } from "../register-student";
 import faker from "faker";
 import { Gender } from "@/domain/@shared/enums/gender";

@@ -1,6 +1,6 @@
 import { EntityNotFoundException } from "@/domain/@shared/exceptions";
 import Messages from "@/domain/@shared/util/messages";
-import { FindCourseRepository } from "@/domain/course/repository/course.repository";
+import { FindCourseRepository } from "@/domain/course/repository";
 import { StudentClass } from "@/domain/student-class/entity";
 import { CreateStudentClassRepository } from "@/domain/student-class/repository";
 import StudentClassService from "@/domain/student-class/services/student-class.service";

@@ -1,5 +1,5 @@
 import { Teacher } from "@/domain/teacher/entity";
-import { UpdateTeacherRepository } from "@/domain/teacher/repository/teacher.repository";
+import { UpdateTeacherRepository } from "@/domain/teacher/repository";
 import { v4 as uuid } from "uuid";
 import faker from "faker";
 import {

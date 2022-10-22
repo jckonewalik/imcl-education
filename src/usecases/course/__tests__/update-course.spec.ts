@@ -5,7 +5,7 @@ import { UpdateCourseUseCase } from "../update-course";
 import {
   FindCourseRepository,
   UpdateCourseRepository,
-} from "@/domain/course/repository/course.repository";
+} from "@/domain/course/repository";
 import { EntityNotFoundException } from "@/domain/@shared/exceptions";
 import Messages from "@/domain/@shared/util/messages";
 import { UpdateAction } from "@/usecases/@shared/enums";
