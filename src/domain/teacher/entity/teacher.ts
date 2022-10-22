@@ -37,6 +37,10 @@ export class Teacher {
     this._name = name;
   }
 
+  changeEmail(email: Email) {
+    this._email = email;
+  }
+
   activate() {
     if (this._active) {
       throw new BadRequestException(Messages.TEACHER_ALREADY_ACTIVE);

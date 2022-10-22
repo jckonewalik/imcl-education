@@ -1,6 +1,7 @@
 import {
   CreateRepository,
   FindRepository,
+  UpdateRepository,
 } from "@/domain/@shared/repository/repository";
 import { Email } from "@/domain/@shared/value-objects";
 import { Teacher } from "../entity";
@@ -12,3 +13,5 @@ export interface FindTeacherByEmailRepository {
 }
 
 export interface CreateTeacherRepository extends CreateRepository<Teacher> {}
+
+export interface UpdateTeacherRepository extends UpdateRepository<Teacher> {}
