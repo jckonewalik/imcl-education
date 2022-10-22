@@ -1,1 +1,1 @@
-export * from "./create-teacher";
+export * from "./register-teacher";

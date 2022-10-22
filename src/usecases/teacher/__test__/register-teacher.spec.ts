@@ -3,7 +3,7 @@ import { Email } from "@/domain/@shared/value-objects";
 import { Teacher } from "@/domain/teacher/entity";
 import { CreateTeacherRepository } from "@/domain/teacher/repository/teacher.repository";
 import faker from "faker";
-import { CreateTeacherUseCase } from "../create-teacher";
+import { RegisterTeacherUseCase } from "../register-teacher";
 import { v4 as uuid } from "uuid";
 import { BadRequestException } from "@/domain/@shared/exceptions";
 import Messages from "@/domain/@shared/util/messages";
@@ -14,7 +14,7 @@ type SutsProps = {
 
 type Suts = {
   createRepository: CreateTeacherRepository;
-  sut: CreateTeacherUseCase;
+  sut: RegisterTeacherUseCase;
 };
 
 const makeTeachers = () => {
@@ -49,12 +49,12 @@ const makeSuts = ({ teachers }: SutsProps): Suts => {
       return teachers?.get(email.value);
     },
   };
-  const sut = new CreateTeacherUseCase(repository, findByEmailRepo);
+  const sut = new RegisterTeacherUseCase(repository, findByEmailRepo);
   return { createRepository: repository, sut };
 };
 
-describe("Create Teacher Use Case", () => {
-  it("Create a new Teacher", async () => {
+describe("Register Teacher Use Case", () => {
+  it("Register a new teacher", async () => {
     const { createRepository, sut } = makeSuts({});
     const spyCreate = jest.spyOn(createRepository, "create");
 
@@ -63,7 +63,7 @@ describe("Create Teacher Use Case", () => {
       gender: Gender.F,
       email: faker.internet.email(),
     };
-    const result = await sut.create(dto);
+    const result = await sut.register(dto);
 
     expect(result.id).toBeDefined();
     expect(result.name).toBe(dto.name);
@@ -73,7 +73,7 @@ describe("Create Teacher Use Case", () => {
     expect(spyCreate).toHaveBeenCalledWith(result);
   });
 
-  it("Fail creating a new Teacher using an existing email", async () => {
+  it("Fail registering a new teacher using an existing email", async () => {
     const { teacher1, teachersMap } = makeTeachers();
     const { sut } = makeSuts({ teachers: teachersMap });
 
@@ -84,7 +84,7 @@ describe("Create Teacher Use Case", () => {
     };
 
     const t = async () => {
-      await sut.create(dto);
+      await sut.register(dto);
     };
 
     await expect(t).rejects.toThrow(BadRequestException);
