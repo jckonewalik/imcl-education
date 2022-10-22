@@ -20,15 +20,24 @@ export class Teacher {
     if (!id) {
       throw new InvalidValueException(Messages.MISSING_TEACHER_ID);
     }
-    if (!name) {
-      throw new InvalidValueException(Messages.MISSING_TEACHER_NAME);
-    }
+    this.validateName(name);
 
     this._id = id;
     this._name = name;
     this._gender = gender;
     this._email = email;
     this._active = active;
+  }
+
+  changeName(name: string) {
+    this.validateName(name);
+    this._name = name;
+  }
+
+  private validateName(name: string) {
+    if (!name) {
+      throw new InvalidValueException(Messages.MISSING_TEACHER_NAME);
+    }
   }
 
   get id(): string {
