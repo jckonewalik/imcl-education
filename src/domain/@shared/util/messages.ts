@@ -34,4 +34,6 @@ export default class Messages {
   static TEACHER_ALREADY_INCLUDED = "O professor já foi incluído";
   static TEACHER_NOT_PRESENT = "O professor não faz parte da turma";
   static INVALID_TEACHER = "O professor informado não é válido";
+  static TEACHER_EMAIL_ALREADY_IN_USE =
+    "O email já está em uso por outro professor";
 }
