@@ -67,4 +67,19 @@ describe("Student Unit tests", () => {
     student.inactivate();
     expect(student.active).toBe(false);
   });
+
+  it("Fail changing name using an invalid name", () => {
+    const student = new Student(uuid(), faker.name.firstName(), Gender.F, true);
+    const t = () => {
+      student.changeName("");
+    };
+    expect(t).toThrow(InvalidValueException);
+    expect(t).toThrow(Messages.MISSING_STUDENT_NAME);
+  });
+  it("Changing name", () => {
+    const student = new Student(uuid(), faker.name.firstName(), Gender.F, true);
+    const newName = faker.name.firstName();
+    student.changeName(newName);
+    expect(student.name).toBe(newName);
+  });
 });
