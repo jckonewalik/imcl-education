@@ -48,6 +48,7 @@ The fallow tecnologies were used to build this project:
 
 - **[NodeJS](https://nodejs.org/en/)**
 - **[Jest](https://jestjs.io/)**
+- **[Sequelize](https://sequelize.org/)**
 
 ---
 
