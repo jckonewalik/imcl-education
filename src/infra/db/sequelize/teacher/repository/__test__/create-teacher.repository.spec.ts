@@ -1,11 +1,7 @@
-import { Teacher } from "@/domain/teacher/entity";
 import { SequelizeCreateTeacherRepository } from "../create-teacher.repository";
-import { v4 as uuid } from "uuid";
-import faker from "faker";
-import { Gender } from "@/domain/@shared/enums/gender";
-import { Email } from "@/domain/@shared/value-objects";
 import { TeacherModel } from "../../model/teacher.model";
 import { Sequelize } from "sequelize-typescript";
+import { makeTeacher } from "./util";
 
 describe("Sequelize Create Teacher Repository", () => {
   let sequelize: Sequelize;
@@ -28,14 +24,7 @@ describe("Sequelize Create Teacher Repository", () => {
 
   it("Create a teacher", async () => {
     const repository = new SequelizeCreateTeacherRepository();
-    const email = new Email(faker.internet.email());
-    const teacher = new Teacher(
-      uuid(),
-      faker.name.firstName() + " " + faker.name.lastName(),
-      Gender.M,
-      email,
-      true
-    );
+    const teacher = makeTeacher();
 
     await repository.create(teacher);
 

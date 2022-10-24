@@ -1,4 +1,3 @@
-import { Gender } from "@/domain/@shared/enums/gender";
 import { Email } from "@/domain/@shared/value-objects";
 import { Teacher } from "@/domain/teacher/entity";
 import { FindTeacherByEmailRepository } from "@/domain/teacher/repository";
@@ -16,12 +15,6 @@ export class SequelizeFindTeacherByEmailRepository
       return undefined;
     }
 
-    return new Teacher(
-      teacherModel.id,
-      teacherModel.name,
-      Gender[teacherModel.gender],
-      new Email(teacherModel.email),
-      teacherModel.active
-    );
+    return teacherModel.toEntity();
   }
 }

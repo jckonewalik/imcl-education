@@ -1,4 +1,6 @@
-import { UUID } from "sequelize";
+import { Gender } from "@/domain/@shared/enums/gender";
+import { Email } from "@/domain/@shared/value-objects";
+import { Teacher } from "@/domain/teacher/entity";
 import {
   Table,
   Column,
@@ -35,4 +37,14 @@ export class TeacherModel extends Model {
 
   @UpdatedAt
   updatedOn: Date;
+
+  toEntity(): Teacher {
+    return new Teacher(
+      this.id,
+      this.name,
+      Gender[this.gender],
+      new Email(this.email),
+      this.active
+    );
+  }
 }
