@@ -66,4 +66,8 @@ export class Lesson {
   get id(): string {
     return this._id;
   }
+
+  get courseId(): string {
+    return this._courseId;
+  }
 }
