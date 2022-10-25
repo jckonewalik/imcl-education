@@ -37,7 +37,6 @@ describe("Sequelize Create Course Repository", () => {
     });
 
     expect(courseModel).toBeDefined();
-    console.log(courseModel?.toJSON());
     expect(courseModel?.id).toBe(course.id);
     expect(courseModel?.name).toBe(course.name);
     expect(courseModel?.lessons.length).toBe(1);
