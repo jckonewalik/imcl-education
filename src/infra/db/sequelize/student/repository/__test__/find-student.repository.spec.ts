@@ -22,19 +22,33 @@ describe("Sequelize Find Student Repository", () => {
   });
 
   it("Find student", async () => {
-    const student = makeStudent();
+    const student1 = makeStudent();
+    const student2 = makeStudent();
+    student2.changePhone(undefined);
+
     await StudentModel.create({
-      id: student.id,
-      name: student.name,
-      gender: student.gender.toString(),
-      phoneNumber: student.phone?.number,
-      phoneIsWhatsapp: student.phone?.isWhatsapp,
-      active: student.active,
+      id: student1.id,
+      name: student1.name,
+      gender: student1.gender.toString(),
+      phoneNumber: student1.phone?.number,
+      phoneIsWhatsapp: student1.phone?.isWhatsapp,
+      active: student1.active,
+    });
+
+    await StudentModel.create({
+      id: student2.id,
+      name: student2.name,
+      gender: student2.gender.toString(),
+      phoneNumber: student2.phone?.number,
+      phoneIsWhatsapp: student2.phone?.isWhatsapp,
+      active: student2.active,
     });
 
     const repository = new SequelizeFindStudentRepository();
-    const foundStudent = await repository.find(student.id);
+    const foundStudent1 = await repository.find(student1.id);
+    const foundStudent2 = await repository.find(student2.id);
 
-    expect(foundStudent).toStrictEqual(student);
+    expect(foundStudent1).toStrictEqual(student1);
+    expect(foundStudent2).toStrictEqual(student2);
   });
 });

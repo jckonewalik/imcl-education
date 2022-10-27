@@ -2,13 +2,13 @@ import { Gender } from "@/domain/@shared/enums/gender";
 import { PhoneNumber } from "@/domain/@shared/value-objects";
 import { Student } from "@/domain/student/entity/student";
 import {
-  Table,
   Column,
+  CreatedAt,
+  DataType,
   Model,
   PrimaryKey,
-  CreatedAt,
+  Table,
   UpdatedAt,
-  DataType,
 } from "sequelize-typescript";
 
 @Table({
@@ -48,12 +48,16 @@ export class StudentModel extends Model {
   updatedOn: Date;
 
   toEntity(): Student {
+    const phoneNumber = !!this.phoneNumber
+      ? new PhoneNumber(this.phoneNumber, this.phoneIsWhatsapp)
+      : undefined;
+
     return new Student(
       this.id,
       this.name,
       Gender[this.gender],
       this.active,
-      new PhoneNumber(this.phoneNumber, this.phoneIsWhatsapp)
+      phoneNumber
     );
   }
 }
