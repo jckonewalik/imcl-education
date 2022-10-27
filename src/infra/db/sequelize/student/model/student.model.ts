@@ -40,9 +40,11 @@ export class StudentModel extends Model {
   active: boolean;
 
   @CreatedAt
+  @Column({ field: "creation_date" })
   creationDate: Date;
 
   @UpdatedAt
+  @Column({ field: "updated_on" })
   updatedOn: Date;
 
   toEntity(): Student {

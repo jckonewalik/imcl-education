@@ -30,9 +30,11 @@ export class CourseModel extends Model {
   lessons: LessonModel[];
 
   @CreatedAt
+  @Column({ field: "creation_date" })
   creationDate: Date;
 
   @UpdatedAt
+  @Column({ field: "updated_on" })
   updatedOn: Date;
 
   toEntity(): Course {

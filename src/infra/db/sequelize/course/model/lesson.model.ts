@@ -40,8 +40,10 @@ export class LessonModel extends Model {
   active: boolean;
 
   @CreatedAt
+  @Column({ field: "creation_date" })
   creationDate: Date;
 
   @UpdatedAt
+  @Column({ field: "updated_on" })
   updatedOn: Date;
 }

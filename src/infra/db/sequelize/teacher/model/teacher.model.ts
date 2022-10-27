@@ -2,13 +2,13 @@ import { Gender } from "@/domain/@shared/enums/gender";
 import { Email } from "@/domain/@shared/value-objects";
 import { Teacher } from "@/domain/teacher/entity";
 import {
-  Table,
   Column,
+  CreatedAt,
+  DataType,
   Model,
   PrimaryKey,
-  CreatedAt,
+  Table,
   UpdatedAt,
-  DataType,
 } from "sequelize-typescript";
 
 @Table({
@@ -33,9 +33,11 @@ export class TeacherModel extends Model {
   active: boolean;
 
   @CreatedAt
+  @Column({ field: "creation_date" })
   creationDate: Date;
 
   @UpdatedAt
+  @Column({ field: "updated_on" })
   updatedOn: Date;
 
   toEntity(): Teacher {
