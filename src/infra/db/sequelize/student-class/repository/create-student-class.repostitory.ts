@@ -17,7 +17,7 @@ export class SequelizeCreateStudentClassRepository
           enrollments: entity.enrollments.map((enrollment) => ({
             id: enrollment.id,
             studentClassId: enrollment.classId,
-            studentId: enrollment.id,
+            studentId: enrollment.studentId,
           })),
         },
         {

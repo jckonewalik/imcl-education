@@ -65,7 +65,18 @@ describe("Sequelize Create Student Class Repository", () => {
     expect(studentClassModel?.name).toBe(studentClass.name);
     expect(studentClassModel?.active).toBe(studentClass.active);
     expect(studentClassModel?.enrollments?.length).toBe(1);
+    expect(studentClassModel?.enrollments?.[0].id).toBe(
+      studentClass.enrollments[0].id
+    );
+    expect(studentClassModel?.enrollments?.[0].studentClassId).toBe(
+      studentClass.enrollments[0].classId
+    );
+    expect(studentClassModel?.enrollments?.[0].studentId).toBe(
+      studentClass.enrollments[0].studentId
+    );
     expect(studentClassModel?.teachers?.length).toBe(1);
+    expect(studentClassModel?.teachers?.[0].id).toBe(teacher.id);
+
     expect(studentClassModel?.creationDate).toBeDefined();
     expect(studentClassModel?.updatedOn).toBeDefined();
   });
