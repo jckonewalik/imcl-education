@@ -1,3 +1,4 @@
+import { Enrollment, StudentClass } from "@/domain/student-class/entity";
 import {
   BelongsTo,
   BelongsToMany,
@@ -27,7 +28,7 @@ export class StudentClassModel extends Model {
 
   @ForeignKey(() => CourseModel)
   @Column({ field: "course_id" })
-  courseId: number;
+  courseId: string;
 
   @BelongsTo(() => CourseModel)
   course: CourseModel;
@@ -51,4 +52,20 @@ export class StudentClassModel extends Model {
   @UpdatedAt
   @Column({ field: "updated_on" })
   updatedOn: Date;
+
+  toEntity(): StudentClass {
+    const teacherIds = this.teachers?.map((teacher) => teacher.id);
+    const enrollments = this.enrollments?.map(
+      (enrollment) =>
+        new Enrollment(
+          enrollment.id,
+          enrollment.studentClassId,
+          enrollment.studentId
+        )
+    );
+    return StudentClass.Builder.builder(this.id, this.courseId, this.name)
+      .teacherIds(teacherIds)
+      .enrollments(enrollments)
+      .build();
+  }
 }
