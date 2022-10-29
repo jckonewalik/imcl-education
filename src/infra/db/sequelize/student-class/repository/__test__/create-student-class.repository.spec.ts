@@ -1,4 +1,3 @@
-import { Gender } from "@/domain/@shared/enums/gender";
 import { StudentClass } from "@/domain/student-class/entity";
 import faker from "faker";
 import { Sequelize } from "sequelize-typescript";
@@ -12,6 +11,7 @@ import {
   StudentClassTeacherModel,
 } from "../../model";
 import { SequelizeCreateStudentClassRepository } from "../create-student-class.repostitory";
+import { makeModels } from "./util";
 
 describe("Sequelize Create Student Class Repository", () => {
   let sequelize: Sequelize;
@@ -41,28 +41,9 @@ describe("Sequelize Create Student Class Repository", () => {
   });
 
   it("Create a student class", async () => {
+    const { course, student, teacher } = await makeModels();
+
     const repository = new SequelizeCreateStudentClassRepository();
-
-    const course = await CourseModel.create({
-      id: uuid(),
-      name: faker.random.word(),
-      active: true,
-    });
-
-    const teacher = await TeacherModel.create({
-      id: uuid(),
-      name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-      gender: Gender.F,
-      email: faker.internet.email(),
-      active: true,
-    });
-
-    const student = await StudentModel.create({
-      id: uuid(),
-      name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-      gender: Gender.M,
-      active: true,
-    });
 
     const studentClass = StudentClass.Builder.builder(
       uuid(),
