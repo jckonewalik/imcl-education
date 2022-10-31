@@ -29,7 +29,7 @@ export class SequelizeUpdateCourseRepository implements UpdateCourseRepository {
         lessonModels = lessonModels.filter((m) => m.id !== lesson.id);
       }
       for (const lesson of lessonModels) {
-        LessonModel.destroy({
+        await LessonModel.destroy({
           where: { id: lesson.id },
         });
       }
