@@ -1,10 +1,9 @@
 import { Course } from "@/domain/course/entity";
-import { Sequelize } from "sequelize-typescript";
-import { CourseModel } from "../../model/course.model";
-import { LessonModel } from "../../model/lesson.model";
-import { SequelizeCreateCourseRepository } from "../create-course.repository";
-import { v4 as uuid } from "uuid";
+import { CourseModel, LessonModel } from "@/infra/db/sequelize/course/model";
 import faker from "faker";
+import { Sequelize } from "sequelize-typescript";
+import { v4 as uuid } from "uuid";
+import { SequelizeCreateCourseRepository } from "../create-course.repository";
 describe("Sequelize Create Course Repository", () => {
   let sequelize: Sequelize;
 

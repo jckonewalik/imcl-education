@@ -1,3 +1,4 @@
+import { StudentModel } from "@/infra/db/sequelize/student/model";
 import {
   Column,
   CreatedAt,
@@ -7,8 +8,7 @@ import {
   PrimaryKey,
   Table,
 } from "sequelize-typescript";
-import { StudentModel } from "../../student/model/student.model";
-import { StudentClassModel } from "./student-class.model";
+import { StudentClassModel } from ".";
 
 @Table({
   tableName: "enrollments",

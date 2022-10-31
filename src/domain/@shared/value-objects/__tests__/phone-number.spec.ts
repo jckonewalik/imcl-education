@@ -1,6 +1,5 @@
-import { InvalidValueException } from "../../exceptions";
+import { InvalidValueException } from "@/domain/@shared/exceptions";
 import { PhoneNumber } from "../phone-number";
-import faker from "faker";
 
 describe("Phone Number unit tests", () => {
   describe("Phone Number invalid scenarios", () => {

@@ -1,6 +1,6 @@
 import { Teacher } from "@/domain/teacher/entity";
 import { FindTeacherRepository } from "@/domain/teacher/repository";
-import { TeacherModel } from "../model/teacher.model";
+import { TeacherModel } from "../model";
 
 export class SequelizeFindTeacherRepository implements FindTeacherRepository {
   async find(id: string): Promise<Teacher | undefined> {

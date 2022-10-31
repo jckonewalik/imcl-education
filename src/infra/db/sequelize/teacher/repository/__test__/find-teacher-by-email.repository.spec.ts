@@ -1,5 +1,5 @@
+import { TeacherModel } from "@/infra/db/sequelize/teacher/model";
 import { Sequelize } from "sequelize-typescript";
-import { TeacherModel } from "../../model/teacher.model";
 import { SequelizeFindTeacherByEmailRepository } from "../find-teacher-by-email.repository";
 import { makeTeacher } from "./util";
 describe("Sequelize Find Teacher by Email Repository", () => {

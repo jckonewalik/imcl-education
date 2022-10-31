@@ -1,9 +1,8 @@
+import { CourseModel, LessonModel } from "@/infra/db/sequelize/course/model";
+import faker from "faker";
 import { Sequelize } from "sequelize-typescript";
-import { CourseModel } from "../../model/course.model";
-import { LessonModel } from "../../model/lesson.model";
 import { SequelizeUpdateCourseRepository } from "../update-course.repository";
 import { makeCourse } from "./util";
-import faker from "faker";
 describe("Sequelize Update Course Repository", () => {
   let sequelize: Sequelize;
 

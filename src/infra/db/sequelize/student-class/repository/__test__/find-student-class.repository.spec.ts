@@ -1,15 +1,15 @@
 import { StudentClass } from "@/domain/student-class/entity";
-import faker from "faker";
-import { Sequelize } from "sequelize-typescript";
-import { v4 as uuid } from "uuid";
-import { CourseModel, LessonModel } from "../../../course/model";
-import { StudentModel } from "../../../student/model/student.model";
-import { TeacherModel } from "../../../teacher/model/teacher.model";
+import { CourseModel, LessonModel } from "@/infra/db/sequelize/course/model";
 import {
   EnrollmentModel,
   StudentClassModel,
   StudentClassTeacherModel,
-} from "../../model";
+} from "@/infra/db/sequelize/student-class/model";
+import { StudentModel } from "@/infra/db/sequelize/student/model";
+import { TeacherModel } from "@/infra/db/sequelize/teacher/model";
+import faker from "faker";
+import { Sequelize } from "sequelize-typescript";
+import { v4 as uuid } from "uuid";
 import { SequelizeCreateStudentClassRepository } from "../create-student-class.repostitory";
 import { SequelizeFindStudentClassRepository } from "../find-student-class.repository";
 import { makeModels } from "./util";

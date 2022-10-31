@@ -1,6 +1,6 @@
 import { Course } from "@/domain/course/entity";
 import { CreateCourseRepository } from "@/domain/course/repository";
-import { CourseModel } from "../model/course.model";
+import { CourseModel } from "../model";
 
 export class SequelizeCreateCourseRepository implements CreateCourseRepository {
   async create(entity: Course): Promise<void> {

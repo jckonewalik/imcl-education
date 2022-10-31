@@ -1,3 +1,4 @@
+import { TeacherModel } from "@/infra/db/sequelize/teacher/model";
 import {
   Column,
   DataType,
@@ -5,8 +6,7 @@ import {
   Model,
   Table,
 } from "sequelize-typescript";
-import { TeacherModel } from "../../teacher/model/teacher.model";
-import { StudentClassModel } from "./student-class.model";
+import { StudentClassModel } from ".";
 
 @Table({
   tableName: "student_class_teacher",

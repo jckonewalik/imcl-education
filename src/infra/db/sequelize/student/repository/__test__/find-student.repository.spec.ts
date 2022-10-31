@@ -1,5 +1,5 @@
+import { StudentModel } from "@/infra/db/sequelize/student/model";
 import { Sequelize } from "sequelize-typescript";
-import { StudentModel } from "../../model/student.model";
 import { SequelizeFindStudentRepository } from "../find-student.repository";
 import { makeStudent } from "./util";
 describe("Sequelize Find Student Repository", () => {

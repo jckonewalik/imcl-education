@@ -9,7 +9,7 @@ import {
   Table,
   UpdatedAt,
 } from "sequelize-typescript";
-import { CourseModel } from "./course.model";
+import { CourseModel } from ".";
 
 @Table({
   tableName: "lessons",

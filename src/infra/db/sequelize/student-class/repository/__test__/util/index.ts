@@ -1,7 +1,7 @@
 import { Gender } from "@/domain/@shared/enums/gender";
 import { CourseModel } from "@/infra/db/sequelize/course/model";
-import { StudentModel } from "@/infra/db/sequelize/student/model/student.model";
-import { TeacherModel } from "@/infra/db/sequelize/teacher/model/teacher.model";
+import { StudentModel } from "@/infra/db/sequelize/student/model";
+import { TeacherModel } from "@/infra/db/sequelize/teacher/model";
 import faker from "faker";
 import { v4 as uuid } from "uuid";
 

@@ -1,7 +1,6 @@
 import { Course } from "@/domain/course/entity";
 import { UpdateCourseRepository } from "@/domain/course/repository";
-import { CourseModel } from "../model/course.model";
-import { LessonModel } from "../model/lesson.model";
+import { CourseModel, LessonModel } from "../model";
 
 export class SequelizeUpdateCourseRepository implements UpdateCourseRepository {
   async update(entity: Course): Promise<void> {

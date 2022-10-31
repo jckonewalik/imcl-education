@@ -1,6 +1,5 @@
+import { CourseModel, LessonModel } from "@/infra/db/sequelize/course/model";
 import { Sequelize } from "sequelize-typescript";
-import { CourseModel } from "../../model/course.model";
-import { LessonModel } from "../../model/lesson.model";
 import { SequelizeFindCourseRepository } from "../find-course.repository";
 import { makeCourse } from "./util";
 

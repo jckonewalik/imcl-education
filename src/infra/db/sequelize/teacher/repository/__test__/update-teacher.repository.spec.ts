@@ -1,7 +1,7 @@
-import { TeacherModel } from "../../model/teacher.model";
+import { TeacherModel } from "@/infra/db/sequelize/teacher/model";
 import { Sequelize } from "sequelize-typescript";
-import { makeTeacher } from "./util";
 import { SequelizeUpdateTeacherRepository } from "../update-teacher.repository";
+import { makeTeacher } from "./util";
 
 describe("Sequelize Update Teacher Repository", () => {
   let sequelize: Sequelize;

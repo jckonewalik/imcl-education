@@ -1,4 +1,4 @@
-import { InvalidValueException } from "../../exceptions";
+import { InvalidValueException } from "@/domain/@shared/exceptions";
 import { Email } from "../email";
 
 describe("Email unit tests", () => {

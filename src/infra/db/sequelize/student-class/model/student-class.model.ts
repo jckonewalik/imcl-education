@@ -1,4 +1,6 @@
 import { Enrollment, StudentClass } from "@/domain/student-class/entity";
+import { CourseModel } from "@/infra/db/sequelize/course/model";
+import { TeacherModel } from "@/infra/db/sequelize/teacher/model";
 import {
   BelongsTo,
   BelongsToMany,
@@ -12,10 +14,7 @@ import {
   Table,
   UpdatedAt,
 } from "sequelize-typescript";
-import { CourseModel } from "../../course/model";
-import { TeacherModel } from "../../teacher/model/teacher.model";
-import { EnrollmentModel } from "./enrollment.model";
-import { StudentClassTeacherModel } from "./student-class-teacher.model";
+import { EnrollmentModel, StudentClassTeacherModel } from ".";
 
 @Table({
   tableName: "student_classes",

@@ -1,6 +1,6 @@
 import { Teacher } from "@/domain/teacher/entity";
 import { UpdateTeacherRepository } from "@/domain/teacher/repository";
-import { TeacherModel } from "../model/teacher.model";
+import { TeacherModel } from "../model";
 
 export class SequelizeUpdateTeacherRepository
   implements UpdateTeacherRepository
