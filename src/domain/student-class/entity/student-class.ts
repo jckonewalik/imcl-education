@@ -5,9 +5,9 @@ import {
 
 import Messages from "@/domain/@shared/util/messages";
 import { Student } from "@/domain/student/entity/student";
-import { Enrollment } from "./enrollment";
-import { v4 as uuid } from "uuid";
 import { Teacher } from "@/domain/teacher/entity";
+import { v4 as uuid } from "uuid";
+import { Enrollment } from "./enrollment";
 
 export class StudentClass {
   private _id: string;
@@ -135,12 +135,12 @@ export class StudentClass {
   }
 
   static Builder = class {
-    private _id: string = "";
-    private _courseId: string = "";
-    private _name: string = "";
-    private _active: boolean = true;
-    private _teacherIds: string[] = [];
-    private _enrollments: Enrollment[] = [];
+    _id: string = "";
+    _courseId: string = "";
+    _name: string = "";
+    _active: boolean = true;
+    _teacherIds: string[] = [];
+    _enrollments: Enrollment[] = [];
 
     static builder(id: string, courseId: string, name: string) {
       const builder = new StudentClass.Builder();

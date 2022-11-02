@@ -1,4 +1,4 @@
-import { UpdateAction } from "../@shared/enums";
+import { UpdateAction } from "@/usecases/@shared/enums";
 
 export type UpdateStudentClassDto = {
   id: string;
