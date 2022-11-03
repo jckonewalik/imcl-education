@@ -38,4 +38,6 @@ export default class Messages {
     "O email já está em uso por outro professor";
   static TEACHER_ALREADY_ACTIVE = "O professor já esta ativo";
   static TEACHER_ALREADY_INACTIVE = "O professor já esta inativo";
+  static SOMETHING_WRONG_HAPPEND =
+    "Algo de errado aconteceu. Tente novamente mais tarde";
 }
