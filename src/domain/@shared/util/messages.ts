@@ -40,4 +40,6 @@ export default class Messages {
   static TEACHER_ALREADY_INACTIVE = "O professor já esta inativo";
   static SOMETHING_WRONG_HAPPEND =
     "Algo de errado aconteceu. Tente novamente mais tarde";
+  static INVALID_GENDER = "O gênero deve ser F ou M";
+  static MISSING_GENDER = "Informe o gênero";
 }
