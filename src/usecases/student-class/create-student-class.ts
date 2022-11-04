@@ -4,7 +4,11 @@ import { FindCourseRepository } from "@/domain/course/repository";
 import { StudentClass } from "@/domain/student-class/entity";
 import { CreateStudentClassRepository } from "@/domain/student-class/repository";
 import StudentClassService from "@/domain/student-class/services/student-class.service";
-import { CreateStudentClassDto } from "./dto";
+
+type CreateProps = {
+  courseId: string;
+  name: string;
+};
 
 export class CreateStudentClassUseCase {
   constructor(
@@ -12,13 +16,13 @@ export class CreateStudentClassUseCase {
     private readonly findCourseRepo: FindCourseRepository
   ) {}
 
-  async create(dto: CreateStudentClassDto): Promise<StudentClass> {
-    const course = await this.findCourseRepo.find(dto.courseId);
+  async create(data: CreateProps): Promise<StudentClass> {
+    const course = await this.findCourseRepo.find(data.courseId);
     if (!course) {
       throw new EntityNotFoundException(Messages.INVALID_COURSE);
     }
 
-    const studentClass = StudentClassService.newStudentClass(course, dto.name);
+    const studentClass = StudentClassService.newStudentClass(course, data.name);
 
     this.createRepo.create(studentClass);
     return studentClass;

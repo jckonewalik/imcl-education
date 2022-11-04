@@ -10,13 +10,14 @@ import {
   Catch,
   ExceptionFilter,
   HttpStatus,
+  Logger,
 } from "@nestjs/common";
 import { HttpAdapterHost } from "@nestjs/core";
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
   constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
-
+  private readonly logger = new Logger(AllExceptionsFilter.name);
   catch(exception: any, host: ArgumentsHost) {
     const { httpAdapter } = this.httpAdapterHost;
 
@@ -49,6 +50,8 @@ export class AllExceptionsFilter implements ExceptionFilter {
           ? Messages.SOMETHING_WRONG_HAPPEND
           : message,
     };
+
+    this.logger.log(responseBody);
 
     httpAdapter.reply(ctx.getResponse(), responseBody, httpStatus);
   }

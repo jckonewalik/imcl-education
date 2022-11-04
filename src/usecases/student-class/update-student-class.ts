@@ -11,7 +11,20 @@ import {
 import { FindStudentRepository } from "@/domain/student/repository";
 import { FindTeacherRepository } from "@/domain/teacher/repository";
 import { UpdateAction } from "../@shared/enums";
-import { UpdateStudentClassDto } from "./dto";
+
+type UpateProps = {
+  id: string;
+  name: string;
+  active: boolean;
+  students?: {
+    studentId: string;
+    action: UpdateAction;
+  }[];
+  teachers?: {
+    teacherId: string;
+    action: UpdateAction;
+  }[];
+};
 
 export class UpdateStudentClassUseCase {
   constructor(
@@ -21,23 +34,23 @@ export class UpdateStudentClassUseCase {
     private readonly findTeacher: FindTeacherRepository
   ) {}
 
-  async update(dto: UpdateStudentClassDto): Promise<StudentClass> {
-    const studentClass = await this.findRepo.find(dto.id);
+  async update(data: UpateProps): Promise<StudentClass> {
+    const studentClass = await this.findRepo.find(data.id);
 
     if (!studentClass) {
       throw new EntityNotFoundException(Messages.INVALID_STUDENT_CLASS);
     }
 
-    if (studentClass.name !== dto.name) {
-      studentClass.changeName(dto.name);
+    if (studentClass.name !== data.name) {
+      studentClass.changeName(data.name);
     }
 
-    if (studentClass.active !== dto.active) {
-      dto.active ? studentClass.activate() : studentClass.inactivate();
+    if (studentClass.active !== data.active) {
+      data.active ? studentClass.activate() : studentClass.inactivate();
     }
 
-    await this.updateEnrollments(studentClass, dto);
-    await this.updateTeachers(studentClass, dto);
+    await this.updateEnrollments(studentClass, data);
+    await this.updateTeachers(studentClass, data);
 
     this.updateRepo.update(studentClass);
     return studentClass;
@@ -45,12 +58,12 @@ export class UpdateStudentClassUseCase {
 
   private async updateEnrollments(
     studentClass: StudentClass,
-    dto: UpdateStudentClassDto
+    data: UpateProps
   ) {
     const studentsToEnroll =
-      dto.students?.filter((s) => s.action === UpdateAction.A) || [];
+      data.students?.filter((s) => s.action === UpdateAction.A) || [];
     const studentsToUnenroll =
-      dto.students?.filter((s) => s.action === UpdateAction.D) || [];
+      data.students?.filter((s) => s.action === UpdateAction.D) || [];
 
     for (const s of studentsToEnroll) {
       const student = await this.findStudent.find(s.studentId);
@@ -69,14 +82,11 @@ export class UpdateStudentClassUseCase {
     }
   }
 
-  private async updateTeachers(
-    studentClass: StudentClass,
-    dto: UpdateStudentClassDto
-  ) {
+  private async updateTeachers(studentClass: StudentClass, data: UpateProps) {
     const teachersToAdd =
-      dto.teachers?.filter((s) => s.action === UpdateAction.A) || [];
+      data.teachers?.filter((s) => s.action === UpdateAction.A) || [];
     const teachersToRemove =
-      dto.teachers?.filter((s) => s.action === UpdateAction.D) || [];
+      data.teachers?.filter((s) => s.action === UpdateAction.D) || [];
 
     for (const t of teachersToAdd) {
       const teacher = await this.findTeacher.find(t.teacherId);

@@ -1,3 +1,4 @@
+import { Gender } from "@/domain/@shared/enums/gender";
 import { BadRequestException } from "@/domain/@shared/exceptions";
 import Messages from "@/domain/@shared/util/messages";
 import { Email } from "@/domain/@shared/value-objects";
@@ -7,7 +8,12 @@ import {
   FindTeacherByEmailRepository,
 } from "@/domain/teacher/repository";
 import { v4 as uuid } from "uuid";
-import { NewTeacherDto } from "./dto";
+
+type RegisterProps = {
+  name: string;
+  gender: Gender;
+  email: string;
+};
 
 export class RegisterTeacherUseCase {
   constructor(
@@ -15,14 +21,14 @@ export class RegisterTeacherUseCase {
     private readonly findRepo: FindTeacherByEmailRepository
   ) {}
 
-  async register(dto: NewTeacherDto): Promise<Teacher> {
-    const email = new Email(dto.email);
+  async register(data: RegisterProps): Promise<Teacher> {
+    const email = new Email(data.email);
 
     const exists = await this.findRepo.find(email);
     if (exists) {
       throw new BadRequestException(Messages.TEACHER_EMAIL_ALREADY_IN_USE);
     }
-    const teacher = new Teacher(uuid(), dto.name, dto.gender, email, true);
+    const teacher = new Teacher(uuid(), data.name, data.gender, email, true);
 
     await this.createRepo.create(teacher);
 

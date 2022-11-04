@@ -6,7 +6,18 @@ import {
   UpdateCourseRepository,
 } from "@/domain/course/repository";
 import { UpdateAction } from "../@shared/enums";
-import { UpdateCourseDto } from "./dto";
+
+type UpdateProps = {
+  id: string;
+  name: string;
+  active: boolean;
+  lessons?: {
+    id?: string;
+    name: string;
+    number: number;
+    action: UpdateAction;
+  }[];
+};
 
 export class UpdateCourseUseCase {
   constructor(
@@ -14,34 +25,34 @@ export class UpdateCourseUseCase {
     private readonly updateRepository: UpdateCourseRepository
   ) {}
 
-  async update(dto: UpdateCourseDto): Promise<Course> {
-    const course = await this.findRepository.find(dto.id);
+  async update(data: UpdateProps): Promise<Course> {
+    const course = await this.findRepository.find(data.id);
 
     if (!course) {
       throw new EntityNotFoundException(Messages.INVALID_COURSE);
     }
 
-    if (course.name !== dto.name) {
-      course.changeName(dto.name);
+    if (course.name !== data.name) {
+      course.changeName(data.name);
     }
 
-    if (course.active !== dto.active) {
-      dto.active ? course.activate() : course.inactivate();
+    if (course.active !== data.active) {
+      data.active ? course.activate() : course.inactivate();
     }
 
-    this.updateLessons(course, dto);
+    this.updateLessons(course, data);
 
     await this.updateRepository.update(course);
     return course;
   }
 
-  private updateLessons(course: Course, dto: UpdateCourseDto) {
+  private updateLessons(course: Course, data: UpdateProps) {
     const lessonsToAdd =
-      dto.lessons?.filter((l) => l.action === UpdateAction.A) || [];
+      data.lessons?.filter((l) => l.action === UpdateAction.A) || [];
     const lessonsToRemove =
-      dto.lessons?.filter((l) => l.action === UpdateAction.D) || [];
+      data.lessons?.filter((l) => l.action === UpdateAction.D) || [];
     const lessonsToInactivate =
-      dto.lessons?.filter((l) => l.action === UpdateAction.I) || [];
+      data.lessons?.filter((l) => l.action === UpdateAction.I) || [];
 
     for (const lesson of lessonsToAdd) {
       course.addLesson(lesson.number, lesson.name);

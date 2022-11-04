@@ -22,6 +22,7 @@ import { SequelizeModule } from "@nestjs/sequelize";
   imports: [
     SequelizeModule.forRoot({
       dialect: "postgres",
+      logging: false,
       host: process.env.DB_HOST,
       port: +(process.env.DB_PORT || 0),
       username: process.env.DB_USER,

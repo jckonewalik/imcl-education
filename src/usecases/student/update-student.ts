@@ -6,26 +6,35 @@ import {
   FindStudentRepository,
   UpdateStudentRepository,
 } from "@/domain/student/repository";
-import { UpdateStudentDto } from "./dto/update-student.dto";
+
+type UpdateProps = {
+  id: string;
+  name: string;
+  phone?: {
+    number: string;
+    isWhatsapp: boolean;
+  };
+  active: boolean;
+};
 
 export class UpdateStudentUseCase {
   constructor(
     private readonly findRepo: FindStudentRepository,
     private readonly updateRepo: UpdateStudentRepository
   ) {}
-  async update(dto: UpdateStudentDto): Promise<Student> {
-    const student = await this.findRepo.find(dto.id);
+  async update(data: UpdateProps): Promise<Student> {
+    const student = await this.findRepo.find(data.id);
     if (!student) {
       throw new EntityNotFoundException(Messages.INVALID_STUDENT);
     }
-    if (student.name !== dto.name) {
-      student.changeName(dto.name);
+    if (student.name !== data.name) {
+      student.changeName(data.name);
     }
-    if (student.active !== dto.active) {
-      dto.active ? student.activate() : student.inactivate();
+    if (student.active !== data.active) {
+      data.active ? student.activate() : student.inactivate();
     }
-    const newPhone = dto.phone
-      ? new PhoneNumber(dto.phone.number, dto.phone.isWhatsapp)
+    const newPhone = data.phone
+      ? new PhoneNumber(data.phone.number, data.phone.isWhatsapp)
       : undefined;
     if (!student.phone?.equals(newPhone)) {
       student.changePhone(newPhone);
