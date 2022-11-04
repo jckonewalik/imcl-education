@@ -10,16 +10,27 @@ import {
   SequelizeFindTeacherRepository,
   SequelizeUpdateTeacherRepository,
 } from "@/infra/db/sequelize/teacher/repository";
+import { AllExceptionsFilter } from "@/presentation/@shared/filters";
 import { TeachersController } from "@/presentation/teacher/controllers";
 import {
   RegisterTeacherUseCase,
   UpdateTeacherUseCase,
 } from "@/usecases/teacher";
-import { Module } from "@nestjs/common";
+import { Module, ValidationPipe } from "@nestjs/common";
+import { APP_FILTER, APP_PIPE } from "@nestjs/core";
 
 @Module({
   controllers: [TeachersController],
+
   providers: [
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
+    },
+    {
+      provide: APP_PIPE,
+      useClass: ValidationPipe,
+    },
     {
       provide: "FindTeacherByEmailRepository",
       useClass: SequelizeFindTeacherByEmailRepository,
