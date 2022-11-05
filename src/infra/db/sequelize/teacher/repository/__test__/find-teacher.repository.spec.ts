@@ -22,7 +22,7 @@ describe("Sequelize Find Teacher Repository", () => {
   });
 
   it("Find teacher", async () => {
-    const teacher = makeTeacher();
+    const teacher = makeTeacher({});
     await TeacherModel.create({
       id: teacher.id,
       name: teacher.name,

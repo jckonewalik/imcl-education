@@ -24,7 +24,7 @@ describe("Sequelize Create Teacher Repository", () => {
 
   it("Create a teacher", async () => {
     const repository = new SequelizeCreateTeacherRepository();
-    const teacher = makeTeacher();
+    const teacher = makeTeacher({});
 
     await repository.create(teacher);
 
