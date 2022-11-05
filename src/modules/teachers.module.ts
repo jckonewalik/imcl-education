@@ -16,6 +16,7 @@ import {
   RegisterTeacherUseCase,
   UpdateTeacherUseCase,
 } from "@/usecases/teacher";
+import { GetTeacherUseCase } from "@/usecases/teacher/get-teacher";
 import { Module, ValidationPipe } from "@nestjs/common";
 import { APP_FILTER, APP_PIPE } from "@nestjs/core";
 
@@ -77,6 +78,13 @@ import { APP_FILTER, APP_PIPE } from "@nestjs/core";
           findTeacherByEmailRepository,
           updateTeacherRepository
         );
+      },
+    },
+    {
+      inject: ["FindTeacherRepository"],
+      provide: GetTeacherUseCase,
+      useFactory: (findTeacherRepository: FindTeacherRepository) => {
+        return new GetTeacherUseCase(findTeacherRepository);
       },
     },
   ],

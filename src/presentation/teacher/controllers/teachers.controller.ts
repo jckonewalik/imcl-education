@@ -4,14 +4,24 @@ import {
   RegisterTeacherUseCase,
   UpdateTeacherUseCase,
 } from "@/usecases/teacher";
-import { Body, Controller, HttpStatus, Param, Post, Put } from "@nestjs/common";
+import { GetTeacherUseCase } from "@/usecases/teacher/get-teacher";
+import {
+  Body,
+  Controller,
+  Get,
+  HttpStatus,
+  Param,
+  Post,
+  Put,
+} from "@nestjs/common";
 import { UpdateTeacherDto } from "../dto/update-teacher.dto";
 
 @Controller("teachers")
 export class TeachersController {
   constructor(
     private readonly registerUseCase: RegisterTeacherUseCase,
-    private readonly updateUseCase: UpdateTeacherUseCase
+    private readonly updateUseCase: UpdateTeacherUseCase,
+    private readonly getUseCase: GetTeacherUseCase
   ) {}
   @Post()
   async create(
@@ -32,6 +42,14 @@ export class TeachersController {
       email: dto.email,
       active: dto.active,
     });
+    return new ResponseDto(HttpStatus.OK, TeacherDto.fromEntity(teacher));
+  }
+
+  @Get(":teacherId")
+  async get(
+    @Param("teacherId") teacherId: string
+  ): Promise<ResponseDto<TeacherDto>> {
+    const teacher = await this.getUseCase.get(teacherId);
     return new ResponseDto(HttpStatus.OK, TeacherDto.fromEntity(teacher));
   }
 }

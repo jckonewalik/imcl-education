@@ -51,7 +51,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
           : message,
     };
 
-    this.logger.log(responseBody);
+    this.logger.log(responseBody, exception);
 
     httpAdapter.reply(ctx.getResponse(), responseBody, httpStatus);
   }
