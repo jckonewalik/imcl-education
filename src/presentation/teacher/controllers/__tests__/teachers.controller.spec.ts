@@ -106,4 +106,20 @@ describe("Teachers Controller Tests", () => {
         expect(result._body.message).toEqual(Messages.INVALID_TEACHER);
       });
   });
+
+  it(`/GET teachers by ID`, async () => {
+    const teacher = await TeacherModel.create({
+      id: uuid(),
+      name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+      gender: Gender.M.toString(),
+      email: faker.internet.email(),
+      active: true,
+    });
+    await request(app.getHttpServer())
+      .get(`/teachers/${teacher.id}`)
+      .then((result) => {
+        expect(result.statusCode).toEqual(200);
+        expect(result._body.body.id).toEqual(teacher.id);
+      });
+  });
 });
