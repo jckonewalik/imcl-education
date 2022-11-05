@@ -1,3 +1,4 @@
+import { Gender } from "@/domain/@shared/enums/gender";
 import Messages from "@/domain/@shared/util/messages";
 import { TeacherModel } from "@/infra/db/sequelize/teacher/model";
 import { TeachersModule } from "@/modules/teachers.module";
@@ -6,6 +7,7 @@ import { Test } from "@nestjs/testing";
 import faker from "faker";
 import { Sequelize } from "sequelize-typescript";
 import request from "supertest";
+import { v4 as uuid } from "uuid";
 describe("Teachers Controller Tests", () => {
   let app: INestApplication;
 
@@ -66,6 +68,42 @@ describe("Teachers Controller Tests", () => {
       .then((result) => {
         expect(result.statusCode).toEqual(400);
         expect(result._body.message).toEqual(Messages.INVALID_GENDER);
+      });
+  });
+
+  it(`/PUT teachers`, async () => {
+    const teacher = await TeacherModel.create({
+      id: uuid(),
+      name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+      gender: Gender.M.toString(),
+      email: faker.internet.email(),
+      active: true,
+    });
+    await request(app.getHttpServer())
+      .put(`/teachers/${teacher.id}`)
+      .send({
+        name: teacher.name,
+        email: teacher.email,
+        active: false,
+      })
+      .expect(200);
+
+    const result = await TeacherModel.findOne({ where: { id: teacher.id } });
+    expect(result).toBeDefined();
+    expect(result?.active).toBeFalsy();
+  });
+
+  it(`/PUT teachers with invalid teacher`, async () => {
+    await request(app.getHttpServer())
+      .put(`/teachers/${uuid()}`)
+      .send({
+        name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+        email: faker.internet.email(),
+        active: false,
+      })
+      .then((result) => {
+        expect(result.statusCode).toEqual(404);
+        expect(result._body.message).toEqual(Messages.INVALID_TEACHER);
       });
   });
 });
