@@ -66,7 +66,7 @@ describe("Sequelize Find All Teachers Repository", () => {
     const result = await sut.find(
       { name: teachers[0].name.substring(0, 5) },
       1,
-      0
+      1
     );
 
     expect(result.currentPage).toBe(1);
@@ -77,7 +77,7 @@ describe("Sequelize Find All Teachers Repository", () => {
 
   it("Find teacher by gender", async () => {
     const { teachers, sut } = await makeSut();
-    const result = await sut.find({ gender: Gender.M.toString() }, 1, 1);
+    const result = await sut.find({ gender: Gender.M.toString() }, 1, 2);
 
     expect(result.currentPage).toBe(2);
     expect(result.totalItems).toBe(2);
@@ -86,7 +86,7 @@ describe("Sequelize Find All Teachers Repository", () => {
   });
   it("Find active teachers", async () => {
     const { teachers, sut } = await makeSut();
-    const result = await sut.find({ active: true }, 2, 0);
+    const result = await sut.find({ active: true }, 2, 1);
 
     expect(result.currentPage).toBe(1);
     expect(result.totalItems).toBe(2);
@@ -95,7 +95,7 @@ describe("Sequelize Find All Teachers Repository", () => {
   });
   it("Find teacher by email", async () => {
     const { teachers, sut } = await makeSut();
-    const result = await sut.find({ email: teachers[0].email.value }, 1, 0);
+    const result = await sut.find({ email: teachers[0].email.value }, 1, 1);
 
     expect(result.currentPage).toBe(1);
     expect(result.totalItems).toBe(1);

@@ -9,8 +9,8 @@ export class SequelizeFindAllTeachersRepository
 {
   async find(
     criteria: object,
-    lines: number,
-    page: number
+    lines: number = 10,
+    page: number = 1
   ): Promise<Page<Teacher>> {
     const name = criteria["name"];
     const active = criteria["active"];
@@ -37,12 +37,12 @@ export class SequelizeFindAllTeachersRepository
     const result = await TeacherModel.findAndCountAll({
       where,
       limit: lines,
-      offset: page * lines,
+      offset: (page - 1) * lines,
     });
 
     return {
-      currentPage: page + 1,
-      totalPages: result.count / lines,
+      currentPage: page,
+      totalPages: Math.ceil(result.count / lines),
       totalItems: result.count,
       data: result.rows.map((r) => r.toEntity()),
     };
