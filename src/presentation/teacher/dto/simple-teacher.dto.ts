@@ -1,9 +1,22 @@
 import { Teacher } from "@/domain/teacher/entity";
+import { ApiProperty } from "@nestjs/swagger";
 
 export class SimpleTeacherDto {
+  @ApiProperty({
+    description: "ID do professor",
+  })
   id: string;
+  @ApiProperty({
+    description: "Nome do professor",
+  })
   name: string;
+  @ApiProperty({
+    description: "E-mail do professor",
+  })
   email: string;
+  @ApiProperty({
+    description: "Identificação de status ativo do professor",
+  })
   active: boolean;
 
   private constructor() {}

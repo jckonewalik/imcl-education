@@ -123,7 +123,7 @@ describe("Teachers Controller Tests", () => {
       });
   });
 
-  it(`/POST teachers`, async () => {
+  it(`/POST teachers/search`, async () => {
     const teacher1 = await TeacherModel.create({
       id: uuid(),
       name: `${faker.name.firstName()} ${faker.name.lastName()}`,
@@ -131,7 +131,7 @@ describe("Teachers Controller Tests", () => {
       email: faker.internet.email(),
       active: true,
     });
-    const teacher2 = await TeacherModel.create({
+    await TeacherModel.create({
       id: uuid(),
       name: `${faker.name.firstName()} ${faker.name.lastName()}`,
       gender: Gender.M.toString(),

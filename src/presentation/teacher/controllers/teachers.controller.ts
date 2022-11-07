@@ -1,5 +1,8 @@
 import { Page } from "@/domain/@shared/types/page";
 import { FindAllTeachersRepository } from "@/domain/teacher/repository";
+import { ApiPageResponseDto } from "@/presentation/@shared/decorators/api-page-response-dto";
+import { ApiResponseDto } from "@/presentation/@shared/decorators/api-response-dto";
+import { ErrorResponseDto } from "@/presentation/@shared/dto/error-response.dto";
 import { ResponseDto } from "@/presentation/@shared/dto/response.dto";
 import { CreateTeacherDto, TeacherDto } from "@/presentation/teacher/dto";
 import {
@@ -18,10 +21,17 @@ import {
   Post,
   Put,
 } from "@nestjs/common";
+import {
+  ApiBadRequestResponse,
+  ApiInternalServerErrorResponse,
+  ApiNotFoundResponse,
+  ApiTags,
+} from "@nestjs/swagger";
 import { SearchTeacherDto } from "../dto/search-teacher.dto";
 import { SimpleTeacherDto } from "../dto/simple-teacher.dto";
 import { UpdateTeacherDto } from "../dto/update-teacher.dto";
 
+@ApiTags("teachers")
 @Controller("teachers")
 export class TeachersController {
   constructor(
@@ -32,6 +42,15 @@ export class TeachersController {
     private readonly findAllRepo: FindAllTeachersRepository
   ) {}
   @Post()
+  @ApiResponseDto(TeacherDto, { status: 201 })
+  @ApiBadRequestResponse({
+    status: 400,
+    type: ErrorResponseDto,
+  })
+  @ApiInternalServerErrorResponse({
+    status: 500,
+    type: ErrorResponseDto,
+  })
   async create(
     @Body() dto: CreateTeacherDto
   ): Promise<ResponseDto<TeacherDto>> {
@@ -40,6 +59,15 @@ export class TeachersController {
   }
 
   @Put(":teacherId")
+  @ApiResponseDto(TeacherDto, { status: 200 })
+  @ApiBadRequestResponse({
+    status: 400,
+    type: ErrorResponseDto,
+  })
+  @ApiInternalServerErrorResponse({
+    status: 500,
+    type: ErrorResponseDto,
+  })
   async update(
     @Param("teacherId") teacherId: string,
     @Body() dto: UpdateTeacherDto
@@ -54,6 +82,15 @@ export class TeachersController {
   }
 
   @Get(":teacherId")
+  @ApiResponseDto(TeacherDto, { status: 200 })
+  @ApiNotFoundResponse({
+    status: 404,
+    type: ErrorResponseDto,
+  })
+  @ApiInternalServerErrorResponse({
+    status: 500,
+    type: ErrorResponseDto,
+  })
   async get(
     @Param("teacherId") teacherId: string
   ): Promise<ResponseDto<TeacherDto>> {
@@ -63,6 +100,15 @@ export class TeachersController {
 
   @Post("search")
   @HttpCode(200)
+  @ApiPageResponseDto(SimpleTeacherDto)
+  @ApiBadRequestResponse({
+    status: 400,
+    type: ErrorResponseDto,
+  })
+  @ApiInternalServerErrorResponse({
+    status: 500,
+    type: ErrorResponseDto,
+  })
   async search(
     @Body() dto: SearchTeacherDto
   ): Promise<ResponseDto<Page<SimpleTeacherDto>>> {
