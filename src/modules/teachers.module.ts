@@ -6,6 +6,7 @@ import {
 } from "@/domain/teacher/repository";
 import {
   SequelizeCreateTeacherRepository,
+  SequelizeFindAllTeachersRepository,
   SequelizeFindTeacherByEmailRepository,
   SequelizeFindTeacherRepository,
   SequelizeUpdateTeacherRepository,
@@ -47,6 +48,10 @@ import { APP_FILTER, APP_PIPE } from "@nestjs/core";
     {
       provide: "UpdateTeacherRepository",
       useClass: SequelizeUpdateTeacherRepository,
+    },
+    {
+      provide: "FindAllTeachersRepository",
+      useClass: SequelizeFindAllTeachersRepository,
     },
     {
       inject: ["FindTeacherByEmailRepository", "CreateTeacherRepository"],

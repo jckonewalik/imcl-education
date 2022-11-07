@@ -1,3 +1,5 @@
+import { Page } from "@/domain/@shared/types/page";
+import { FindAllTeachersRepository } from "@/domain/teacher/repository";
 import { ResponseDto } from "@/presentation/@shared/dto/response.dto";
 import { CreateTeacherDto, TeacherDto } from "@/presentation/teacher/dto";
 import {
@@ -9,11 +11,15 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
   HttpStatus,
+  Inject,
   Param,
   Post,
   Put,
 } from "@nestjs/common";
+import { SearchTeacherDto } from "../dto/search-teacher.dto";
+import { SimpleTeacherDto } from "../dto/simple-teacher.dto";
 import { UpdateTeacherDto } from "../dto/update-teacher.dto";
 
 @Controller("teachers")
@@ -21,7 +27,9 @@ export class TeachersController {
   constructor(
     private readonly registerUseCase: RegisterTeacherUseCase,
     private readonly updateUseCase: UpdateTeacherUseCase,
-    private readonly getUseCase: GetTeacherUseCase
+    private readonly getUseCase: GetTeacherUseCase,
+    @Inject("FindAllTeachersRepository")
+    private readonly findAllRepo: FindAllTeachersRepository
   ) {}
   @Post()
   async create(
@@ -51,5 +59,22 @@ export class TeachersController {
   ): Promise<ResponseDto<TeacherDto>> {
     const teacher = await this.getUseCase.get(teacherId);
     return new ResponseDto(HttpStatus.OK, TeacherDto.fromEntity(teacher));
+  }
+
+  @Post("search")
+  @HttpCode(200)
+  async search(
+    @Body() dto: SearchTeacherDto
+  ): Promise<ResponseDto<Page<SimpleTeacherDto>>> {
+    const { page, lines, ...criteria } = dto;
+    const { currentPage, data, totalItems, totalPages } =
+      await this.findAllRepo.find(criteria, lines, page);
+
+    return new ResponseDto(HttpStatus.OK, {
+      currentPage,
+      totalItems,
+      totalPages,
+      data: data.map((t) => SimpleTeacherDto.fromEntity(t)),
+    });
   }
 }

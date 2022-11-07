@@ -42,4 +42,6 @@ export default class Messages {
     "Algo de errado aconteceu. Tente novamente mais tarde";
   static INVALID_GENDER = "O gênero deve ser F ou M";
   static MISSING_GENDER = "Informe o gênero";
+  static INVALID_PAGE_NUMBER = "A página é inválida";
+  static INVALID_LINES_NUMBER = "O numero de linhas é inválido";
 }
