@@ -122,4 +122,32 @@ describe("Teachers Controller Tests", () => {
         expect(result._body.body.id).toEqual(teacher.id);
       });
   });
+
+  it(`/POST teachers`, async () => {
+    const teacher1 = await TeacherModel.create({
+      id: uuid(),
+      name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+      gender: Gender.M.toString(),
+      email: faker.internet.email(),
+      active: true,
+    });
+    const teacher2 = await TeacherModel.create({
+      id: uuid(),
+      name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+      gender: Gender.M.toString(),
+      email: faker.internet.email(),
+      active: true,
+    });
+
+    await request(app.getHttpServer())
+      .post("/teachers/search")
+      .send({
+        name: teacher1.name,
+      })
+      .then((result) => {
+        expect(result.statusCode).toEqual(200);
+        expect(result._body?.body?.data?.length).toEqual(1);
+        expect(result._body.body.data[0]?.id).toEqual(teacher1.id);
+      });
+  });
 });
