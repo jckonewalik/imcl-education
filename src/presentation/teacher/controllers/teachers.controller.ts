@@ -64,6 +64,10 @@ export class TeachersController {
     status: 400,
     type: ErrorResponseDto,
   })
+  @ApiNotFoundResponse({
+    status: 404,
+    type: ErrorResponseDto,
+  })
   @ApiInternalServerErrorResponse({
     status: 500,
     type: ErrorResponseDto,
