@@ -7,6 +7,8 @@
     "test": "jest",
     "prepare": "husky install",
     "start": "nest start",
+    "migrations": "npx sequelize-cli db:migrate",
+    "migrations:dev": "npm run migrations && npm run start:dev",
     "start:dev": "nest start --watch"
   },
   "keywords": [],

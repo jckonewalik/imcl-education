@@ -14,7 +14,7 @@ import { TeachersModule } from "./teachers.module";
     SequelizeModule.forRoot({
       dialect: "postgres",
       logging: false,
-      host: process.env.DB_HOST,
+      host: process.env.DB_SERVER,
       port: +(process.env.DB_PORT || 0),
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
