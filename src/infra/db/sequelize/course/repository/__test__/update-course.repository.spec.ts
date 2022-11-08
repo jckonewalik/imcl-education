@@ -24,7 +24,7 @@ describe("Sequelize Update Course Repository", () => {
 
   it("Update a course", async () => {
     const repository = new SequelizeUpdateCourseRepository();
-    const course = makeCourse();
+    const course = makeCourse({});
     await CourseModel.create(
       {
         id: course.id,

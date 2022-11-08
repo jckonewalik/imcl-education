@@ -23,7 +23,7 @@ describe("Sequelize Find Course Repository", () => {
   });
 
   it("Find course", async () => {
-    const course = makeCourse();
+    const course = makeCourse({});
     await CourseModel.create(
       {
         id: course.id,
