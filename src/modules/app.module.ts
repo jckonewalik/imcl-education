@@ -8,6 +8,7 @@ import { StudentModel } from "@/infra/db/sequelize/student/model";
 import { TeacherModel } from "@/infra/db/sequelize/teacher/model";
 import { Module } from "@nestjs/common";
 import { SequelizeModule } from "@nestjs/sequelize";
+import { CoursesModule } from "./courses.module";
 import { TeachersModule } from "./teachers.module";
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { TeachersModule } from "./teachers.module";
       ],
     }),
     TeachersModule,
+    CoursesModule,
   ],
 })
 export class AppModule {}

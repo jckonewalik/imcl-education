@@ -44,4 +44,6 @@ export default class Messages {
   static MISSING_GENDER = "Informe o gênero";
   static INVALID_PAGE_NUMBER = "A página é inválida";
   static INVALID_LINES_NUMBER = "O numero de linhas é inválido";
+  static INVALID_UPDATE_ACTION =
+    "Ação inválida, a ação deve ser A(tivar), D(eletar), I(nativar)";
 }

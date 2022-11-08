@@ -1,5 +1,5 @@
 export enum UpdateAction {
-  A,
-  D,
-  I,
+  A = "A",
+  D = "D",
+  I = "I",
 }
