@@ -14,6 +14,8 @@
 
 Methodist Education - is a philanthropic project developed to help organize the basic routines of the Education Minister of the Central Methodist Church of Londrina.
 
+This project is a backend server responsible to provide the APIs to clients to execute the features below
+
 ---
 
 ## ⚙️ Features
@@ -27,7 +29,7 @@ Methodist Education - is a philanthropic project developed to help organize the 
   - [ ] teachers
 
 - [ ] Students Registration
-- [ ] Teachers Registration
+- [x] Teachers Registration
 - [ ] Frequence control
 
 ---
@@ -36,9 +38,26 @@ Methodist Education - is a philanthropic project developed to help organize the 
 
 ### Pre-requirements
 
+Before starting, you will need some tools installed on your machine.
+[Git](https://git-scm.com). [Node.js](https://nodejs.org/en/). [NPM](https://www.npmjs.com/). [Docker](https://www.docker.com/products/docker-desktop)
+It's nice to have a good text editor to work with the code like [VSCode](https://code.visualstudio.com/)
+
 #### 🧭 Running the app
 
-In Progress ...
+```bash
+
+# Clone the repo
+$ git clone git@github.com:jckonewalik/imcl-education.git
+
+# Access the folder via terminal
+$ cd imcl-education
+
+# Docker Compose
+$ docker-compose up --build
+
+http://localhost:3000/api
+
+```
 
 ---
 
@@ -50,6 +69,8 @@ The fallow tecnologies were used to build this project:
 - **[Jest](https://jestjs.io/)**
 - **[Sequelize](https://sequelize.org/)**
 - **[NestJS](https://nestjs.com/)**
+- **[Swagger](https://swagger.io/)**
+- **[Docker](https://www.docker.com/)**
 
 ---
 
