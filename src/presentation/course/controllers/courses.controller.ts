@@ -5,11 +5,13 @@ import { ApiResponseDto } from "@/presentation/@shared/decorators/api-response-d
 import { ErrorResponseDto } from "@/presentation/@shared/dto/error-response.dto";
 import { ResponseDto } from "@/presentation/@shared/dto/response.dto";
 import CreateCourseUseCase from "@/usecases/course/create-course";
+import { DeleteCourseUseCase } from "@/usecases/course/delete-course";
 import { GetCourseUseCase } from "@/usecases/course/get-course";
 import { UpdateCourseUseCase } from "@/usecases/course/update-course";
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -39,6 +41,7 @@ export class CoursesController {
     private readonly createUseCase: CreateCourseUseCase,
     private readonly updateUseCase: UpdateCourseUseCase,
     private readonly getUseCase: GetCourseUseCase,
+    private readonly deleteUseCase: DeleteCourseUseCase,
     @Inject("FindAllCoursesRepository")
     private readonly findAllRepo: FindAllCoursesRepository
   ) {}
@@ -125,5 +128,19 @@ export class CoursesController {
       totalPages,
       data: data.map((t) => SimpleCourseDto.fromEntity(t)),
     });
+  }
+
+  @Delete(":courseId")
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiNotFoundResponse({
+    status: 404,
+    type: ErrorResponseDto,
+  })
+  @ApiInternalServerErrorResponse({
+    status: 500,
+    type: ErrorResponseDto,
+  })
+  async delete(@Param("courseId") courseId: string): Promise<void> {
+    await this.deleteUseCase.delete(courseId);
   }
 }
