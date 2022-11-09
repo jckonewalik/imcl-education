@@ -15,3 +15,7 @@ export interface FindRepository<T> {
 export interface FindAllRepository<T> {
   find(criteria: object, lines?: number, page?: number): Promise<Page<T>>;
 }
+
+export interface DeleteRepository {
+  delete(id: string): Promise<void>;
+}

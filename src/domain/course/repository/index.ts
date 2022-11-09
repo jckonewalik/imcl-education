@@ -1,5 +1,6 @@
 import {
   CreateRepository,
+  DeleteRepository,
   FindAllRepository,
   FindRepository,
   UpdateRepository,
@@ -13,3 +14,5 @@ export interface UpdateCourseRepository extends UpdateRepository<Course> {}
 export interface FindCourseRepository extends FindRepository<Course> {}
 
 export interface FindAllCoursesRepository extends FindAllRepository<Course> {}
+
+export interface DeleteCourseRepository extends DeleteRepository {}

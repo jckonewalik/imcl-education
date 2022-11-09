@@ -26,7 +26,9 @@ export class CourseModel extends Model {
   @Column
   active: boolean;
 
-  @HasMany(() => LessonModel)
+  @HasMany(() => LessonModel, {
+    onDelete: "CASCADE",
+  })
   lessons: LessonModel[];
 
   @CreatedAt
