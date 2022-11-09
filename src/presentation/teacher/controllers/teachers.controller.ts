@@ -9,10 +9,12 @@ import {
   RegisterTeacherUseCase,
   UpdateTeacherUseCase,
 } from "@/usecases/teacher";
+import { DeleteTeacherUseCase } from "@/usecases/teacher/delete-teacher";
 import { GetTeacherUseCase } from "@/usecases/teacher/get-teacher";
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -25,6 +27,7 @@ import {
   ApiBadRequestResponse,
   ApiInternalServerErrorResponse,
   ApiNotFoundResponse,
+  ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
 import { SearchTeacherDto } from "../dto/search-teacher.dto";
@@ -38,6 +41,7 @@ export class TeachersController {
     private readonly registerUseCase: RegisterTeacherUseCase,
     private readonly updateUseCase: UpdateTeacherUseCase,
     private readonly getUseCase: GetTeacherUseCase,
+    private readonly deleteUseCase: DeleteTeacherUseCase,
     @Inject("FindAllTeachersRepository")
     private readonly findAllRepo: FindAllTeachersRepository
   ) {}
@@ -126,5 +130,22 @@ export class TeachersController {
       totalPages,
       data: data.map((t) => SimpleTeacherDto.fromEntity(t)),
     });
+  }
+
+  @Delete(":teacherId")
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiResponse({
+    status: 204,
+  })
+  @ApiNotFoundResponse({
+    status: 404,
+    type: ErrorResponseDto,
+  })
+  @ApiInternalServerErrorResponse({
+    status: 500,
+    type: ErrorResponseDto,
+  })
+  async delete(@Param("teacherId") teacherId: string): Promise<void> {
+    await this.deleteUseCase.delete(teacherId);
   }
 }
