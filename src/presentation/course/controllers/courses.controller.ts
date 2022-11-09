@@ -24,6 +24,7 @@ import {
   ApiBadRequestResponse,
   ApiInternalServerErrorResponse,
   ApiNotFoundResponse,
+  ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
 import {
@@ -132,6 +133,9 @@ export class CoursesController {
 
   @Delete(":courseId")
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiResponse({
+    status: 204,
+  })
   @ApiNotFoundResponse({
     status: 404,
     type: ErrorResponseDto,
