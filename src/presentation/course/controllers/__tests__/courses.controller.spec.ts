@@ -146,4 +146,29 @@ describe("Courses Controller Tests", () => {
         expect(result._body.body.data[0]?.id).toEqual(course1.id);
       });
   });
+
+  it(`/DELETE courses by ID`, async () => {
+    const course = await CourseModel.create({
+      id: uuid(),
+      name: faker.random.word(),
+      active: true,
+    });
+    await request(app.getHttpServer())
+      .delete(`/courses/${course.id}`)
+      .then((result) => {
+        expect(result.statusCode).toEqual(204);
+      });
+
+    const exists = await CourseModel.findOne({ where: { id: course.id } });
+    expect(exists).toBeNull();
+  });
+
+  it(`/DELETE courses with invalid course`, async () => {
+    await request(app.getHttpServer())
+      .delete(`/courses/${uuid()}`)
+      .then((result) => {
+        expect(result.statusCode).toEqual(404);
+        expect(result._body.message).toEqual(Messages.INVALID_COURSE);
+      });
+  });
 });
