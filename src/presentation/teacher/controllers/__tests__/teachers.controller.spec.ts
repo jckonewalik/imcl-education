@@ -150,4 +150,31 @@ describe("Teachers Controller Tests", () => {
         expect(result._body.body.data[0]?.id).toEqual(teacher1.id);
       });
   });
+
+  it(`/DELETE teachers by ID`, async () => {
+    const teacher = await TeacherModel.create({
+      id: uuid(),
+      name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+      gender: Gender.M.toString(),
+      email: faker.internet.email(),
+      active: true,
+    });
+    await request(app.getHttpServer())
+      .delete(`/teachers/${teacher.id}`)
+      .then((result) => {
+        expect(result.statusCode).toEqual(204);
+      });
+
+    const exists = await TeacherModel.findOne({ where: { id: teacher.id } });
+    expect(exists).toBeNull();
+  });
+
+  it(`/DELETE teachers with invalid teacher`, async () => {
+    await request(app.getHttpServer())
+      .delete(`/teachers/${uuid()}`)
+      .then((result) => {
+        expect(result.statusCode).toEqual(404);
+        expect(result._body.message).toEqual(Messages.INVALID_TEACHER);
+      });
+  });
 });
