@@ -1,9 +1,17 @@
 import { ApiResponseDto } from "@/presentation/@shared/decorators/api-response-dto";
 import { ErrorResponseDto } from "@/presentation/@shared/dto/error-response.dto";
 import { ResponseDto } from "@/presentation/@shared/dto/response.dto";
-import { RegisterStudentUseCase } from "@/usecases/student";
+import { GetStudentUseCase, RegisterStudentUseCase } from "@/usecases/student";
 import { UpdateStudentUseCase } from "@/usecases/student/update-student";
-import { Body, Controller, HttpStatus, Param, Post, Put } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Get,
+  HttpStatus,
+  Param,
+  Post,
+  Put,
+} from "@nestjs/common";
 import {
   ApiBadRequestResponse,
   ApiInternalServerErrorResponse,
@@ -18,7 +26,8 @@ import { StudentDto } from "../dto/student.dto";
 export class StudentsController {
   constructor(
     private readonly registerUseCase: RegisterStudentUseCase,
-    private readonly updateUseCase: UpdateStudentUseCase
+    private readonly updateUseCase: UpdateStudentUseCase,
+    private readonly getUseCase: GetStudentUseCase
   ) {}
 
   @Post()
@@ -66,6 +75,23 @@ export class StudentsController {
       phone: dto.phone,
       active: dto.active,
     });
+    return new ResponseDto(HttpStatus.OK, StudentDto.fromEntity(student));
+  }
+
+  @Get(":studentId")
+  @ApiResponseDto(StudentDto, { status: 200 })
+  @ApiNotFoundResponse({
+    status: 404,
+    type: ErrorResponseDto,
+  })
+  @ApiInternalServerErrorResponse({
+    status: 500,
+    type: ErrorResponseDto,
+  })
+  async get(
+    @Param("studentId") studentId: string
+  ): Promise<ResponseDto<StudentDto>> {
+    const student = await this.getUseCase.get(studentId);
     return new ResponseDto(HttpStatus.OK, StudentDto.fromEntity(student));
   }
 }

@@ -35,6 +35,13 @@ export class StudentDto {
     dto.name = entity.name;
     dto.gender = entity.gender;
     dto.active = entity.active;
+    if (entity.phone) {
+      dto.phone = {
+        number: entity.phone.number,
+        isWhatsapp: entity.phone.isWhatsapp,
+      };
+    }
+
     return dto;
   }
 }

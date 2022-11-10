@@ -10,7 +10,7 @@ import {
 } from "@/infra/db/sequelize/student/repository";
 import { AllExceptionsFilter } from "@/presentation/@shared/filters";
 import { StudentsController } from "@/presentation/student/controllers";
-import { RegisterStudentUseCase } from "@/usecases/student";
+import { GetStudentUseCase, RegisterStudentUseCase } from "@/usecases/student";
 import { UpdateStudentUseCase } from "@/usecases/student/update-student";
 import { Module, ValidationPipe } from "@nestjs/common";
 import { APP_FILTER, APP_PIPE } from "@nestjs/core";
@@ -56,6 +56,13 @@ import { APP_FILTER, APP_PIPE } from "@nestjs/core";
           findStudentRepository,
           updateStudentRepository
         );
+      },
+    },
+    {
+      inject: ["FindStudentRepository"],
+      provide: GetStudentUseCase,
+      useFactory: (findStudentRepository: FindStudentRepository) => {
+        return new GetStudentUseCase(findStudentRepository);
       },
     },
   ],
