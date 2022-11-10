@@ -1,3 +1,6 @@
+import { Page } from "@/domain/@shared/types/page";
+import { FindAllStudentsRepository } from "@/domain/student/repository";
+import { ApiPageResponseDto } from "@/presentation/@shared/decorators/api-page-response-dto";
 import { ApiResponseDto } from "@/presentation/@shared/decorators/api-response-dto";
 import { ErrorResponseDto } from "@/presentation/@shared/dto/error-response.dto";
 import { ResponseDto } from "@/presentation/@shared/dto/response.dto";
@@ -7,7 +10,9 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
   HttpStatus,
+  Inject,
   Param,
   Post,
   Put,
@@ -18,7 +23,12 @@ import {
   ApiNotFoundResponse,
   ApiTags,
 } from "@nestjs/swagger";
-import { CreateStudentDto, UpdateStudentDto } from "../dto";
+import {
+  CreateStudentDto,
+  SearchStudentDto,
+  SimpleStudentDto,
+  UpdateStudentDto,
+} from "../dto";
 import { StudentDto } from "../dto/student.dto";
 
 @ApiTags("students")
@@ -27,7 +37,9 @@ export class StudentsController {
   constructor(
     private readonly registerUseCase: RegisterStudentUseCase,
     private readonly updateUseCase: UpdateStudentUseCase,
-    private readonly getUseCase: GetStudentUseCase
+    private readonly getUseCase: GetStudentUseCase,
+    @Inject("FindAllStudentsRepository")
+    private readonly findAllRepo: FindAllStudentsRepository
   ) {}
 
   @Post()
@@ -93,5 +105,31 @@ export class StudentsController {
   ): Promise<ResponseDto<StudentDto>> {
     const student = await this.getUseCase.get(studentId);
     return new ResponseDto(HttpStatus.OK, StudentDto.fromEntity(student));
+  }
+
+  @Post("search")
+  @HttpCode(200)
+  @ApiPageResponseDto(SimpleStudentDto)
+  @ApiBadRequestResponse({
+    status: 400,
+    type: ErrorResponseDto,
+  })
+  @ApiInternalServerErrorResponse({
+    status: 500,
+    type: ErrorResponseDto,
+  })
+  async search(
+    @Body() dto: SearchStudentDto
+  ): Promise<ResponseDto<Page<SimpleStudentDto>>> {
+    const { page, lines, ...criteria } = dto;
+    const { currentPage, data, totalItems, totalPages } =
+      await this.findAllRepo.find(criteria, lines, page);
+
+    return new ResponseDto(HttpStatus.OK, {
+      currentPage,
+      totalItems,
+      totalPages,
+      data: data.map((t) => SimpleStudentDto.fromEntity(t)),
+    });
   }
 }

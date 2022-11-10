@@ -8,6 +8,7 @@ import {
   SequelizeFindStudentRepository,
   SequelizeUpdateStudentRepository,
 } from "@/infra/db/sequelize/student/repository";
+import { SequelizeFindAllStudentsRepository } from "@/infra/db/sequelize/student/repository/find-all-students.repository";
 import { AllExceptionsFilter } from "@/presentation/@shared/filters";
 import { StudentsController } from "@/presentation/student/controllers";
 import { GetStudentUseCase, RegisterStudentUseCase } from "@/usecases/student";
@@ -37,6 +38,10 @@ import { APP_FILTER, APP_PIPE } from "@nestjs/core";
     {
       provide: "UpdateStudentRepository",
       useClass: SequelizeUpdateStudentRepository,
+    },
+    {
+      provide: "FindAllStudentsRepository",
+      useClass: SequelizeFindAllStudentsRepository,
     },
     {
       inject: ["CreateStudentRepository"],
