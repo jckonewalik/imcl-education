@@ -1,7 +1,7 @@
 import { Page } from "@/domain/@shared/types/page";
 import { Student } from "@/domain/student/entity";
 import { FindAllStudentsRepository } from "@/domain/student/repository";
-import { Op, WhereOptions } from "sequelize";
+import { Op, Order, WhereOptions } from "sequelize";
 import { StudentModel } from "../model";
 
 export class SequelizeFindAllStudentsRepository
@@ -9,6 +9,8 @@ export class SequelizeFindAllStudentsRepository
 {
   async find(
     criteria: object,
+    sortBy: string = "name",
+    sortOrder: "ASC" | "DESC" = "ASC",
     lines: number = 10,
     page: number = 1
   ): Promise<Page<Student>> {
@@ -29,8 +31,14 @@ export class SequelizeFindAllStudentsRepository
       where["gender"] = gender;
     }
 
+    const order: Order = [];
+    if (Object.keys(StudentModel.getAttributes()).includes(sortBy)) {
+      order.push([sortBy, sortOrder]);
+    }
+
     const result = await StudentModel.findAndCountAll({
       where,
+      order,
       limit: lines,
       offset: (page - 1) * lines,
     });

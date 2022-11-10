@@ -1,6 +1,6 @@
 import Messages from "@/domain/@shared/util/messages";
 import { ApiProperty } from "@nestjs/swagger";
-import { Min, ValidateIf } from "class-validator";
+import { IsIn, Min, ValidateIf } from "class-validator";
 
 export class SearchCourseDto {
   @ApiProperty({
@@ -27,4 +27,16 @@ export class SearchCourseDto {
   @ValidateIf((o) => o.lines !== undefined)
   @Min(1, { message: Messages.INVALID_LINES_NUMBER })
   lines?: number;
+  @ApiProperty({
+    required: false,
+    description: "Ordenar por",
+  })
+  sortBy?: string;
+  @ApiProperty({
+    required: false,
+    description: "Ordem dos dados",
+  })
+  @ValidateIf((o) => o.sortOrder !== undefined)
+  @IsIn(["ASC", "DESC"], { message: Messages.INVALID_SORT_ORDER })
+  sortOrder?: "ASC" | "DESC";
 }

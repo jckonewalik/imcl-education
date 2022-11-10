@@ -12,9 +12,9 @@ type Sut = {
 };
 
 const makeSut = async (): Promise<Sut> => {
-  const student1 = makeStudent({ active: false });
-  const student2 = makeStudent({ gender: Gender.F });
-  const student3 = makeStudent({});
+  const student1 = makeStudent({ name: "Paulo", active: false });
+  const student2 = makeStudent({ name: "Ana", gender: Gender.F });
+  const student3 = makeStudent({ name: "Jose" });
 
   await StudentModel.create({
     id: student1.id,
@@ -68,6 +68,8 @@ describe("Sequelize Find All Students Repository", () => {
     const { students, sut } = await makeSut();
     const result = await sut.find(
       { name: students[0].name.substring(0, 5) },
+      "name",
+      "ASC",
       1,
       1
     );
@@ -80,16 +82,22 @@ describe("Sequelize Find All Students Repository", () => {
 
   it("Find student by gender", async () => {
     const { students, sut } = await makeSut();
-    const result = await sut.find({ gender: Gender.M.toString() }, 1, 2);
+    const result = await sut.find(
+      { gender: Gender.M.toString() },
+      "name",
+      "ASC",
+      1,
+      2
+    );
 
     expect(result.currentPage).toBe(2);
     expect(result.totalItems).toBe(2);
     expect(result.totalPages).toBe(2);
-    expect(result.data[0]).toStrictEqual(students[2]);
+    expect(result.data[0]).toStrictEqual(students[0]);
   });
   it("Find active students", async () => {
     const { students, sut } = await makeSut();
-    const result = await sut.find({ active: true }, 2, 1);
+    const result = await sut.find({ active: true }, "name", "ASC", 2, 1);
 
     expect(result.currentPage).toBe(1);
     expect(result.totalItems).toBe(2);

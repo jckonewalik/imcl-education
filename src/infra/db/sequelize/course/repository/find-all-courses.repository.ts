@@ -1,7 +1,7 @@
 import { Page } from "@/domain/@shared/types/page";
 import { Course } from "@/domain/course/entity";
 import { FindAllCoursesRepository } from "@/domain/course/repository";
-import { Op, WhereOptions } from "sequelize";
+import { Op, Order, WhereOptions } from "sequelize";
 import { CourseModel } from "../model";
 
 export class SequelizeFindAllCoursesRepository
@@ -9,6 +9,8 @@ export class SequelizeFindAllCoursesRepository
 {
   async find(
     criteria: object,
+    sortBy: string = "name",
+    sortOrder: "ASC" | "DESC" = "ASC",
     lines: number = 10,
     page: number = 1
   ): Promise<Page<Course>> {
@@ -23,9 +25,13 @@ export class SequelizeFindAllCoursesRepository
     if (active !== undefined) {
       where["active"] = active;
     }
-
+    const order: Order = [];
+    if (Object.keys(CourseModel.getAttributes()).includes(sortBy)) {
+      order.push([sortBy, sortOrder]);
+    }
     const result = await CourseModel.findAndCountAll({
       where,
+      order,
       limit: lines,
       offset: (page - 1) * lines,
     });

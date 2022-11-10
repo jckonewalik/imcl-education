@@ -52,6 +52,8 @@ describe("Sequelize Find All Courses Repository", () => {
     const { courses, sut } = await makeSut();
     const result = await sut.find(
       { name: courses[0].name.substring(0, 5) },
+      "name",
+      "ASC",
       1,
       1
     );
@@ -64,7 +66,7 @@ describe("Sequelize Find All Courses Repository", () => {
 
   it("Find active courses", async () => {
     const { courses, sut } = await makeSut();
-    const result = await sut.find({ active: true }, 2, 1);
+    const result = await sut.find({ active: true }, "name", "ASC", 2, 1);
 
     expect(result.currentPage).toBe(1);
     expect(result.totalItems).toBe(1);

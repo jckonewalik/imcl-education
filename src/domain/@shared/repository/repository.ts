@@ -13,7 +13,13 @@ export interface FindRepository<T> {
 }
 
 export interface FindAllRepository<T> {
-  find(criteria: object, lines?: number, page?: number): Promise<Page<T>>;
+  find(
+    criteria: object,
+    sortBy?: string,
+    sortOrder?: "ASC" | "DESC",
+    lines?: number,
+    page?: number
+  ): Promise<Page<T>>;
 }
 
 export interface DeleteRepository {

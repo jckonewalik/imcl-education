@@ -120,9 +120,9 @@ export class TeachersController {
   async search(
     @Body() dto: SearchTeacherDto
   ): Promise<ResponseDto<Page<SimpleTeacherDto>>> {
-    const { page, lines, ...criteria } = dto;
+    const { page, lines, sortBy, sortOrder, ...criteria } = dto;
     const { currentPage, data, totalItems, totalPages } =
-      await this.findAllRepo.find(criteria, lines, page);
+      await this.findAllRepo.find(criteria, sortBy, sortOrder, lines, page);
 
     return new ResponseDto(HttpStatus.OK, {
       currentPage,

@@ -119,9 +119,9 @@ export class CoursesController {
   async search(
     @Body() dto: SearchCourseDto
   ): Promise<ResponseDto<Page<SimpleCourseDto>>> {
-    const { page, lines, ...criteria } = dto;
+    const { page, lines, sortBy, sortOrder, ...criteria } = dto;
     const { currentPage, data, totalItems, totalPages } =
-      await this.findAllRepo.find(criteria, lines, page);
+      await this.findAllRepo.find(criteria, sortBy, sortOrder, lines, page);
 
     return new ResponseDto(HttpStatus.OK, {
       currentPage,

@@ -48,4 +48,5 @@ export default class Messages {
     "Ação inválida, a ação deve ser A(tivar), D(eletar), I(nativar)";
   static COURSE_IN_USE =
     "O curso esta em uso e não pode ser excluído. Favor inativa-lo";
+  static INVALID_SORT_ORDER = "A ordem informada é inválida";
 }
