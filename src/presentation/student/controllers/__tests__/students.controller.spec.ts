@@ -1,3 +1,4 @@
+import { Gender } from "@/domain/@shared/enums/gender";
 import Messages from "@/domain/@shared/util/messages";
 import { StudentModel } from "@/infra/db/sequelize/student/model";
 import { StudentsModule } from "@/modules/students.module";
@@ -6,6 +7,7 @@ import { Test } from "@nestjs/testing";
 import faker from "faker";
 import { Sequelize } from "sequelize-typescript";
 import request from "supertest";
+import { v4 as uuid } from "uuid";
 describe("Students Controller Tests", () => {
   let app: INestApplication;
 
@@ -66,6 +68,45 @@ describe("Students Controller Tests", () => {
       .then((result) => {
         expect(result.statusCode).toEqual(400);
         expect(result._body.message).toEqual(Messages.INVALID_GENDER);
+      });
+  });
+
+  it(`/PUT students`, async () => {
+    const student = await StudentModel.create({
+      id: uuid(),
+      name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+      gender: Gender.M.toString(),
+      active: true,
+    });
+    const phoneNumber = "99999999999";
+    await request(app.getHttpServer())
+      .put(`/students/${student.id}`)
+      .send({
+        name: student.name,
+        active: false,
+        phone: {
+          number: phoneNumber,
+          isWhatsapp: true,
+        },
+      })
+      .expect(200);
+
+    const result = await StudentModel.findOne({ where: { id: student.id } });
+    expect(result).toBeDefined();
+    expect(result?.phoneNumber).toBe(phoneNumber);
+    expect(result?.phoneIsWhatsapp).toBeTruthy();
+  });
+
+  it(`/PUT students with invalid student`, async () => {
+    await request(app.getHttpServer())
+      .put(`/students/${uuid()}`)
+      .send({
+        name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+        active: false,
+      })
+      .then((result) => {
+        expect(result.statusCode).toEqual(404);
+        expect(result._body.message).toEqual(Messages.INVALID_STUDENT);
       });
   });
 });
