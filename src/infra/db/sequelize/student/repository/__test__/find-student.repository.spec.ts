@@ -22,8 +22,8 @@ describe("Sequelize Find Student Repository", () => {
   });
 
   it("Find student", async () => {
-    const student1 = makeStudent();
-    const student2 = makeStudent();
+    const student1 = makeStudent({});
+    const student2 = makeStudent({});
     student2.changePhone(undefined);
 
     await StudentModel.create({

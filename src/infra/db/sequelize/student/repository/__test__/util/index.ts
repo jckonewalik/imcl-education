@@ -1,15 +1,17 @@
+import { Gender } from "@/domain/@shared/enums/gender";
 import { PhoneNumber } from "@/domain/@shared/value-objects";
 import { Student } from "@/domain/student/entity/student";
-import { v4 as uuid } from "uuid";
 import faker from "faker";
-import { Gender } from "@/domain/@shared/enums/gender";
-export const makeStudent = (): Student => {
-  const phone = new PhoneNumber("9999999999", true);
-  return new Student(
-    uuid(),
-    faker.name.firstName() + " " + faker.name.lastName(),
-    Gender.M,
-    true,
-    phone
-  );
+import { v4 as uuid } from "uuid";
+export const makeStudent = ({
+  name = faker.name.firstName() + " " + faker.name.lastName(),
+  gender = Gender.M,
+  active = true,
+  withPhone = true,
+}): Student => {
+  let phone: PhoneNumber | undefined;
+  if (withPhone) {
+    phone = new PhoneNumber("9999999999", true);
+  }
+  return new Student(uuid(), name, gender, active, phone);
 };
