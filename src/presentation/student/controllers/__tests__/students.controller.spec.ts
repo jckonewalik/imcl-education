@@ -133,4 +133,30 @@ describe("Students Controller Tests", () => {
         );
       });
   });
+
+  it(`/POST students/search`, async () => {
+    const student1 = await StudentModel.create({
+      id: uuid(),
+      name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+      gender: Gender.M.toString(),
+      active: true,
+    });
+    await StudentModel.create({
+      id: uuid(),
+      name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+      email: faker.internet.email(),
+      active: true,
+    });
+
+    await request(app.getHttpServer())
+      .post("/students/search")
+      .send({
+        name: student1.name,
+      })
+      .then((result) => {
+        expect(result.statusCode).toEqual(200);
+        expect(result._body?.body?.data?.length).toEqual(1);
+        expect(result._body.body.data[0]?.id).toEqual(student1.id);
+      });
+  });
 });
