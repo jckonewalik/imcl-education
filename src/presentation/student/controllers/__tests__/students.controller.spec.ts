@@ -109,4 +109,28 @@ describe("Students Controller Tests", () => {
         expect(result._body.message).toEqual(Messages.INVALID_STUDENT);
       });
   });
+
+  it(`/GET students by ID`, async () => {
+    const student = await StudentModel.create({
+      id: uuid(),
+      name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+      gender: Gender.M.toString(),
+      phoneNumber: "99999999999",
+      phoneIsWhatsapp: true,
+      active: true,
+    });
+    await request(app.getHttpServer())
+      .get(`/students/${student.id}`)
+      .then((result) => {
+        expect(result.statusCode).toEqual(200);
+        expect(result._body.body.id).toEqual(student.id);
+        expect(result._body.body.name).toEqual(student.name);
+        expect(result._body.body.gender).toEqual(student.gender);
+        expect(result._body.body.active).toEqual(student.active);
+        expect(result._body.body.phone.number).toEqual(student.phoneNumber);
+        expect(result._body.body.phone.isWhatsapp).toEqual(
+          student.phoneIsWhatsapp
+        );
+      });
+  });
 });
