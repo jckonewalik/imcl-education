@@ -51,4 +51,5 @@ export default class Messages {
   static INVALID_SORT_ORDER = "A ordem informada é inválida";
   static STUDENT_ENROLLED =
     "O aluno está matriculado e não pode ser excluído. Favor inativá-lo";
+  static INVALID_ID = "O ID informado não é válido. Informe um UUID v4 válido";
 }
