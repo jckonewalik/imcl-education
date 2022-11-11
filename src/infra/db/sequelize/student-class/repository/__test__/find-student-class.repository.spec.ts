@@ -1,3 +1,5 @@
+import { BadRequestException } from "@/domain/@shared/exceptions";
+import Messages from "@/domain/@shared/util/messages";
 import { StudentClass } from "@/domain/student-class/entity";
 import { CourseModel, LessonModel } from "@/infra/db/sequelize/course/model";
 import {
@@ -38,6 +40,15 @@ describe("Sequelize Find Student Class Repository", () => {
 
   afterEach(async () => {
     await sequelize.close();
+  });
+
+  it("Fail trying find a student class passing a wrong ID", async () => {
+    const repository = new SequelizeFindStudentClassRepository();
+    const t = async () => {
+      await repository.find(faker.random.word());
+    };
+    expect(t).rejects.toThrow(BadRequestException);
+    expect(t).rejects.toThrow(Messages.INVALID_ID);
   });
 
   it("Find student class", async () => {
