@@ -1,4 +1,7 @@
+import { BadRequestException } from "@/domain/@shared/exceptions";
+import Messages from "@/domain/@shared/util/messages";
 import { CourseModel, LessonModel } from "@/infra/db/sequelize/course/model";
+import faker from "faker";
 import { Sequelize } from "sequelize-typescript";
 import { SequelizeFindCourseRepository } from "../find-course.repository";
 import { makeCourse } from "./util";
@@ -22,6 +25,14 @@ describe("Sequelize Find Course Repository", () => {
     await sequelize.close();
   });
 
+  it("Fail trying find a course passing a wrong ID", async () => {
+    const repository = new SequelizeFindCourseRepository();
+    const t = async () => {
+      await repository.find(faker.random.word());
+    };
+    expect(t).rejects.toThrow(BadRequestException);
+    expect(t).rejects.toThrow(Messages.INVALID_ID);
+  });
   it("Find course", async () => {
     const course = makeCourse({});
     await CourseModel.create(
