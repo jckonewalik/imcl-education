@@ -1,4 +1,7 @@
+import { BadRequestException } from "@/domain/@shared/exceptions";
+import Messages from "@/domain/@shared/util/messages";
 import { TeacherModel } from "@/infra/db/sequelize/teacher/model";
+import faker from "faker";
 import { Sequelize } from "sequelize-typescript";
 import { SequelizeDeleteTeacherRepository } from "../delete-teacher.repository";
 import { makeTeacher } from "./util";
@@ -21,6 +24,14 @@ describe("Sequelize Delete Teacher Repository", () => {
     await sequelize.close();
   });
 
+  it("Fail trying delete a teacher passing a wrong ID", async () => {
+    const repository = new SequelizeDeleteTeacherRepository();
+    const t = async () => {
+      await repository.delete(faker.random.word());
+    };
+    expect(t).rejects.toThrow(BadRequestException);
+    expect(t).rejects.toThrow(Messages.INVALID_ID);
+  });
   it("Delete teacher", async () => {
     const teacher = makeTeacher({});
     await TeacherModel.create({
