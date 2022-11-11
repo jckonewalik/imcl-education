@@ -4,11 +4,16 @@ import { ApiPageResponseDto } from "@/presentation/@shared/decorators/api-page-r
 import { ApiResponseDto } from "@/presentation/@shared/decorators/api-response-dto";
 import { ErrorResponseDto } from "@/presentation/@shared/dto/error-response.dto";
 import { ResponseDto } from "@/presentation/@shared/dto/response.dto";
-import { GetStudentUseCase, RegisterStudentUseCase } from "@/usecases/student";
+import {
+  DeleteStudentUseCase,
+  GetStudentUseCase,
+  RegisterStudentUseCase,
+} from "@/usecases/student";
 import { UpdateStudentUseCase } from "@/usecases/student/update-student";
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -21,6 +26,7 @@ import {
   ApiBadRequestResponse,
   ApiInternalServerErrorResponse,
   ApiNotFoundResponse,
+  ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
 import {
@@ -38,6 +44,7 @@ export class StudentsController {
     private readonly registerUseCase: RegisterStudentUseCase,
     private readonly updateUseCase: UpdateStudentUseCase,
     private readonly getUseCase: GetStudentUseCase,
+    private readonly deleteUseCase: DeleteStudentUseCase,
     @Inject("FindAllStudentsRepository")
     private readonly findAllRepo: FindAllStudentsRepository
   ) {}
@@ -131,5 +138,22 @@ export class StudentsController {
       totalPages,
       data: data.map((t) => SimpleStudentDto.fromEntity(t)),
     });
+  }
+
+  @Delete(":studentId")
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiResponse({
+    status: 204,
+  })
+  @ApiNotFoundResponse({
+    status: 404,
+    type: ErrorResponseDto,
+  })
+  @ApiInternalServerErrorResponse({
+    status: 500,
+    type: ErrorResponseDto,
+  })
+  async delete(@Param("studentId") studentId: string): Promise<void> {
+    await this.deleteUseCase.delete(studentId);
   }
 }
