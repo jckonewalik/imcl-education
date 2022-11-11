@@ -28,7 +28,7 @@ This project is a backend server responsible to provide the APIs to clients to e
   - [ ] students
   - [ ] teachers
 
-- [ ] Students Registration
+- [x] Students Registration
 - [x] Teachers Registration
 - [ ] Frequence control
 
