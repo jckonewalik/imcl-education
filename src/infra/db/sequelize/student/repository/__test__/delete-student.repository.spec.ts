@@ -41,6 +41,14 @@ describe("Sequelize Delete Student Repository", () => {
     await sequelize.close();
   });
 
+  it("Fail trying delete a student passing a wrong ID", async () => {
+    const repository = new SequelizeDeleteStudentRepository();
+    const t = async () => {
+      await repository.delete(faker.random.word());
+    };
+    expect(t).rejects.toThrow(BadRequestException);
+    expect(t).rejects.toThrow(Messages.INVALID_ID);
+  });
   it("Delete student", async () => {
     const student = makeStudent({});
     await StudentModel.create({
