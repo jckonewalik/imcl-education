@@ -159,4 +159,29 @@ describe("Students Controller Tests", () => {
         expect(result._body.body.data[0]?.id).toEqual(student1.id);
       });
   });
+
+  it(`/DELETE students by ID`, async () => {
+    const student = await StudentModel.create({
+      id: uuid(),
+      name: faker.random.word(),
+      active: true,
+    });
+    await request(app.getHttpServer())
+      .delete(`/students/${student.id}`)
+      .then((result) => {
+        expect(result.statusCode).toEqual(204);
+      });
+
+    const exists = await StudentModel.findOne({ where: { id: student.id } });
+    expect(exists).toBeNull();
+  });
+
+  it(`/DELETE students with invalid student`, async () => {
+    await request(app.getHttpServer())
+      .delete(`/students/${uuid()}`)
+      .then((result) => {
+        expect(result.statusCode).toEqual(404);
+        expect(result._body.message).toEqual(Messages.INVALID_STUDENT);
+      });
+  });
 });
