@@ -1,4 +1,7 @@
+import { BadRequestException } from "@/domain/@shared/exceptions";
+import Messages from "@/domain/@shared/util/messages";
 import { StudentModel } from "@/infra/db/sequelize/student/model";
+import faker from "faker";
 import { Sequelize } from "sequelize-typescript";
 import { SequelizeFindStudentRepository } from "../find-student.repository";
 import { makeStudent } from "./util";
@@ -21,6 +24,14 @@ describe("Sequelize Find Student Repository", () => {
     await sequelize.close();
   });
 
+  it("Fail trying find a student passing a wrong ID", async () => {
+    const repository = new SequelizeFindStudentRepository();
+    const t = async () => {
+      await repository.find(faker.random.word());
+    };
+    expect(t).rejects.toThrow(BadRequestException);
+    expect(t).rejects.toThrow(Messages.INVALID_ID);
+  });
   it("Find student", async () => {
     const student1 = makeStudent({});
     const student2 = makeStudent({});
