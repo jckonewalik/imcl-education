@@ -8,6 +8,7 @@ import {
   StudentClassModel,
   StudentClassTeacherModel,
 } from "../../../student-class/model";
+import { StudentModel } from "../../../student/model";
 import { TeacherModel } from "../../../teacher/model";
 import { CourseModel, LessonModel } from "../../model";
 import { SequelizeDeleteCourseRepository } from "../delete-course.repository";
@@ -30,6 +31,7 @@ describe("Sequelize Delete Course Repository", () => {
       EnrollmentModel,
       StudentClassTeacherModel,
       TeacherModel,
+      StudentModel,
     ]);
     await sequelize.sync();
   });

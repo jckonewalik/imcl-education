@@ -1,0 +1,19 @@
+import { BadRequestException } from "@/domain/@shared/exceptions";
+import { DeleteRepository } from "@/domain/@shared/repository/repository";
+import Messages from "@/domain/@shared/util/messages";
+import { StudentModel } from "../model";
+
+export class SequelizeDeleteStudentRepository implements DeleteRepository {
+  async delete(id: string): Promise<void> {
+    try {
+      await StudentModel.destroy({
+        where: { id },
+      });
+    } catch (error: any) {
+      if (error.name === "SequelizeForeignKeyConstraintError") {
+        throw new BadRequestException(Messages.STUDENT_ENROLLED);
+      }
+      throw error;
+    }
+  }
+}

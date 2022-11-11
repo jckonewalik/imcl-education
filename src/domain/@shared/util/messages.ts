@@ -49,4 +49,6 @@ export default class Messages {
   static COURSE_IN_USE =
     "O curso esta em uso e não pode ser excluído. Favor inativa-lo";
   static INVALID_SORT_ORDER = "A ordem informada é inválida";
+  static STUDENT_ENROLLED =
+    "O aluno está matriculado e não pode ser excluído. Favor inativá-lo";
 }

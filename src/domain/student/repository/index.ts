@@ -1,5 +1,6 @@
 import {
   CreateRepository,
+  DeleteRepository,
   FindAllRepository,
   FindRepository,
   UpdateRepository,
@@ -11,3 +12,4 @@ export interface FindStudentRepository extends FindRepository<Student> {}
 export interface CreateStudentRepository extends CreateRepository<Student> {}
 export interface UpdateStudentRepository extends UpdateRepository<Student> {}
 export interface FindAllStudentsRepository extends FindAllRepository<Student> {}
+export interface DeleteStudentRepository extends DeleteRepository {}

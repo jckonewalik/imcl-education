@@ -1,5 +1,6 @@
 import { StudentModel } from "@/infra/db/sequelize/student/model";
 import {
+  BelongsTo,
   Column,
   CreatedAt,
   DataType,
@@ -26,6 +27,9 @@ export class EnrollmentModel extends Model {
   @ForeignKey(() => StudentModel)
   @Column({ type: DataType.UUID, field: "student_id" })
   studentId: string;
+
+  @BelongsTo(() => StudentModel)
+  student: StudentModel;
 
   @CreatedAt
   @Column({ field: "creation_date" })
