@@ -40,6 +40,14 @@ describe("Sequelize Delete Course Repository", () => {
     await sequelize.close();
   });
 
+  it("Fail trying delete a course passing a wrong ID", async () => {
+    const repository = new SequelizeDeleteCourseRepository();
+    const t = async () => {
+      await repository.delete(faker.random.word());
+    };
+    expect(t).rejects.toThrow(BadRequestException);
+    expect(t).rejects.toThrow(Messages.INVALID_ID);
+  });
   it("Delete course", async () => {
     const course = makeCourse({});
     await CourseModel.create(
