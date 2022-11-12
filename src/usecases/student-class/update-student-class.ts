@@ -45,14 +45,14 @@ export class UpdateStudentClassUseCase {
       studentClass.changeName(data.name);
     }
 
+    await this.updateEnrollments(studentClass, data);
+    await this.updateTeachers(studentClass, data);
+
     if (studentClass.active !== data.active) {
       data.active ? studentClass.activate() : studentClass.inactivate();
     }
 
-    await this.updateEnrollments(studentClass, data);
-    await this.updateTeachers(studentClass, data);
-
-    this.updateRepo.update(studentClass);
+    await this.updateRepo.update(studentClass);
     return studentClass;
   }
 
