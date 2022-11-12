@@ -7,7 +7,6 @@ import {
 import {
   SequelizeCreateStudentRepository,
   SequelizeDeleteStudentRepository,
-  SequelizeFindStudentRepository,
   SequelizeUpdateStudentRepository,
 } from "@/infra/db/sequelize/student/repository";
 import { SequelizeFindAllStudentsRepository } from "@/infra/db/sequelize/student/repository/find-all-students.repository";
@@ -21,9 +20,11 @@ import {
 import { UpdateStudentUseCase } from "@/usecases/student/update-student";
 import { Module, ValidationPipe } from "@nestjs/common";
 import { APP_FILTER, APP_PIPE } from "@nestjs/core";
+import { SharedModule } from "./shared.module";
 
 @Module({
   controllers: [StudentsController],
+  imports: [SharedModule],
   providers: [
     {
       provide: APP_FILTER,
@@ -36,10 +37,6 @@ import { APP_FILTER, APP_PIPE } from "@nestjs/core";
     {
       provide: "CreateStudentRepository",
       useClass: SequelizeCreateStudentRepository,
-    },
-    {
-      provide: "FindStudentRepository",
-      useClass: SequelizeFindStudentRepository,
     },
     {
       provide: "UpdateStudentRepository",

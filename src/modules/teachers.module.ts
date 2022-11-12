@@ -9,7 +9,6 @@ import {
   SequelizeCreateTeacherRepository,
   SequelizeFindAllTeachersRepository,
   SequelizeFindTeacherByEmailRepository,
-  SequelizeFindTeacherRepository,
   SequelizeUpdateTeacherRepository,
 } from "@/infra/db/sequelize/teacher/repository";
 import { SequelizeDeleteTeacherRepository } from "@/infra/db/sequelize/teacher/repository/delete-teacher.repository";
@@ -23,10 +22,11 @@ import { DeleteTeacherUseCase } from "@/usecases/teacher/delete-teacher";
 import { GetTeacherUseCase } from "@/usecases/teacher/get-teacher";
 import { Module, ValidationPipe } from "@nestjs/common";
 import { APP_FILTER, APP_PIPE } from "@nestjs/core";
+import { SharedModule } from "./shared.module";
 
 @Module({
   controllers: [TeachersController],
-
+  imports: [SharedModule],
   providers: [
     {
       provide: APP_FILTER,
@@ -43,10 +43,6 @@ import { APP_FILTER, APP_PIPE } from "@nestjs/core";
     {
       provide: "CreateTeacherRepository",
       useClass: SequelizeCreateTeacherRepository,
-    },
-    {
-      provide: "FindTeacherRepository",
-      useClass: SequelizeFindTeacherRepository,
     },
     {
       provide: "UpdateTeacherRepository",
