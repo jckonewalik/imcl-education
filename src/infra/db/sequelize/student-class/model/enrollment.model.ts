@@ -14,6 +14,7 @@ import { StudentClassModel } from ".";
 @Table({
   tableName: "enrollments",
   timestamps: true,
+  updatedAt: false,
 })
 export class EnrollmentModel extends Model {
   @PrimaryKey
