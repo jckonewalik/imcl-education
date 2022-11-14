@@ -14,6 +14,10 @@ export interface FindTeacherByEmailRepository {
   find(email: Email): Promise<Teacher | undefined>;
 }
 
+export interface FindInTeachersRepository {
+  find(ids: string[]): Promise<Teacher[]>;
+}
+
 export interface CreateTeacherRepository extends CreateRepository<Teacher> {}
 
 export interface UpdateTeacherRepository extends UpdateRepository<Teacher> {}
