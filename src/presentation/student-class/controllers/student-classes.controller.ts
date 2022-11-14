@@ -1,4 +1,7 @@
 import { FindCourseRepository } from "@/domain/course/repository";
+import { StudentClass } from "@/domain/student-class/entity";
+import { FindInStudentsRepository } from "@/domain/student/repository";
+import { FindInTeachersRepository } from "@/domain/teacher/repository";
 import { ApiResponseDto } from "@/presentation/@shared/decorators/api-response-dto";
 import { ErrorResponseDto } from "@/presentation/@shared/dto/error-response.dto";
 import { ResponseDto } from "@/presentation/@shared/dto/response.dto";
@@ -31,7 +34,11 @@ export class StudentClassesController {
     private readonly createUseCase: CreateStudentClassUseCase,
     private readonly updateUseCase: UpdateStudentClassUseCase,
     @Inject("FindCourseRepository")
-    private readonly findCourseRepo: FindCourseRepository
+    private readonly findCourseRepo: FindCourseRepository,
+    @Inject("FindInTeachersRepository")
+    private readonly findInTeachersRepo: FindInTeachersRepository,
+    @Inject("FindInStudentsRepository")
+    private readonly findInStudentsRepo: FindInStudentsRepository
   ) {}
 
   @Post()
@@ -48,10 +55,9 @@ export class StudentClassesController {
     @Body() dto: CreateStudentClassDto
   ): Promise<ResponseDto<StudentClassDto>> {
     const studentClass = await this.createUseCase.create(dto);
-    const course = await this.findCourseRepo.find(dto.courseId);
     return new ResponseDto(
       HttpStatus.CREATED,
-      StudentClassDto.create(studentClass, course!)
+      await this.createStudentClassDto(studentClass)
     );
   }
 
@@ -80,10 +86,20 @@ export class StudentClassesController {
       students: dto.students,
       teachers: dto.teachers,
     });
-    const course = await this.findCourseRepo.find(studentClass.courseId);
     return new ResponseDto(
       HttpStatus.OK,
-      StudentClassDto.create(studentClass, course!)
+      await this.createStudentClassDto(studentClass)
     );
+  }
+
+  private async createStudentClassDto(studentClass: StudentClass) {
+    const course = await this.findCourseRepo.find(studentClass.courseId);
+    const teachersIds = studentClass.teacherIds;
+    const teachers = await this.findInTeachersRepo.find(teachersIds);
+
+    const studentIds = studentClass.enrollments.map((e) => e.studentId);
+    const students = await this.findInStudentsRepo.find(studentIds);
+
+    return StudentClassDto.create(studentClass, course!, teachers, students);
   }
 }

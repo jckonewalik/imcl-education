@@ -15,6 +15,7 @@ import faker from "faker";
 import { Sequelize } from "sequelize-typescript";
 import request from "supertest";
 import { v4 as uuid } from "uuid";
+import { StudentClassDto } from "../../dto";
 
 const createCourse = async (): Promise<CourseModel> => {
   const course = await CourseModel.create({
@@ -146,6 +147,10 @@ describe("Student Classes Controller Tests", () => {
           },
         ],
       });
+
+    const body: StudentClassDto = response._body.body;
+    expect(body.teachers.find((t) => t.id === teacher.id)).toBeDefined();
+    expect(body.students.find((s) => s.id === student.id)).toBeDefined();
 
     const result = await StudentClassModel.findOne({
       where: { id: studentClass.id },

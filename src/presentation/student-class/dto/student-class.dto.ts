@@ -3,8 +3,7 @@ import { StudentClass } from "@/domain/student-class/entity";
 import { Student } from "@/domain/student/entity";
 import { Teacher } from "@/domain/teacher/entity";
 import { SimpleCourseDto } from "@/presentation/course/dto";
-import { SimpleStudentDto, StudentDto } from "@/presentation/student/dto";
-import { TeacherDto } from "@/presentation/teacher/dto";
+import { SimpleStudentDto } from "@/presentation/student/dto";
 import { SimpleTeacherDto } from "@/presentation/teacher/dto/simple-teacher.dto";
 import { ApiProperty } from "@nestjs/swagger";
 
@@ -51,8 +50,8 @@ export class StudentClassDto {
     dto.course = SimpleCourseDto.fromEntity(course);
     dto.name = studentClass.name;
     dto.active = studentClass.active;
-    dto.teachers = teachers.map((t) => TeacherDto.fromEntity(t));
-    dto.students = students.map((s) => StudentDto.fromEntity(s));
+    dto.teachers = teachers.map((t) => SimpleTeacherDto.fromEntity(t));
+    dto.students = students.map((s) => SimpleStudentDto.fromEntity(s));
 
     return dto;
   }
