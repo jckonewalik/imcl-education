@@ -5,11 +5,13 @@ import { FindInTeachersRepository } from "@/domain/teacher/repository";
 import { ApiResponseDto } from "@/presentation/@shared/decorators/api-response-dto";
 import { ErrorResponseDto } from "@/presentation/@shared/dto/error-response.dto";
 import { ResponseDto } from "@/presentation/@shared/dto/response.dto";
+import { GetStudentClassUseCase } from "@/usecases/student-class";
 import { CreateStudentClassUseCase } from "@/usecases/student-class/create-student-class";
 import { UpdateStudentClassUseCase } from "@/usecases/student-class/update-student-class";
 import {
   Body,
   Controller,
+  Get,
   HttpStatus,
   Inject,
   Param,
@@ -33,6 +35,7 @@ export class StudentClassesController {
   constructor(
     private readonly createUseCase: CreateStudentClassUseCase,
     private readonly updateUseCase: UpdateStudentClassUseCase,
+    private readonly getUseCase: GetStudentClassUseCase,
     @Inject("FindCourseRepository")
     private readonly findCourseRepo: FindCourseRepository,
     @Inject("FindInTeachersRepository")
@@ -86,6 +89,26 @@ export class StudentClassesController {
       students: dto.students,
       teachers: dto.teachers,
     });
+    return new ResponseDto(
+      HttpStatus.OK,
+      await this.createStudentClassDto(studentClass)
+    );
+  }
+
+  @Get(":studentClassId")
+  @ApiResponseDto(StudentClassDto, { status: 200 })
+  @ApiNotFoundResponse({
+    status: 404,
+    type: ErrorResponseDto,
+  })
+  @ApiInternalServerErrorResponse({
+    status: 500,
+    type: ErrorResponseDto,
+  })
+  async get(
+    @Param("studentClassId") studentClassId: string
+  ): Promise<ResponseDto<StudentClassDto>> {
+    const studentClass = await this.getUseCase.get(studentClassId);
     return new ResponseDto(
       HttpStatus.OK,
       await this.createStudentClassDto(studentClass)

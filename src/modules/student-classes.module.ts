@@ -11,6 +11,7 @@ import { SequelizeFindStudentClassRepository } from "@/infra/db/sequelize/studen
 import { SequelizeUpdateStudentClassRepository } from "@/infra/db/sequelize/student-class/repository/update-student-class.repository";
 import { AllExceptionsFilter } from "@/presentation/@shared/filters";
 import { StudentClassesController } from "@/presentation/student-class/controllers";
+import { GetStudentClassUseCase } from "@/usecases/student-class";
 import { CreateStudentClassUseCase } from "@/usecases/student-class/create-student-class";
 import { UpdateStudentClassUseCase } from "@/usecases/student-class/update-student-class";
 import { Module, ValidationPipe } from "@nestjs/common";
@@ -42,6 +43,10 @@ import { SharedModule } from "./shared.module";
       useClass: SequelizeUpdateStudentClassRepository,
     },
     {
+      provide: "FindStudentClassRepository",
+      useClass: SequelizeFindStudentClassRepository,
+    },
+    {
       inject: ["CreateStudentClassRepository", "FindCourseRepository"],
       provide: CreateStudentClassUseCase,
       useFactory: (
@@ -71,6 +76,13 @@ import { SharedModule } from "./shared.module";
           findStudentRepo,
           findTeacherRepo
         );
+      },
+    },
+    {
+      inject: ["FindStudentClassRepository"],
+      provide: GetStudentClassUseCase,
+      useFactory: (findRepo: FindStudentClassRepository) => {
+        return new GetStudentClassUseCase(findRepo);
       },
     },
   ],
