@@ -174,4 +174,21 @@ describe("Student Classes Controller Tests", () => {
         expect(result._body.message).toEqual(Messages.INVALID_STUDENT_CLASS);
       });
   });
+
+  it(`/GET student class by ID`, async () => {
+    const course = await createCourse();
+    const studentClass = await StudentClassModel.create({
+      id: uuid(),
+      courseId: course.id,
+      name: faker.random.word(),
+      active: true,
+    });
+    const response = await request(app.getHttpServer()).get(
+      `/student-classes/${studentClass.id}`
+    );
+
+    expect(response.statusCode).toBe(200);
+    const body: StudentClassDto = response._body.body;
+    expect(body.id).toBe(studentClass.id);
+  });
 });
