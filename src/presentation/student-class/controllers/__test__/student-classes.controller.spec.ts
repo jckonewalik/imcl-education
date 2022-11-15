@@ -96,6 +96,7 @@ describe("Student Classes Controller Tests", () => {
       .send({
         courseId: course.id,
         name,
+        year: 2022,
       })
       .expect(201);
 
@@ -103,6 +104,7 @@ describe("Student Classes Controller Tests", () => {
     expect(result).toBeDefined();
     expect(result?.length).toBe(1);
     expect(result?.[0].name).toBe(name);
+    expect(result?.[0].year).toBe(2022);
   });
 
   it(`/POST student-classes with bad request`, () => {
@@ -134,6 +136,7 @@ describe("Student Classes Controller Tests", () => {
       .send({
         name: newName,
         active: true,
+        year: 2022,
         students: [
           {
             studentId: student.id,
@@ -158,6 +161,7 @@ describe("Student Classes Controller Tests", () => {
     });
     expect(result).toBeDefined();
     expect(result?.name).toBe(newName);
+    expect(result?.year).toBe(2022);
     expect(result?.teachers.length).toBe(1);
     expect(result?.enrollments.length).toBe(1);
   });
