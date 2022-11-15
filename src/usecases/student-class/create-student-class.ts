@@ -8,6 +8,7 @@ import StudentClassService from "@/domain/student-class/services/student-class.s
 type CreateProps = {
   courseId: string;
   name: string;
+  year?: number;
 };
 
 export class CreateStudentClassUseCase {
@@ -22,7 +23,11 @@ export class CreateStudentClassUseCase {
       throw new EntityNotFoundException(Messages.INVALID_COURSE);
     }
 
-    const studentClass = StudentClassService.newStudentClass(course, data.name);
+    const studentClass = StudentClassService.newStudentClass(
+      course,
+      data.name,
+      data.year
+    );
 
     this.createRepo.create(studentClass);
     return studentClass;

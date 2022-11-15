@@ -59,7 +59,8 @@ describe("Sequelize Find Student Class Repository", () => {
     const studentClass = StudentClass.Builder.builder(
       uuid(),
       course.id,
-      faker.random.word()
+      faker.random.word(),
+      true
     ).build();
     studentClass.enrollStudent(student.toEntity());
     studentClass.addTeacher(teacher.toEntity());

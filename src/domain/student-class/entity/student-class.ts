@@ -13,6 +13,7 @@ export class StudentClass {
   private _id: string;
   private _courseId: string;
   private _name: string;
+  private _year?: number;
   private _active: boolean;
   private _teacherIds: string[] = [];
   private _enrollments: Enrollment[] = [];
@@ -23,7 +24,8 @@ export class StudentClass {
     name: string,
     active: boolean,
     teacherIds: string[] = [],
-    enrollments: Enrollment[] = []
+    enrollments: Enrollment[] = [],
+    year?: number
   ) {
     if (!id) {
       throw new InvalidValueException(Messages.MISSING_STUDENT_CLASS_ID);
@@ -35,6 +37,7 @@ export class StudentClass {
     this._id = id;
     this._courseId = courseId;
     this._name = name;
+    this._year = year;
     this._active = active;
     this._teacherIds = teacherIds;
     this._enrollments = enrollments;
@@ -57,6 +60,10 @@ export class StudentClass {
   changeName(name: string) {
     this.validateName(name);
     this._name = name;
+  }
+
+  changeYear(year?: number) {
+    this._year = year;
   }
 
   enrollStudent(student: Student) {
@@ -116,6 +123,10 @@ export class StudentClass {
     return this._name;
   }
 
+  get year(): number | undefined {
+    return this._year;
+  }
+
   get id(): string {
     return this._id;
   }
@@ -138,21 +149,23 @@ export class StudentClass {
     _id: string = "";
     _courseId: string = "";
     _name: string = "";
+    _year?: number;
     _active: boolean = true;
     _teacherIds: string[] = [];
     _enrollments: Enrollment[] = [];
 
-    static builder(id: string, courseId: string, name: string) {
+    static builder(
+      id: string,
+      courseId: string,
+      name: string,
+      active: boolean
+    ) {
       const builder = new StudentClass.Builder();
       builder._id = id;
       builder._courseId = courseId;
       builder._name = name;
+      builder._active = active;
       return builder;
-    }
-
-    active(active: boolean) {
-      this._active = active;
-      return this;
     }
 
     enrollments(enrollments: Enrollment[]) {
@@ -165,6 +178,11 @@ export class StudentClass {
       return this;
     }
 
+    year(year?: number) {
+      this._year = year;
+      return this;
+    }
+
     build(): StudentClass {
       return new StudentClass(
         this._id,
@@ -172,7 +190,8 @@ export class StudentClass {
         this._name,
         this._active,
         this._teacherIds,
-        this._enrollments
+        this._enrollments,
+        this._year
       );
     }
   };

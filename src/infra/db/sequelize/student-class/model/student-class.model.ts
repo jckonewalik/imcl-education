@@ -36,6 +36,9 @@ export class StudentClassModel extends Model {
   name: string;
 
   @Column
+  year: number;
+
+  @Column
   active: boolean;
 
   @HasMany(() => EnrollmentModel)
@@ -62,7 +65,13 @@ export class StudentClassModel extends Model {
           enrollment.studentId
         )
     );
-    return StudentClass.Builder.builder(this.id, this.courseId, this.name)
+    return StudentClass.Builder.builder(
+      this.id,
+      this.courseId,
+      this.name,
+      this.active
+    )
+      .year(this.year || undefined)
       .teacherIds(teacherIds)
       .enrollments(enrollments)
       .build();

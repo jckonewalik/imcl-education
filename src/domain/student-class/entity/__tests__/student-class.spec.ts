@@ -1,15 +1,15 @@
+import { Gender } from "@/domain/@shared/enums/gender";
 import {
-  InvalidValueException,
   BadRequestException,
+  InvalidValueException,
 } from "@/domain/@shared/exceptions";
 import Messages from "@/domain/@shared/util/messages";
-import { StudentClass } from "../student-class";
+import { Email } from "@/domain/@shared/value-objects";
+import { Student } from "@/domain/student/entity/student";
+import { Teacher } from "@/domain/teacher/entity";
 import faker from "faker";
 import { v4 as uuid } from "uuid";
-import { Student } from "@/domain/student/entity/student";
-import { Gender } from "@/domain/@shared/enums/gender";
-import { Teacher } from "@/domain/teacher/entity";
-import { Email } from "@/domain/@shared/value-objects";
+import { StudentClass } from "../student-class";
 
 const makeStudentClass = ({
   id = uuid(),
@@ -17,9 +17,7 @@ const makeStudentClass = ({
   name = faker.name.jobArea(),
   active = true,
 }): StudentClass => {
-  return StudentClass.Builder.builder(id, courseId, name)
-    .active(active)
-    .build();
+  return StudentClass.Builder.builder(id, courseId, name, active).build();
 };
 
 const makeTeacher = ({
@@ -44,9 +42,12 @@ const makeStudent = ({
 describe("Student Class Unit tests", () => {
   it("Fail when create a student class without an ID", () => {
     const t = () => {
-      StudentClass.Builder.builder("", uuid(), faker.name.jobArea())
-        .active(true)
-        .build();
+      StudentClass.Builder.builder(
+        "",
+        uuid(),
+        faker.name.jobArea(),
+        true
+      ).build();
     };
     expect(t).toThrow(InvalidValueException);
     expect(t).toThrow(Messages.MISSING_STUDENT_CLASS_ID);
@@ -54,9 +55,12 @@ describe("Student Class Unit tests", () => {
 
   it("Fail when create a student class without a course ID", () => {
     const t = () => {
-      StudentClass.Builder.builder(uuid(), "", faker.name.jobArea())
-        .active(true)
-        .build();
+      StudentClass.Builder.builder(
+        uuid(),
+        "",
+        faker.name.jobArea(),
+        true
+      ).build();
     };
     expect(t).toThrow(InvalidValueException);
     expect(t).toThrow(Messages.MISSING_COURSE_ID);
@@ -64,7 +68,7 @@ describe("Student Class Unit tests", () => {
 
   it("Fail when create a course without a name", () => {
     const t = () => {
-      StudentClass.Builder.builder(uuid(), uuid(), "").active(true).build();
+      StudentClass.Builder.builder(uuid(), uuid(), "", true).build();
     };
     expect(t).toThrow(InvalidValueException);
     expect(t).toThrow(Messages.MISSING_STUDENT_CLASS_NAME);

@@ -50,6 +50,11 @@ export class UpdateStudentClassDto {
   })
   name: string;
   @ApiProperty({
+    description: "Ano da turma",
+    required: false,
+  })
+  year?: number;
+  @ApiProperty({
     description: "Identificação de status ativo do turma",
     required: true,
   })

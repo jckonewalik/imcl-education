@@ -22,6 +22,10 @@ export class StudentClassDto {
   })
   name: string;
   @ApiProperty({
+    description: "Ano do turma",
+  })
+  year?: number;
+  @ApiProperty({
     description: "Professores da turma",
     type: SimpleTeacherDto,
   })
@@ -49,6 +53,7 @@ export class StudentClassDto {
     dto.id = studentClass.id;
     dto.course = SimpleCourseDto.fromEntity(course);
     dto.name = studentClass.name;
+    dto.year = studentClass.year;
     dto.active = studentClass.active;
     dto.teachers = teachers.map((t) => SimpleTeacherDto.fromEntity(t));
     dto.students = students.map((s) => SimpleStudentDto.fromEntity(s));

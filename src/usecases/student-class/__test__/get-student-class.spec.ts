@@ -19,12 +19,14 @@ const makeStudentClasses = () => {
   const studentClass1 = StudentClass.Builder.builder(
     uuid(),
     course.id,
-    faker.random.word()
+    faker.random.word(),
+    true
   ).build();
   const studentClass2 = StudentClass.Builder.builder(
     uuid(),
     course.id,
-    faker.random.word()
+    faker.random.word(),
+    true
   ).build();
 
   const classesMap = new Map<string, StudentClass>();

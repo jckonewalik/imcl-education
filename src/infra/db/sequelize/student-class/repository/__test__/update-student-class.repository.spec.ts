@@ -50,7 +50,8 @@ describe("Sequelize Update Student Class Repository", () => {
     const studentClass = StudentClass.Builder.builder(
       uuid(),
       course.id,
-      faker.random.word()
+      faker.random.word(),
+      true
     ).build();
     studentClass.enrollStudent(student1.toEntity());
     studentClass.addTeacher(teacher1.toEntity());
@@ -61,6 +62,7 @@ describe("Sequelize Update Student Class Repository", () => {
 
     const newName = faker.random.word();
     studentClass.changeName(newName);
+    studentClass.changeYear(2022);
     studentClass.unenrollStudent(student1.toEntity());
     studentClass.removeTeacher(teacher1.toEntity());
     studentClass.enrollStudent(student2.toEntity());
@@ -78,6 +80,7 @@ describe("Sequelize Update Student Class Repository", () => {
     expect(studentClassModel).not.toBeNull();
     expect(studentClassModel?.id).toBe(studentClass.id);
     expect(studentClassModel?.name).toBe(newName);
+    expect(studentClassModel?.year).toBe(2022);
     expect(studentClassModel?.active).toBe(studentClass.active);
     expect(studentClassModel?.enrollments?.length).toBe(2);
     expect(

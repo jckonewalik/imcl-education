@@ -16,6 +16,7 @@ type UpateProps = {
   id: string;
   name: string;
   active: boolean;
+  year?: number;
   students?: {
     studentId: string;
     action: UpdateAction;
@@ -43,6 +44,10 @@ export class UpdateStudentClassUseCase {
 
     if (studentClass.name !== data.name) {
       studentClass.changeName(data.name);
+    }
+
+    if (studentClass.year !== data.year) {
+      studentClass.changeYear(data.year);
     }
 
     await this.updateEnrollments(studentClass, data);

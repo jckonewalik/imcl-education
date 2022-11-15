@@ -64,6 +64,7 @@ export class SequelizeUpdateStudentClassRepository
         {
           id: entity.id,
           name: entity.name,
+          year: entity.year,
           active: entity.active,
         },
         {

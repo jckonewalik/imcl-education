@@ -85,6 +85,7 @@ export class StudentClassesController {
     const studentClass = await this.updateUseCase.update({
       id: studentClassId,
       name: dto.name,
+      year: dto.year,
       active: dto.active,
       students: dto.students,
       teachers: dto.teachers,

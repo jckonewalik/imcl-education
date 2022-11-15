@@ -48,8 +48,11 @@ describe("Sequelize Create Student Class Repository", () => {
     const studentClass = StudentClass.Builder.builder(
       uuid(),
       course.id,
-      faker.random.word()
-    ).build();
+      faker.random.word(),
+      true
+    )
+      .year(2022)
+      .build();
     studentClass.enrollStudent(student.toEntity());
     studentClass.addTeacher(teacher.toEntity());
 
@@ -63,6 +66,7 @@ describe("Sequelize Create Student Class Repository", () => {
     expect(studentClassModel).not.toBeNull();
     expect(studentClassModel?.id).toBe(studentClass.id);
     expect(studentClassModel?.name).toBe(studentClass.name);
+    expect(studentClassModel?.year).toBe(2022);
     expect(studentClassModel?.active).toBe(studentClass.active);
     expect(studentClassModel?.enrollments?.length).toBe(1);
     expect(studentClassModel?.enrollments?.[0].id).toBe(

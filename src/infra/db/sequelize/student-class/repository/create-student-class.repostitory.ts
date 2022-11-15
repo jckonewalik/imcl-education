@@ -13,6 +13,7 @@ export class SequelizeCreateStudentClassRepository
           id: entity.id,
           courseId: entity.courseId,
           name: entity.name,
+          year: entity.year,
           active: entity.active,
           enrollments: entity.enrollments.map((enrollment) => ({
             id: enrollment.id,

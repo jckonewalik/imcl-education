@@ -16,4 +16,9 @@ export class CreateStudentClassDto {
     required: true,
   })
   name: string;
+  @ApiProperty({
+    description: "Ano da turma",
+    required: false,
+  })
+  year?: number;
 }
