@@ -195,4 +195,33 @@ describe("Student Classes Controller Tests", () => {
     const body: StudentClassDto = response._body.body;
     expect(body.id).toBe(studentClass.id);
   });
+
+  it(`/DELETE student class by ID`, async () => {
+    const course = await createCourse();
+    const studentClass = await StudentClassModel.create({
+      id: uuid(),
+      courseId: course.id,
+      name: faker.random.word(),
+      active: true,
+    });
+    await request(app.getHttpServer())
+      .delete(`/student-classes/${studentClass.id}`)
+      .then((result) => {
+        expect(result.statusCode).toEqual(204);
+      });
+
+    const exists = await StudentClassModel.findOne({
+      where: { id: studentClass.id },
+    });
+    expect(exists).toBeNull();
+  });
+
+  it(`/DELETE student class with invalid class`, async () => {
+    await request(app.getHttpServer())
+      .delete(`/student-classes/${uuid()}`)
+      .then((result) => {
+        expect(result.statusCode).toEqual(404);
+        expect(result._body.message).toEqual(Messages.INVALID_STUDENT_CLASS);
+      });
+  });
 });
