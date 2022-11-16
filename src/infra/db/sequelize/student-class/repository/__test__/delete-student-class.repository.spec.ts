@@ -2,6 +2,7 @@ import { BadRequestException } from "@/domain/@shared/exceptions";
 import Messages from "@/domain/@shared/util/messages";
 import faker from "faker";
 import { Sequelize } from "sequelize-typescript";
+import { v4 as uuid } from "uuid";
 import { CourseModel, LessonModel } from "../../../course/model";
 import { StudentModel } from "../../../student/model";
 import { TeacherModel } from "../../../teacher/model";
@@ -12,7 +13,6 @@ import {
 } from "../../model";
 import { SequelizeDeleteStudentClassRepository } from "../delete-student-class.repository";
 import { makeModels } from "./util";
-
 describe("Sequelize Delete Student Class Repository", () => {
   let sequelize: Sequelize;
 
@@ -49,7 +49,14 @@ describe("Sequelize Delete Student Class Repository", () => {
     expect(t).rejects.toThrow(Messages.INVALID_ID);
   });
   it("Delete student class", async () => {
-    const { studentClass } = await makeModels();
+    const { course } = await makeModels();
+    const studentClass = await StudentClassModel.create({
+      id: uuid(),
+      courseId: course.id,
+      name: faker.random.word(),
+      year: 2022,
+      active: true,
+    });
     let exists = await StudentClassModel.findOne({
       where: { id: studentClass.id },
     });
