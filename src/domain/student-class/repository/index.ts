@@ -1,6 +1,7 @@
 import {
   CreateRepository,
   DeleteRepository,
+  FindAllRepository,
   FindRepository,
   UpdateRepository,
 } from "@/domain/@shared/repository/repository";
@@ -16,3 +17,6 @@ export interface UpdateStudentClassRepository
   extends UpdateRepository<StudentClass> {}
 
 export interface DeleteStudentClassRepository extends DeleteRepository {}
+
+export interface FindAllStudentClassesRepository
+  extends FindAllRepository<StudentClass> {}
