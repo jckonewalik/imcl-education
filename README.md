@@ -22,7 +22,7 @@ This project is a backend server responsible to provide the APIs to clients to e
 
 - [x] Courses Registration
   - [x] Lessons
-- [ ] Classes Control:
+- [x] Classes Control:
 
   - [x] course and class name
   - [x] students
