@@ -16,3 +16,7 @@ export interface FindCourseRepository extends FindRepository<Course> {}
 export interface FindAllCoursesRepository extends FindAllRepository<Course> {}
 
 export interface DeleteCourseRepository extends DeleteRepository {}
+
+export interface FindInCoursesRepository {
+  find(ids: string[]): Promise<Course[]>;
+}
