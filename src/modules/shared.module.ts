@@ -1,5 +1,5 @@
-import { FindCourseRepository } from "@/domain/course/repository";
 import { SequelizeFindCourseRepository } from "@/infra/db/sequelize/course/repository/find-course.repository";
+import { SequelizeFindInCoursesRepository } from "@/infra/db/sequelize/course/repository/find-in-courses.repository";
 import {
   SequelizeFindInStudentsRepository,
   SequelizeFindStudentRepository,
@@ -8,7 +8,6 @@ import {
   SequelizeFindInTeachersRepository,
   SequelizeFindTeacherRepository,
 } from "@/infra/db/sequelize/teacher/repository";
-import { GetCourseUseCase } from "@/usecases/course/get-course";
 import { Module } from "@nestjs/common";
 
 @Module({
@@ -34,20 +33,21 @@ import { Module } from "@nestjs/common";
       useClass: SequelizeFindInStudentsRepository,
     },
     {
-      inject: ["FindCourseRepository"],
-      provide: GetCourseUseCase,
-      useFactory: (findCourseRepository: FindCourseRepository) => {
-        return new GetCourseUseCase(findCourseRepository);
-      },
+      provide: "FindInStudentsRepository",
+      useClass: SequelizeFindInStudentsRepository,
+    },
+    {
+      provide: "FindInCoursesRepository",
+      useClass: SequelizeFindInCoursesRepository,
     },
   ],
   exports: [
     "FindCourseRepository",
-    GetCourseUseCase,
     "FindStudentRepository",
     "FindTeacherRepository",
     "FindInTeachersRepository",
     "FindInStudentsRepository",
+    "FindInCoursesRepository",
   ],
 })
 export class SharedModule {}

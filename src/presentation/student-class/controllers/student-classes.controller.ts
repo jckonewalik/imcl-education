@@ -1,7 +1,13 @@
-import { FindCourseRepository } from "@/domain/course/repository";
+import { Page } from "@/domain/@shared/types/page";
+import {
+  FindCourseRepository,
+  FindInCoursesRepository,
+} from "@/domain/course/repository";
 import { StudentClass } from "@/domain/student-class/entity";
+import { FindAllStudentClassesRepository } from "@/domain/student-class/repository";
 import { FindInStudentsRepository } from "@/domain/student/repository";
 import { FindInTeachersRepository } from "@/domain/teacher/repository";
+import { ApiPageResponseDto } from "@/presentation/@shared/decorators/api-page-response-dto";
 import { ApiResponseDto } from "@/presentation/@shared/decorators/api-response-dto";
 import { ErrorResponseDto } from "@/presentation/@shared/dto/error-response.dto";
 import { ResponseDto } from "@/presentation/@shared/dto/response.dto";
@@ -30,6 +36,8 @@ import {
 } from "@nestjs/swagger";
 import {
   CreateStudentClassDto,
+  SearchStudentClassDto,
+  SimpleStudentClassDto,
   StudentClassDto,
   UpdateStudentClassDto,
 } from "../dto";
@@ -46,7 +54,11 @@ export class StudentClassesController {
     @Inject("FindInTeachersRepository")
     private readonly findInTeachersRepo: FindInTeachersRepository,
     @Inject("FindInStudentsRepository")
-    private readonly findInStudentsRepo: FindInStudentsRepository
+    private readonly findInStudentsRepo: FindInStudentsRepository,
+    @Inject("FindAllStudentClassesRepository")
+    private readonly findAllRepo: FindAllStudentClassesRepository,
+    @Inject("FindInCoursesRepository")
+    private readonly findInCoursesRepo: FindInCoursesRepository
   ) {}
 
   @Post()
@@ -147,5 +159,39 @@ export class StudentClassesController {
     const students = await this.findInStudentsRepo.find(studentIds);
 
     return StudentClassDto.create(studentClass, course!, teachers, students);
+  }
+
+  @Post("search")
+  @HttpCode(200)
+  @ApiPageResponseDto(SimpleStudentClassDto)
+  @ApiBadRequestResponse({
+    status: 400,
+    type: ErrorResponseDto,
+  })
+  @ApiInternalServerErrorResponse({
+    status: 500,
+    type: ErrorResponseDto,
+  })
+  async search(
+    @Body() dto: SearchStudentClassDto
+  ): Promise<ResponseDto<Page<SimpleStudentClassDto>>> {
+    const { page, lines, sortBy, sortOrder, ...criteria } = dto;
+    const { currentPage, data, totalItems, totalPages } =
+      await this.findAllRepo.find(criteria, sortBy, sortOrder, lines, page);
+
+    const courseIds = [...new Set(data.map((s) => s.courseId))];
+    const courses = await this.findInCoursesRepo.find(courseIds);
+
+    return new ResponseDto(HttpStatus.OK, {
+      currentPage,
+      totalItems,
+      totalPages,
+      data: data.map((t) =>
+        SimpleStudentClassDto.create(
+          t,
+          courses.find((c) => c.id === t.courseId)
+        )
+      ),
+    });
   }
 }

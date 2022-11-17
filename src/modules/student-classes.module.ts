@@ -9,6 +9,7 @@ import { FindStudentRepository } from "@/domain/student/repository";
 import { FindTeacherRepository } from "@/domain/teacher/repository";
 import { SequelizeCreateStudentClassRepository } from "@/infra/db/sequelize/student-class/repository/create-student-class.repostitory";
 import { SequelizeDeleteStudentClassRepository } from "@/infra/db/sequelize/student-class/repository/delete-student-class.repository";
+import { SequelizeFindAllStudentClassesRepository } from "@/infra/db/sequelize/student-class/repository/find-all-student-classes.repository";
 import { SequelizeFindStudentClassRepository } from "@/infra/db/sequelize/student-class/repository/find-student-class.repository";
 import { SequelizeUpdateStudentClassRepository } from "@/infra/db/sequelize/student-class/repository/update-student-class.repository";
 import { AllExceptionsFilter } from "@/presentation/@shared/filters";
@@ -52,6 +53,10 @@ import { SharedModule } from "./shared.module";
     {
       provide: "FindStudentClassRepository",
       useClass: SequelizeFindStudentClassRepository,
+    },
+    {
+      provide: "FindAllStudentClassesRepository",
+      useClass: SequelizeFindAllStudentClassesRepository,
     },
     {
       inject: ["CreateStudentClassRepository", "FindCourseRepository"],

@@ -12,6 +12,7 @@ import { AllExceptionsFilter } from "@/presentation/@shared/filters";
 import { CoursesController } from "@/presentation/course/controllers";
 import CreateCourseUseCase from "@/usecases/course/create-course";
 import { DeleteCourseUseCase } from "@/usecases/course/delete-course";
+import { GetCourseUseCase } from "@/usecases/course/get-course";
 import { UpdateCourseUseCase } from "@/usecases/course/update-course";
 import { Module, ValidationPipe } from "@nestjs/common";
 import { APP_FILTER, APP_PIPE } from "@nestjs/core";
@@ -78,6 +79,13 @@ import { SharedModule } from "./shared.module";
           findCourseRepository,
           deleteCourseRepository
         );
+      },
+    },
+    {
+      inject: ["FindCourseRepository"],
+      provide: GetCourseUseCase,
+      useFactory: (findCourseRepository: FindCourseRepository) => {
+        return new GetCourseUseCase(findCourseRepository);
       },
     },
   ],
