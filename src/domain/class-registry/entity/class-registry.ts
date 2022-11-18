@@ -1,0 +1,130 @@
+import {
+  BadRequestException,
+  InvalidValueException,
+} from "@/domain/@shared/exceptions";
+import Messages from "@/domain/@shared/util/messages";
+import { Lesson } from "@/domain/course/entity";
+import { Student } from "@/domain/student/entity";
+
+export class ClassRegistry {
+  private _id: string;
+  private _studentClassId: string;
+  private _date: Date;
+  private _teacherId: string;
+  private _studentIds: string[];
+  private _lessonIds: string[];
+
+  constructor(
+    id: string,
+    studentClassId: string,
+    date: Date,
+    teacherId: string,
+    studentIds: string[],
+    lessonIds: string[] = []
+  ) {
+    if (!id) {
+      throw new InvalidValueException(Messages.MISSING_CLASS_REGISTRY_ID);
+    }
+    if (!studentClassId) {
+      throw new InvalidValueException(Messages.MISSING_STUDENT_CLASS_ID);
+    }
+    this.validateDate(date);
+    if (!teacherId) {
+      throw new InvalidValueException(Messages.MISSING_TEACHER_ID);
+    }
+    this.validateStudents(studentIds);
+    this._id = id;
+    this._studentClassId = studentClassId;
+    this._date = date;
+    this._teacherId = teacherId;
+    this._studentIds = studentIds;
+    this._lessonIds = lessonIds;
+  }
+
+  private validateDate(date: Date) {
+    const today = new Date();
+    const dateCompare = new Date(date);
+
+    today.setHours(0, 0, 0, 0);
+    dateCompare.setHours(0, 0, 0, 0);
+
+    if (dateCompare > today) {
+      throw new InvalidValueException(Messages.CLASS_DATE_CANT_BE_IN_FUTURE);
+    }
+  }
+
+  private validateStudents(studentIds: string[]) {
+    if (studentIds.length < 1) {
+      throw new InvalidValueException(Messages.CLASS_REGISTRY_WITH_NO_STUDENTS);
+    }
+  }
+
+  public validate(): void {
+    this.validateStudents(this._studentIds);
+  }
+
+  addStudent(student: Student) {
+    if (this._studentIds.includes(student.id)) {
+      throw new BadRequestException(Messages.STUDENT_ALREADY_INCLUDED);
+    }
+    if (!student.active) {
+      throw new BadRequestException(Messages.STUDENT_INACTIVE);
+    }
+    this._studentIds.push(student.id);
+  }
+
+  removeStudent(student: Student) {
+    if (!this._studentIds.includes(student.id)) {
+      throw new BadRequestException(Messages.STUDENT_NOT_INCLUDED);
+    }
+    this._studentIds = this._studentIds.filter((id) => id !== student.id);
+  }
+
+  public addLesson(lesson: Lesson) {
+    if (this._lessonIds.includes(lesson.id)) {
+      throw new BadRequestException(Messages.LESSON_ALREADY_INCLUDED);
+    }
+    if (!lesson.active) {
+      throw new BadRequestException(Messages.LESSON_INACTIVE);
+    }
+    this._lessonIds.push(lesson.id);
+  }
+
+  removeLesson(lesson: Lesson) {
+    if (!this._lessonIds.includes(lesson.id)) {
+      throw new BadRequestException(Messages.LESSON_NOT_INCLUDED);
+    }
+    this._lessonIds = this._lessonIds.filter((id) => id !== lesson.id);
+  }
+
+  updateDate(newDate: Date) {
+    this.validateDate(newDate);
+    this._date = newDate;
+  }
+
+  get id(): string {
+    return this._id;
+  }
+
+  get studentClassId(): string {
+    return this._studentClassId;
+  }
+
+  get date(): Date {
+    return this._date;
+  }
+
+  get teacherId(): string {
+    return this._teacherId;
+  }
+
+  get studentIds(): string[] {
+    const studentIds: string[] = [];
+    return studentIds.concat(this._studentIds);
+  }
+
+  get lessonIds(): string[] {
+    const lessonIds: string[] = [];
+    return lessonIds.concat(this._lessonIds);
+  }
+}

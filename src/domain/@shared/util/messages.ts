@@ -52,4 +52,14 @@ export default class Messages {
   static STUDENT_ENROLLED =
     "O aluno está matriculado e não pode ser excluído. Favor inativá-lo";
   static INVALID_ID = "O ID informado não é válido. Informe um UUID v4 válido";
+  static MISSING_CLASS_REGISTRY_ID = "Informe o ID da aula";
+  static CLASS_DATE_CANT_BE_IN_FUTURE =
+    "A data da aula não pode ser maior que a data atual";
+  static CLASS_REGISTRY_WITH_NO_STUDENTS =
+    "A aula tem que ter ao menos um aluno";
+  static LESSON_ALREADY_INCLUDED = "A lição já foi incluída";
+  static LESSON_INACTIVE = "A lição está inativa";
+  static LESSON_NOT_INCLUDED = "A lição não foi incluída";
+  static STUDENT_ALREADY_INCLUDED = "O aluno já foi incluído";
+  static STUDENT_NOT_INCLUDED = "O aluno não foi incluída";
 }
