@@ -61,5 +61,9 @@ export default class Messages {
   static LESSON_INACTIVE = "A lição está inativa";
   static LESSON_NOT_INCLUDED = "A lição não foi incluída";
   static STUDENT_ALREADY_INCLUDED = "O aluno já foi incluído";
-  static STUDENT_NOT_INCLUDED = "O aluno não foi incluída";
+  static STUDENT_NOT_INCLUDED = "O aluno não foi incluído";
+  static DUPLICATED_CLASS_REGISTRY =
+    "Já existe um registro de aula para essa turma e data";
+  static INVALID_LESSON = "A lição informada não é válida para essa turma";
+  static STUDENT_NOT_ASSOCIATED = "O aluno não faz parte da turma";
 }
