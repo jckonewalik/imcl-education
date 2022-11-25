@@ -1,3 +1,4 @@
+import { ClassRegistry } from "@/domain/class-registry/entity";
 import {
   BelongsTo,
   BelongsToMany,
@@ -56,4 +57,15 @@ export class ClassRegistryModel extends Model {
   @UpdatedAt
   @Column({ field: "updated_on" })
   updatedOn: Date;
+
+  toEntity(): ClassRegistry {
+    return new ClassRegistry(
+      this.id,
+      this.studentClassId,
+      this.date,
+      this.teacherId,
+      this.students?.map((s) => s.id),
+      this.lessons?.map((l) => l.id)
+    );
+  }
 }
