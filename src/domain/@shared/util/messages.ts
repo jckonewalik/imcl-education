@@ -66,4 +66,5 @@ export default class Messages {
     "Já existe um registro de aula para essa turma e data";
   static INVALID_LESSON = "A lição informada não é válida para essa turma";
   static STUDENT_NOT_ASSOCIATED = "O aluno não faz parte da turma";
+  static INVALID_DATE_FORMAT = "O formato da data deve ser YYYY-MM-DD";
 }
