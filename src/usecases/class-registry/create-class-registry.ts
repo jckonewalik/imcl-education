@@ -29,8 +29,8 @@ export class CreateClassRegistryUseCase {
     studentClassId,
     date,
     teacherId,
-    studentIds,
-    lessonIds,
+    studentIds = [],
+    lessonIds = [],
   }: Props): Promise<ClassRegistry> {
     const studentClass = await this.findStudentClassRepo.find(studentClassId);
     if (!studentClass) {
