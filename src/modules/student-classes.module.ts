@@ -39,10 +39,6 @@ import { SharedModule } from "./shared.module";
       useClass: SequelizeCreateStudentClassRepository,
     },
     {
-      provide: "FindStudentClassRepository",
-      useClass: SequelizeFindStudentClassRepository,
-    },
-    {
       provide: "UpdateStudentClassRepository",
       useClass: SequelizeUpdateStudentClassRepository,
     },

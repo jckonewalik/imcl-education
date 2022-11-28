@@ -1,5 +1,6 @@
 import { SequelizeFindCourseRepository } from "@/infra/db/sequelize/course/repository/find-course.repository";
 import { SequelizeFindInCoursesRepository } from "@/infra/db/sequelize/course/repository/find-in-courses.repository";
+import { SequelizeFindStudentClassRepository } from "@/infra/db/sequelize/student-class/repository/find-student-class.repository";
 import {
   SequelizeFindInStudentsRepository,
   SequelizeFindStudentRepository,
@@ -40,6 +41,10 @@ import { Module } from "@nestjs/common";
       provide: "FindInCoursesRepository",
       useClass: SequelizeFindInCoursesRepository,
     },
+    {
+      provide: "FindStudentClassRepository",
+      useClass: SequelizeFindStudentClassRepository,
+    },
   ],
   exports: [
     "FindCourseRepository",
@@ -48,6 +53,7 @@ import { Module } from "@nestjs/common";
     "FindInTeachersRepository",
     "FindInStudentsRepository",
     "FindInCoursesRepository",
+    "FindStudentClassRepository",
   ],
 })
 export class SharedModule {}
