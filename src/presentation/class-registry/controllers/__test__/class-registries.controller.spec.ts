@@ -3,6 +3,7 @@ import {
   ClassRegistryModel,
   ClassRegistryStudentModel,
 } from "@/infra/db/sequelize/class-registry/model";
+import { makeModels } from "@/infra/db/sequelize/class-registry/repository/__test__/util";
 import { CourseModel, LessonModel } from "@/infra/db/sequelize/course/model";
 import {
   EnrollmentModel,
@@ -14,19 +15,8 @@ import { TeacherModel } from "@/infra/db/sequelize/teacher/model";
 import { ClassRegistriesModule } from "@/modules/class-registries.module";
 import { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
-import faker from "faker";
 import { Sequelize } from "sequelize-typescript";
 import request from "supertest";
-import { v4 as uuid } from "uuid";
-import { makeModels } from "./util";
-const createCourse = async (): Promise<CourseModel> => {
-  const course = await CourseModel.create({
-    id: uuid(),
-    name: faker.random.word(),
-    active: true,
-  });
-  return course;
-};
 
 describe("Class Registries Controller Tests", () => {
   let app: INestApplication;

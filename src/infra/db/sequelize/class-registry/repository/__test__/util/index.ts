@@ -1,6 +1,10 @@
 import { Gender } from "@/domain/@shared/enums/gender";
 import { CourseModel } from "@/infra/db/sequelize/course/model";
-import { StudentClassModel } from "@/infra/db/sequelize/student-class/model";
+import {
+  EnrollmentModel,
+  StudentClassModel,
+  StudentClassTeacherModel,
+} from "@/infra/db/sequelize/student-class/model";
 import { StudentModel } from "@/infra/db/sequelize/student/model";
 import { TeacherModel } from "@/infra/db/sequelize/teacher/model";
 import faker from "faker";
@@ -47,6 +51,17 @@ export const makeModels = async () => {
     name: faker.random.word(),
     year: new Date().getFullYear(),
     active: true,
+  });
+
+  await EnrollmentModel.create({
+    id: uuid(),
+    studentClassId: studentClass.id,
+    studentId: student.id,
+  });
+
+  await StudentClassTeacherModel.create({
+    studentClassId: studentClass.id,
+    teacherId: teacher.id,
   });
 
   return { course, teacher, student, studentClass };
