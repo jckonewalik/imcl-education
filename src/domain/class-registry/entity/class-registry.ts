@@ -28,14 +28,11 @@ export class ClassRegistry {
     if (!studentClassId) {
       throw new InvalidValueException(Messages.MISSING_STUDENT_CLASS_ID);
     }
-    if (!teacherId) {
-      throw new InvalidValueException(Messages.MISSING_TEACHER_ID);
-    }
     this.validateStudents(studentIds);
     this._id = id;
     this._studentClassId = studentClassId;
     this.updateDate(date);
-    this._teacherId = teacherId;
+    this.updateTeacher(teacherId);
     this._studentIds = studentIds;
     this._lessonIds = lessonIds;
   }
@@ -96,6 +93,13 @@ export class ClassRegistry {
   updateDate(newDate: Date) {
     this.validateDate(newDate);
     this._date = DateUtils.toSimpleDate(newDate);
+  }
+
+  updateTeacher(teacherId: string) {
+    if (!teacherId) {
+      throw new InvalidValueException(Messages.MISSING_TEACHER_ID);
+    }
+    this._teacherId = teacherId;
   }
 
   get id(): string {
