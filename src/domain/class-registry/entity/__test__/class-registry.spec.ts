@@ -3,6 +3,7 @@ import {
   BadRequestException,
   InvalidValueException,
 } from "@/domain/@shared/exceptions";
+import { DateUtils } from "@/domain/@shared/util/date-utils";
 import Messages from "@/domain/@shared/util/messages";
 import { Lesson } from "@/domain/course/entity";
 import { Student } from "@/domain/student/entity";
@@ -225,6 +226,6 @@ describe("Class Registry Unit tests", () => {
       [uuid()]
     );
     classRegistry.updateDate(newDate);
-    expect(classRegistry.date).toBe(newDate);
+    expect(classRegistry.date).toStrictEqual(DateUtils.toSimpleDate(newDate));
   });
 });

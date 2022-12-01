@@ -1,3 +1,4 @@
+import { DateUtils } from "@/domain/@shared/util/date-utils";
 import { Sequelize } from "sequelize-typescript";
 import { v4 as uuid } from "uuid";
 import { CourseModel, LessonModel } from "../../../course/model";
@@ -75,7 +76,7 @@ describe("Sequelize Find Class Registry By Date Repository", () => {
     expect(registry).toBeDefined();
     expect(registry?.studentClassId).toBe(studentClass.id);
     expect(registry?.teacherId).toBe(teacher.id);
-    expect(registry?.date).toBe(date.toISOString().split("T")[0]);
+    expect(registry?.date).toStrictEqual(DateUtils.toSimpleDate(date));
 
     date.setDate(date.getDate() - 1);
     registry = await sut.find(studentClass.id, date);

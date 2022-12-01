@@ -1,5 +1,6 @@
 import { Gender } from "@/domain/@shared/enums/gender";
 import { BadRequestException } from "@/domain/@shared/exceptions";
+import { DateUtils } from "@/domain/@shared/util/date-utils";
 import Messages from "@/domain/@shared/util/messages";
 import { Email } from "@/domain/@shared/value-objects";
 import { ClassRegistry } from "@/domain/class-registry/entity";
@@ -299,7 +300,7 @@ describe("Create Class Registry Use Case", () => {
     });
 
     expect(registry.studentClassId).toBe(studentClassId);
-    expect(registry.date).toBe(date);
+    expect(registry.date).toStrictEqual(DateUtils.toSimpleDate(date));
     expect(registry.teacherId).toBe(teacher.id);
     expect(registry.studentIds).toStrictEqual([student.id]);
     expect(registry.lessonIds).toStrictEqual([course.lessons[0].id]);

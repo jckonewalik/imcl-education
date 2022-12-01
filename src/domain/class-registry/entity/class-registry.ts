@@ -2,10 +2,10 @@ import {
   BadRequestException,
   InvalidValueException,
 } from "@/domain/@shared/exceptions";
+import { DateUtils } from "@/domain/@shared/util/date-utils";
 import Messages from "@/domain/@shared/util/messages";
 import { Lesson } from "@/domain/course/entity";
 import { Student } from "@/domain/student/entity";
-
 export class ClassRegistry {
   private _id: string;
   private _studentClassId: string;
@@ -28,25 +28,21 @@ export class ClassRegistry {
     if (!studentClassId) {
       throw new InvalidValueException(Messages.MISSING_STUDENT_CLASS_ID);
     }
-    this.validateDate(date);
     if (!teacherId) {
       throw new InvalidValueException(Messages.MISSING_TEACHER_ID);
     }
     this.validateStudents(studentIds);
     this._id = id;
     this._studentClassId = studentClassId;
-    this._date = date;
+    this.updateDate(date);
     this._teacherId = teacherId;
     this._studentIds = studentIds;
     this._lessonIds = lessonIds;
   }
 
   private validateDate(date: Date) {
-    const today = new Date();
-    const dateCompare = new Date(date);
-
-    today.setHours(0, 0, 0, 0);
-    dateCompare.setHours(0, 0, 0, 0);
+    const today = DateUtils.toSimpleDate(new Date());
+    const dateCompare = DateUtils.toSimpleDate(date);
 
     if (dateCompare > today) {
       throw new InvalidValueException(Messages.CLASS_DATE_CANT_BE_IN_FUTURE);
@@ -99,7 +95,7 @@ export class ClassRegistry {
 
   updateDate(newDate: Date) {
     this.validateDate(newDate);
-    this._date = newDate;
+    this._date = DateUtils.toSimpleDate(newDate);
   }
 
   get id(): string {
