@@ -47,7 +47,7 @@ describe("Sequelize Create Class Registry Repository", () => {
   });
 
   it("Create a class registry", async () => {
-    const { course, student, teacher, studentClass } = await makeModels();
+    const { course, student1, teacher1, studentClass } = await makeModels();
 
     const repository = new SequelizeCreateClassRegistryRepository();
 
@@ -55,8 +55,8 @@ describe("Sequelize Create Class Registry Repository", () => {
       uuid(),
       studentClass.id,
       new Date(),
-      teacher.id,
-      [student.id],
+      teacher1.id,
+      [student1.id],
       [course.lessons[0].id]
     );
 
@@ -75,7 +75,7 @@ describe("Sequelize Create Class Registry Repository", () => {
       registry.date.toISOString().split("T")[0]
     );
     expect(registryModel?.students.length).toBe(1);
-    expect(registryModel?.students[0].id).toBe(student.id);
+    expect(registryModel?.students[0].id).toBe(student1.id);
 
     expect(registryModel?.lessons.length).toBe(1);
     expect(registryModel?.lessons[0].id).toBe(course.lessons[0].id);

@@ -47,7 +47,7 @@ describe("Sequelize Find Class Registry By Date Repository", () => {
   });
 
   it("Find a class registry by Date", async () => {
-    const { student, teacher, studentClass } = await makeModels();
+    const { student1, teacher1, studentClass } = await makeModels();
 
     const sut = new SequelizeFindClassRegitryByDateRepository();
 
@@ -59,12 +59,12 @@ describe("Sequelize Find Class Registry By Date Repository", () => {
       await ClassRegistryModel.create({
         id,
         studentClassId: studentClass.id,
-        teacherId: teacher.id,
+        teacherId: teacher1.id,
         date,
       });
       await ClassRegistryStudentModel.create({
         classRegistryId: id,
-        studentId: student.id,
+        studentId: student1.id,
       });
       await t?.commit();
     } catch (error) {
@@ -75,7 +75,7 @@ describe("Sequelize Find Class Registry By Date Repository", () => {
 
     expect(registry).toBeDefined();
     expect(registry?.studentClassId).toBe(studentClass.id);
-    expect(registry?.teacherId).toBe(teacher.id);
+    expect(registry?.teacherId).toBe(teacher1.id);
     expect(registry?.date).toStrictEqual(DateUtils.toSimpleDate(date));
 
     date.setDate(date.getDate() - 1);

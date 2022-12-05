@@ -63,14 +63,14 @@ describe("Class Registries Controller Tests", () => {
   });
 
   it(`/POST class-registries`, async () => {
-    const { course, student, studentClass, teacher } = await makeModels();
+    const { course, student1, studentClass, teacher1 } = await makeModels();
     const response = await request(app.getHttpServer())
       .post("/class-registries")
       .send({
         studentClassId: studentClass.id,
-        teacherId: teacher.id,
+        teacherId: teacher1.id,
         date: new Date().toISOString().split("T")[0],
-        studentIds: [student.id],
+        studentIds: [student1.id],
         lessonIds: [course.lessons[0]?.id],
       });
 
@@ -81,11 +81,11 @@ describe("Class Registries Controller Tests", () => {
     });
     expect(result).toBeDefined();
     expect(result?.studentClassId).toBe(studentClass.id);
-    expect(result?.teacherId).toBe(teacher.id);
+    expect(result?.teacherId).toBe(teacher1.id);
     expect(result?.date).toBe(new Date().toISOString().split("T")[0]);
     expect(result?.lessons.length).toBe(1);
     expect(result?.lessons[0].id).toBe(course.lessons[0].id);
     expect(result?.students.length).toBe(1);
-    expect(result?.students[0].id).toBe(student.id);
+    expect(result?.students[0].id).toBe(student1.id);
   });
 });

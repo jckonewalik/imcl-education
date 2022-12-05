@@ -25,12 +25,19 @@ export const makeModels = async () => {
           name: faker.random.word(),
           active: true,
         },
+        {
+          id: uuid(),
+          courseId: courseId,
+          number: 2,
+          name: faker.random.word(),
+          active: true,
+        },
       ],
     },
     { include: "lessons" }
   );
 
-  const teacher = await TeacherModel.create({
+  const teacher1 = await TeacherModel.create({
     id: uuid(),
     name: `${faker.name.firstName()} ${faker.name.lastName()}`,
     gender: Gender.F,
@@ -38,7 +45,22 @@ export const makeModels = async () => {
     active: true,
   });
 
-  const student = await StudentModel.create({
+  const teacher2 = await TeacherModel.create({
+    id: uuid(),
+    name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+    gender: Gender.F,
+    email: faker.internet.email(),
+    active: true,
+  });
+
+  const student1 = await StudentModel.create({
+    id: uuid(),
+    name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+    gender: Gender.M,
+    active: true,
+  });
+
+  const student2 = await StudentModel.create({
     id: uuid(),
     name: `${faker.name.firstName()} ${faker.name.lastName()}`,
     gender: Gender.M,
@@ -56,13 +78,24 @@ export const makeModels = async () => {
   await EnrollmentModel.create({
     id: uuid(),
     studentClassId: studentClass.id,
-    studentId: student.id,
+    studentId: student1.id,
+  });
+
+  await EnrollmentModel.create({
+    id: uuid(),
+    studentClassId: studentClass.id,
+    studentId: student2.id,
   });
 
   await StudentClassTeacherModel.create({
     studentClassId: studentClass.id,
-    teacherId: teacher.id,
+    teacherId: teacher1.id,
   });
 
-  return { course, teacher, student, studentClass };
+  await StudentClassTeacherModel.create({
+    studentClassId: studentClass.id,
+    teacherId: teacher2.id,
+  });
+
+  return { course, teacher1, teacher2, student1, student2, studentClass };
 };

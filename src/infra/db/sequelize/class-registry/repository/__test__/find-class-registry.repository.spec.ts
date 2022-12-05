@@ -60,7 +60,7 @@ describe("Sequelize Find Class Registry Repository", () => {
   });
 
   it("Find class registry", async () => {
-    const { course, student, teacher, studentClass } = await makeModels();
+    const { course, student1, teacher1, studentClass } = await makeModels();
 
     const createRepository = new SequelizeCreateClassRegistryRepository();
 
@@ -68,8 +68,8 @@ describe("Sequelize Find Class Registry Repository", () => {
       uuid(),
       studentClass.id,
       new Date(),
-      teacher.id,
-      [student.id],
+      teacher1.id,
+      [student1.id],
       [course.lessons[0].id]
     );
 
