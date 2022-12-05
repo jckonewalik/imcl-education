@@ -1,3 +1,8 @@
+import {
+  ClassRegistryLessonModel,
+  ClassRegistryModel,
+  ClassRegistryStudentModel,
+} from "@/infra/db/sequelize/class-registry/model";
 import { CourseModel, LessonModel } from "@/infra/db/sequelize/course/model";
 import {
   EnrollmentModel,
@@ -31,6 +36,9 @@ import { TeachersModule } from "./teachers.module";
         StudentClassModel,
         StudentClassTeacherModel,
         TeacherModel,
+        ClassRegistryModel,
+        ClassRegistryStudentModel,
+        ClassRegistryLessonModel,
       ],
     }),
     TeachersModule,
