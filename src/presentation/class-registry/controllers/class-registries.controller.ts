@@ -6,20 +6,36 @@ import { FindTeacherRepository } from "@/domain/teacher/repository";
 import { ApiResponseDto } from "@/presentation/@shared/decorators/api-response-dto";
 import { ErrorResponseDto } from "@/presentation/@shared/dto/error-response.dto";
 import { ResponseDto } from "@/presentation/@shared/dto/response.dto";
-import { CreateClassRegistryUseCase } from "@/usecases/class-registry";
-import { Body, Controller, HttpStatus, Inject, Post } from "@nestjs/common";
+import {
+  CreateClassRegistryUseCase,
+  UpdateClassRegistryUseCase,
+} from "@/usecases/class-registry";
+import {
+  Body,
+  Controller,
+  HttpStatus,
+  Inject,
+  Param,
+  Post,
+  Put,
+} from "@nestjs/common";
 import {
   ApiBadRequestResponse,
   ApiInternalServerErrorResponse,
   ApiTags,
 } from "@nestjs/swagger";
 import moment from "moment";
-import { ClassRegistryDto, CreateClassRegistryDto } from "../dto";
+import {
+  ClassRegistryDto,
+  CreateClassRegistryDto,
+  UpdateClassRegistryDto,
+} from "../dto";
 @ApiTags("class-registries")
 @Controller("class-registries")
 export class ClassRegistriesController {
   constructor(
     private readonly createUseCase: CreateClassRegistryUseCase,
+    private readonly updateUseCase: UpdateClassRegistryUseCase,
     @Inject("FindStudentClassRepository")
     private readonly findStudentClassRepo: FindStudentClassRepository,
     @Inject("FindCourseRepository")
@@ -49,6 +65,31 @@ export class ClassRegistriesController {
     });
     return new ResponseDto(
       HttpStatus.CREATED,
+      await this.createClassRegistryDto(registry)
+    );
+  }
+
+  @Put(":classRegistryId")
+  @ApiResponseDto(ClassRegistryDto, { status: 200 })
+  @ApiBadRequestResponse({
+    status: 400,
+    type: ErrorResponseDto,
+  })
+  @ApiInternalServerErrorResponse({
+    status: 500,
+    type: ErrorResponseDto,
+  })
+  async update(
+    @Param("classRegistryId") classRegistryId: string,
+    @Body() dto: UpdateClassRegistryDto
+  ): Promise<ResponseDto<ClassRegistryDto>> {
+    const registry = await this.updateUseCase.update({
+      ...dto,
+      id: classRegistryId,
+      date: moment(dto.date).toDate(),
+    });
+    return new ResponseDto(
+      HttpStatus.OK,
       await this.createClassRegistryDto(registry)
     );
   }

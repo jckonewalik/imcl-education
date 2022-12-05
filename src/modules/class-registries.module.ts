@@ -1,14 +1,24 @@
-import { FindClassRegitryByDateRepository } from "@/domain/class-registry/repository";
+import {
+  FindClassRegistryRepository,
+  FindClassRegitryByDateRepository,
+  UpdateClassRegistryRepository,
+} from "@/domain/class-registry/repository";
 import { FindCourseRepository } from "@/domain/course/repository";
 import { FindStudentClassRepository } from "@/domain/student-class/repository";
+import { FindStudentRepository } from "@/domain/student/repository";
 import { FindTeacherRepository } from "@/domain/teacher/repository";
 import {
   SequelizeCreateClassRegistryRepository,
   SequelizeFindClassRegitryByDateRepository,
 } from "@/infra/db/sequelize/class-registry/repository";
+import { SequelizeFindClassRegistryRepository } from "@/infra/db/sequelize/class-registry/repository/find-class-registry.repository";
+import { SequelizeUpdateClassRegistryRepository } from "@/infra/db/sequelize/class-registry/repository/update-class-registry.repository";
 import { AllExceptionsFilter } from "@/presentation/@shared/filters";
 import { ClassRegistriesController } from "@/presentation/class-registry/controllers";
-import { CreateClassRegistryUseCase } from "@/usecases/class-registry";
+import {
+  CreateClassRegistryUseCase,
+  UpdateClassRegistryUseCase,
+} from "@/usecases/class-registry";
 import { Module, ValidationPipe } from "@nestjs/common";
 import { APP_FILTER, APP_PIPE } from "@nestjs/core";
 import { SharedModule } from "./shared.module";
@@ -34,6 +44,14 @@ import { SharedModule } from "./shared.module";
       useClass: SequelizeCreateClassRegistryRepository,
     },
     {
+      provide: "FindClassRegistryRepository",
+      useClass: SequelizeFindClassRegistryRepository,
+    },
+    {
+      provide: "UpdateClassRegistryRepository",
+      useClass: SequelizeUpdateClassRegistryRepository,
+    },
+    {
       provide: CreateClassRegistryUseCase,
       inject: [
         "FindClassRegitryByDateRepository",
@@ -55,6 +73,34 @@ import { SharedModule } from "./shared.module";
           findTeacherRepo,
           findCourseRepo,
           createRepo
+        );
+      },
+    },
+    {
+      provide: UpdateClassRegistryUseCase,
+      inject: [
+        "FindClassRegistryRepository",
+        "UpdateClassRegistryRepository",
+        "FindTeacherRepository",
+        "FindStudentRepository",
+        "FindStudentClassRepository",
+        "FindCourseRepository",
+      ],
+      useFactory: (
+        findRepo: FindClassRegistryRepository,
+        updateRepo: UpdateClassRegistryRepository,
+        findTeacher: FindTeacherRepository,
+        findStudent: FindStudentRepository,
+        findStudentClass: FindStudentClassRepository,
+        findCourse: FindCourseRepository
+      ) => {
+        return new UpdateClassRegistryUseCase(
+          findRepo,
+          updateRepo,
+          findTeacher,
+          findStudent,
+          findStudentClass,
+          findCourse
         );
       },
     },

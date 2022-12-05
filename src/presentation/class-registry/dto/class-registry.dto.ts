@@ -1,3 +1,4 @@
+import { DateUtils } from "@/domain/@shared/util/date-utils";
 import { ClassRegistry } from "@/domain/class-registry/entity";
 import { Course } from "@/domain/course/entity";
 import { StudentClass } from "@/domain/student-class/entity";
@@ -27,7 +28,7 @@ export class ClassRegistryDto {
   @ApiProperty({
     description: "Data do registro",
   })
-  date: Date;
+  date: string;
   @ApiProperty({
     description: "Alunos",
     type: SimpleStudentDto,
@@ -48,6 +49,7 @@ export class ClassRegistryDto {
   ): ClassRegistryDto {
     const dto = new ClassRegistryDto();
     dto.id = registry.id;
+    dto.date = DateUtils.toIsoDate(registry.date);
     if (studentClass) {
       dto.studentClass = SimpleStudentClassDto.create(studentClass, course);
     }
