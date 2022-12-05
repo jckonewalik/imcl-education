@@ -1,3 +1,5 @@
+import { DateUtils } from "@/domain/@shared/util/date-utils";
+import Messages from "@/domain/@shared/util/messages";
 import {
   ClassRegistryLessonModel,
   ClassRegistryModel,
@@ -17,7 +19,8 @@ import { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
 import { Sequelize } from "sequelize-typescript";
 import request from "supertest";
-
+import { v4 as uuid } from "uuid";
+import { ClassRegistryDto } from "../../dto";
 describe("Class Registries Controller Tests", () => {
   let app: INestApplication;
 
@@ -87,5 +90,86 @@ describe("Class Registries Controller Tests", () => {
     expect(result?.lessons[0].id).toBe(course.lessons[0].id);
     expect(result?.students.length).toBe(1);
     expect(result?.students[0].id).toBe(student1.id);
+  });
+
+  it(`/POST class-registries with bad request`, () => {
+    return request(app.getHttpServer())
+      .post("/class-registries")
+      .send({
+        date: new Date().toISOString().split("T")[0],
+        teacherId: uuid(),
+      })
+      .then((result) => {
+        expect(result.statusCode).toEqual(400);
+        expect(result._body.message).toEqual(Messages.MISSING_STUDENT_CLASS_ID);
+      });
+  });
+
+  it(`/PUT class-registries`, async () => {
+    const { course, studentClass, teacher1, teacher2, student1, student2 } =
+      await makeModels();
+
+    const id = uuid();
+    const registry = await ClassRegistryModel.create({
+      id,
+      studentClassId: studentClass.id,
+      teacherId: teacher1.id,
+      date: new Date(),
+    });
+    await ClassRegistryStudentModel.create({
+      studentId: student1.id,
+      classRegistryId: id,
+    });
+    await ClassRegistryLessonModel.create({
+      classRegistryId: id,
+      lessonId: course.lessons[0].id,
+    });
+    const newDate = new Date();
+    newDate.setDate(newDate.getDate() - 1);
+
+    const response = await request(app.getHttpServer())
+      .put(`/class-registries/${registry.id}`)
+      .send({
+        date: newDate,
+        teacherId: teacher2.id,
+        students: [
+          {
+            studentId: student2.id,
+            action: "A",
+          },
+        ],
+      });
+
+    expect(response.statusCode).toBe(200);
+
+    const body: ClassRegistryDto = response._body.body;
+    expect(body.students.find((t) => t.id === student2.id)).toBeDefined();
+    expect(body.students.find((s) => s.id === student1.id)).toBeDefined();
+
+    const result = await ClassRegistryModel.findOne({
+      where: { id: registry.id },
+      include: ["students", "lessons"],
+    });
+    expect(result).toBeDefined();
+    expect(DateUtils.toSimpleDate(result!.date)).toStrictEqual(
+      DateUtils.toSimpleDate(newDate)
+    );
+    expect(result?.teacherId).toBe(teacher2.id);
+    expect(result?.students.length).toBe(2);
+    expect(result?.lessons.length).toBe(1);
+  });
+
+  it(`404 /PUT class-registries with invalid registry`, async () => {
+    await request(app.getHttpServer())
+      .put(`/class-registries/${uuid()}`)
+      .send({
+        date: new Date(),
+        teacherId: uuid(),
+        students: [],
+      })
+      .then((result) => {
+        expect(result.statusCode).toEqual(404);
+        expect(result._body.message).toEqual(Messages.INVALID_CLASS_REGISTRY);
+      });
   });
 });
