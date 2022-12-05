@@ -1,3 +1,4 @@
+import { Lesson } from "@/domain/course/entity";
 import {
   BelongsTo,
   Column,
@@ -46,4 +47,14 @@ export class LessonModel extends Model {
   @UpdatedAt
   @Column({ field: "updated_on" })
   updatedOn: Date;
+
+  toEntity(): Lesson {
+    return new Lesson(
+      this.id,
+      this.courseId,
+      this.number,
+      this.name,
+      this.active
+    );
+  }
 }

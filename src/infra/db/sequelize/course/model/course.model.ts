@@ -1,4 +1,4 @@
-import { Course, Lesson } from "@/domain/course/entity";
+import { Course } from "@/domain/course/entity";
 import {
   Column,
   CreatedAt,
@@ -40,9 +40,7 @@ export class CourseModel extends Model {
   updatedOn: Date;
 
   toEntity(): Course {
-    const lessons = this.lessons?.map(
-      (l) => new Lesson(l.id, this.id, l.number, l.name, l.active)
-    );
+    const lessons = this.lessons?.map((l) => l.toEntity());
     const course = new Course(this.id, this.name, this.active, lessons);
     return course;
   }
