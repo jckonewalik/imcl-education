@@ -3,7 +3,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    return queryInterface.createTable("class_regitry_lesson", {
+    return queryInterface.createTable("class_registry_lesson", {
       class_registry_id: {
         type: Sequelize.UUID,
         references: {
@@ -28,6 +28,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    return queryInterface.dropTable("class_regitry_lesson");
+    return queryInterface.dropTable("class_registry_lesson");
   },
 };
