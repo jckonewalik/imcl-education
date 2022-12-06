@@ -72,20 +72,19 @@ describe("Class Registries Controller Tests", () => {
       .send({
         studentClassId: studentClass.id,
         teacherId: teacher1.id,
-        date: new Date().toISOString().split("T")[0],
+        date: DateUtils.toIsoDate(new Date()),
         studentIds: [student1.id],
         lessonIds: [course.lessons[0]?.id],
       });
 
-    console.log(response);
-
+    expect(response.statusCode).toBe(201);
     const result = await ClassRegistryModel.findOne({
       include: ["lessons", "students"],
     });
     expect(result).toBeDefined();
     expect(result?.studentClassId).toBe(studentClass.id);
     expect(result?.teacherId).toBe(teacher1.id);
-    expect(result?.date).toBe(new Date().toISOString().split("T")[0]);
+    expect(result?.date).toBe(DateUtils.toIsoDate(new Date()));
     expect(result?.lessons.length).toBe(1);
     expect(result?.lessons[0].id).toBe(course.lessons[0].id);
     expect(result?.students.length).toBe(1);
@@ -96,7 +95,7 @@ describe("Class Registries Controller Tests", () => {
     return request(app.getHttpServer())
       .post("/class-registries")
       .send({
-        date: new Date().toISOString().split("T")[0],
+        date: DateUtils.toSimpleDate(new Date()),
         teacherId: uuid(),
       })
       .then((result) => {

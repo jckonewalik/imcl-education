@@ -1,3 +1,4 @@
+import { DateUtils } from "@/domain/@shared/util/date-utils";
 import { ClassRegistry } from "@/domain/class-registry/entity";
 import { Sequelize } from "sequelize-typescript";
 import { v4 as uuid } from "uuid";
@@ -72,7 +73,7 @@ describe("Sequelize Create Class Registry Repository", () => {
     expect(registryModel?.studentClassId).toBe(registry.studentClassId);
     expect(registryModel?.teacherId).toBe(registry.teacherId);
     expect(registryModel?.date).toStrictEqual(
-      registry.date.toISOString().split("T")[0]
+      DateUtils.toIsoDate(registry.date)
     );
     expect(registryModel?.students.length).toBe(1);
     expect(registryModel?.students[0].id).toBe(student1.id);

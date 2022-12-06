@@ -6,6 +6,6 @@ export class DateUtils {
   }
 
   static toIsoDate(date: Date): string {
-    return date.toISOString().split("T")[0];
+    return moment(date).format("YYYY-MM-DD");
   }
 }
