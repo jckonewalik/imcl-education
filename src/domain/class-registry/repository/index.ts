@@ -1,5 +1,6 @@
 import {
   CreateRepository,
+  DeleteRepository,
   FindRepository,
   UpdateRepository,
 } from "@/domain/@shared/repository/repository";
@@ -13,6 +14,8 @@ export interface FindClassRegistryRepository
 
 export interface UpdateClassRegistryRepository
   extends UpdateRepository<ClassRegistry> {}
+
+export interface DeleteClassRegistryRepository extends DeleteRepository {}
 
 export interface FindClassRegitryByDateRepository {
   find(studentClassId: string, date: Date): Promise<ClassRegistry | undefined>;
