@@ -21,6 +21,8 @@ services:
       context: .
     volumes:
       - ./src:/app/src
+      - ./db/migrations:/app/db/migrations
+
     restart: on-failure
     ports:
       - "3000:3000"
