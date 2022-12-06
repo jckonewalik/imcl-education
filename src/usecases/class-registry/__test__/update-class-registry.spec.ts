@@ -1,8 +1,6 @@
-import { Gender } from "@/domain/@shared/enums/gender";
 import { EntityNotFoundException } from "@/domain/@shared/exceptions";
 import { DateUtils } from "@/domain/@shared/util/date-utils";
 import Messages from "@/domain/@shared/util/messages";
-import { Email } from "@/domain/@shared/value-objects";
 import { ClassRegistry } from "@/domain/class-registry/entity";
 import { UpdateClassRegistryRepository } from "@/domain/class-registry/repository";
 import { Course } from "@/domain/course/entity";
@@ -11,9 +9,15 @@ import { Student } from "@/domain/student/entity/student";
 import { Teacher } from "@/domain/teacher/entity";
 import { UpdateAction } from "@/usecases/@shared/enums";
 import { BadRequestException } from "@nestjs/common";
-import faker from "faker";
 import { v4 as uuid } from "uuid";
 import { UpdateClassRegistryUseCase } from "../update-class-registry";
+import {
+  makeClassRegistry,
+  makeCourses,
+  makeStudentClasses,
+  makeStudents,
+  makeTeachers,
+} from "./util";
 
 type SutsProps = {
   classRegistry?: ClassRegistry;
@@ -25,84 +29,6 @@ type SutsProps = {
 type Suts = {
   updateRepo: UpdateClassRegistryRepository;
   sut: UpdateClassRegistryUseCase;
-};
-
-const makeClassRegistry = ({
-  studentClassId = uuid(),
-  date = new Date(),
-  teacherId = uuid(),
-  students = [uuid()],
-  lessons = [] as string[],
-}): ClassRegistry => {
-  const registry = new ClassRegistry(
-    uuid(),
-    studentClassId,
-    date,
-    teacherId,
-    students,
-    lessons
-  );
-  return registry;
-};
-
-const makeStudents = () => {
-  const student1 = new Student(uuid(), faker.name.firstName(), Gender.F, true);
-  const student2 = new Student(uuid(), faker.name.firstName(), Gender.F, true);
-  const student3 = new Student(uuid(), faker.name.firstName(), Gender.F, true);
-
-  const studentsMap = new Map<string, Student>();
-  studentsMap.set(student1.id, student1);
-  studentsMap.set(student2.id, student2);
-  studentsMap.set(student3.id, student3);
-  return { student1, student2, student3, studentsMap };
-};
-
-const makeCourses = () => {
-  const course1 = new Course(uuid(), faker.random.word(), true);
-  course1.addLesson(1, faker.random.word());
-  const course2 = new Course(uuid(), faker.name.firstName(), true);
-  course2.addLesson(1, faker.random.word());
-
-  const coursesMap = new Map<string, Course>();
-  coursesMap.set(course1.id, course1);
-  coursesMap.set(course2.id, course2);
-
-  return { course1, course2, coursesMap };
-};
-
-const makeStudentClasses = ({ courseId = uuid() }) => {
-  const class1 = StudentClass.Builder.builder(
-    uuid(),
-    courseId,
-    faker.random.word(),
-    true
-  ).build();
-  const studentClassesMap = new Map<string, StudentClass>();
-  studentClassesMap.set(class1.id, class1);
-  return { class1, studentClassesMap };
-};
-
-const makeTeachers = () => {
-  const teacher1 = new Teacher(
-    uuid(),
-    faker.name.firstName(),
-    Gender.F,
-    new Email(faker.internet.email()),
-    true
-  );
-  const teacher2 = new Teacher(
-    uuid(),
-    faker.name.firstName(),
-    Gender.F,
-    new Email(faker.internet.email()),
-    true
-  );
-
-  const teachersMap = new Map<string, Teacher>();
-  teachersMap.set(teacher1.id, teacher1);
-  teachersMap.set(teacher2.id, teacher2);
-
-  return { teacher1, teacher2, teachersMap };
 };
 
 const makeSuts = (props: SutsProps): Suts => {
