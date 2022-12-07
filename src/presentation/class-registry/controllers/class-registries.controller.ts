@@ -1,4 +1,6 @@
+import { DateUtils } from "@/domain/@shared/util/date-utils";
 import { ClassRegistry } from "@/domain/class-registry/entity";
+import { FindClassRegitryByDateRepository } from "@/domain/class-registry/repository";
 import { FindCourseRepository } from "@/domain/course/repository";
 import { FindStudentClassRepository } from "@/domain/student-class/repository";
 import { FindInStudentsRepository } from "@/domain/student/repository";
@@ -15,12 +17,14 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   HttpCode,
   HttpStatus,
   Inject,
   Param,
   Post,
   Put,
+  Query,
 } from "@nestjs/common";
 import {
   ApiBadRequestResponse,
@@ -44,12 +48,14 @@ export class ClassRegistriesController {
     private readonly deleteUseCase: DeleteClassRegistryUseCase,
     @Inject("FindStudentClassRepository")
     private readonly findStudentClassRepo: FindStudentClassRepository,
-    @Inject("FindCourseRepository")
+    @Inject("FindTeacherRepository")
     private readonly findTeacherRepo: FindTeacherRepository,
     @Inject("FindCourseRepository")
     private readonly findCourseRepo: FindCourseRepository,
     @Inject("FindInStudentsRepository")
-    private readonly findInStudentsRepo: FindInStudentsRepository
+    private readonly findInStudentsRepo: FindInStudentsRepository,
+    @Inject("FindClassRegitryByDateRepository")
+    private readonly findRegistryByDate: FindClassRegitryByDateRepository
   ) {}
 
   @Post()
@@ -64,7 +70,7 @@ export class ClassRegistriesController {
   })
   async create(
     @Body() dto: CreateClassRegistryDto
-  ): Promise<ResponseDto<ClassRegistryDto>> {
+  ): Promise<ResponseDto<ClassRegistryDto | undefined>> {
     const registry = await this.createUseCase.create({
       ...dto,
       date: moment(dto.date).toDate(),
@@ -88,7 +94,7 @@ export class ClassRegistriesController {
   async update(
     @Param("classRegistryId") classRegistryId: string,
     @Body() dto: UpdateClassRegistryDto
-  ): Promise<ResponseDto<ClassRegistryDto>> {
+  ): Promise<ResponseDto<ClassRegistryDto | undefined>> {
     const registry = await this.updateUseCase.update({
       ...dto,
       id: classRegistryId,
@@ -119,7 +125,31 @@ export class ClassRegistriesController {
     await this.deleteUseCase.delete(classRegistryId);
   }
 
-  private async createClassRegistryDto(registry: ClassRegistry) {
+  @Get()
+  @ApiResponseDto(ClassRegistryDto, { status: 200 })
+  @ApiInternalServerErrorResponse({
+    status: 500,
+    type: ErrorResponseDto,
+  })
+  async find(
+    @Query("studentClassId") studentClassId: string,
+    @Query("date") date: string
+  ): Promise<ResponseDto<ClassRegistryDto | undefined>> {
+    const searchDate = DateUtils.fromString(date);
+    const registry = await this.findRegistryByDate.find(
+      studentClassId,
+      searchDate
+    );
+    return new ResponseDto(
+      HttpStatus.OK,
+      await this.createClassRegistryDto(registry)
+    );
+  }
+
+  private async createClassRegistryDto(registry?: ClassRegistry) {
+    if (!registry) {
+      return;
+    }
     const studentClass = await this.findStudentClassRepo.find(
       registry.studentClassId
     );
