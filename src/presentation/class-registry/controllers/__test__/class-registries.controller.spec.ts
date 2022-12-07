@@ -210,4 +210,26 @@ describe("Class Registries Controller Tests", () => {
         expect(result._body.message).toEqual(Messages.INVALID_CLASS_REGISTRY);
       });
   });
+
+  it(`/GET registry by class and date`, async () => {
+    const { registry, student1, course } = await makeClassRegistry();
+    const date = DateUtils.toIsoDate(registry.date);
+    const response = await request(app.getHttpServer()).get(
+      `/class-registries?studentClassId=${registry.studentClassId}&date=${date}`
+    );
+
+    expect(response.statusCode).toBe(200);
+
+    const body: ClassRegistryDto = response._body.body;
+    expect(body).toBeDefined();
+    expect(body).not.toBeNull();
+    expect(body.id).toBe(registry.id);
+    expect(body.date).toStrictEqual(date);
+    expect(body.studentClass.id).toBe(registry.studentClassId);
+    expect(body.teacher.id).toBe(registry.teacherId);
+    expect(body.students.find((t) => t.id === student1.id)).toBeDefined();
+    expect(
+      body.lessons.find((t) => t.id === course.lessons[0].id)
+    ).toBeDefined();
+  });
 });
