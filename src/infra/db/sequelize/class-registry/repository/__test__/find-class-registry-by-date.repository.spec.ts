@@ -1,4 +1,7 @@
+import { BadRequestException } from "@/domain/@shared/exceptions";
 import { DateUtils } from "@/domain/@shared/util/date-utils";
+import Messages from "@/domain/@shared/util/messages";
+import faker from "faker";
 import { Sequelize } from "sequelize-typescript";
 import { v4 as uuid } from "uuid";
 import { CourseModel, LessonModel } from "../../../course/model";
@@ -44,6 +47,15 @@ describe("Sequelize Find Class Registry By Date Repository", () => {
 
   afterEach(async () => {
     await sequelize.close();
+  });
+
+  it("Fail trying find a registry passing a wrong student Class ID", async () => {
+    const repository = new SequelizeFindClassRegitryByDateRepository();
+    const t = async () => {
+      await repository.find(faker.random.word(), new Date());
+    };
+    expect(t).rejects.toThrow(BadRequestException);
+    expect(t).rejects.toThrow(Messages.INVALID_ID);
   });
 
   it("Find a class registry by Date", async () => {
