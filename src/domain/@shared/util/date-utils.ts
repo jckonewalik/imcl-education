@@ -8,4 +8,8 @@ export class DateUtils {
   static toIsoDate(date: Date): string {
     return moment(date).format("YYYY-MM-DD");
   }
+
+  static fromString(date: string): Date {
+    return moment(date).toDate();
+  }
 }
