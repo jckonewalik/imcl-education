@@ -52,14 +52,14 @@ describe("Sequelize Create Class Registry Repository", () => {
 
     const repository = new SequelizeCreateClassRegistryRepository();
 
-    const registry = new ClassRegistry(
-      uuid(),
-      studentClass.id,
-      new Date(),
-      teacher1.id,
-      [student1.id],
-      [course.lessons[0].id]
-    );
+    const registry = new ClassRegistry({
+      id: uuid(),
+      studentClassId: studentClass.id,
+      date: new Date(),
+      teacherId: teacher1.id,
+      studentIds: [student1.id],
+      lessonIds: [course.lessons[0].id],
+    });
 
     await repository.create(registry);
 

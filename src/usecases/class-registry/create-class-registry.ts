@@ -74,14 +74,14 @@ export class CreateClassRegistryUseCase {
       }
     }
 
-    const registry = new ClassRegistry(
-      uuid(),
+    const registry = new ClassRegistry({
+      id: uuid(),
       studentClassId,
       date,
       teacherId,
       studentIds,
-      lessonIds
-    );
+      lessonIds,
+    });
 
     await this.createRepo.create(registry);
 

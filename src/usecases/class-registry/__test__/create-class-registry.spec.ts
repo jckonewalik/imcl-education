@@ -145,7 +145,13 @@ describe("Create Class Registry Use Case", () => {
         studentClassId: string,
         date: Date
       ): Promise<ClassRegistry | undefined> {
-        return new ClassRegistry(uuid(), uuid(), new Date(), uuid(), [uuid()]);
+        return new ClassRegistry({
+          id: uuid(),
+          studentClassId: uuid(),
+          date: new Date(),
+          teacherId: uuid(),
+          studentIds: [uuid()],
+        });
       },
     };
     const { sut } = makeSut({

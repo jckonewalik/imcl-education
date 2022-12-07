@@ -6,6 +6,14 @@ import { DateUtils } from "@/domain/@shared/util/date-utils";
 import Messages from "@/domain/@shared/util/messages";
 import { Lesson } from "@/domain/course/entity";
 import { Student } from "@/domain/student/entity";
+type Props = {
+  id: string;
+  studentClassId: string;
+  date: Date;
+  teacherId: string;
+  studentIds: string[];
+  lessonIds?: string[];
+};
 export class ClassRegistry {
   private _id: string;
   private _studentClassId: string;
@@ -14,14 +22,14 @@ export class ClassRegistry {
   private _studentIds: string[];
   private _lessonIds: string[];
 
-  constructor(
-    id: string,
-    studentClassId: string,
-    date: Date,
-    teacherId: string,
-    studentIds: string[],
-    lessonIds: string[] = []
-  ) {
+  constructor({
+    id,
+    studentClassId,
+    date,
+    teacherId,
+    studentIds,
+    lessonIds = [],
+  }: Props) {
     if (!id) {
       throw new InvalidValueException(Messages.MISSING_CLASS_REGISTRY_ID);
     }

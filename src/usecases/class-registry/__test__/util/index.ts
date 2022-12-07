@@ -15,14 +15,14 @@ export const makeClassRegistry = ({
   students = [uuid()],
   lessons = [] as string[],
 }): ClassRegistry => {
-  const registry = new ClassRegistry(
-    uuid(),
+  const registry = new ClassRegistry({
+    id: uuid(),
     studentClassId,
     date,
     teacherId,
-    students,
-    lessons
-  );
+    studentIds: students,
+    lessonIds: lessons,
+  });
   return registry;
 };
 

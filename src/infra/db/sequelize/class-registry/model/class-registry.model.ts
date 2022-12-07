@@ -59,13 +59,13 @@ export class ClassRegistryModel extends Model {
   updatedOn: Date;
 
   toEntity(): ClassRegistry {
-    return new ClassRegistry(
-      this.id,
-      this.studentClassId,
-      this.date,
-      this.teacherId,
-      this.students?.map((s) => s.id),
-      this.lessons?.map((l) => l.id)
-    );
+    return new ClassRegistry({
+      id: this.id,
+      studentClassId: this.studentClassId,
+      date: this.date,
+      teacherId: this.teacherId,
+      studentIds: this.students?.map((s) => s.id),
+      lessonIds: this.lessons?.map((l) => l.id),
+    });
   }
 }
