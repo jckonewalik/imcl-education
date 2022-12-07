@@ -28,14 +28,14 @@ export class ClassRegistryModel extends Model {
   id: string;
 
   @ForeignKey(() => StudentClassModel)
-  @Column({ field: "student_class_id" })
+  @Column({ type: DataType.UUID, field: "student_class_id" })
   studentClassId: string;
 
   @BelongsTo(() => StudentClassModel)
   studentClass: StudentClassModel;
 
   @ForeignKey(() => TeacherModel)
-  @Column({ field: "teacher_id" })
+  @Column({ type: DataType.UUID, field: "teacher_id" })
   teacherId: string;
 
   @BelongsTo(() => TeacherModel)

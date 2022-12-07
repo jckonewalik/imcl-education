@@ -26,7 +26,7 @@ export class StudentClassModel extends Model {
   id: string;
 
   @ForeignKey(() => CourseModel)
-  @Column({ field: "course_id" })
+  @Column({ type: DataType.UUID, field: "course_id" })
   courseId: string;
 
   @BelongsTo(() => CourseModel)
