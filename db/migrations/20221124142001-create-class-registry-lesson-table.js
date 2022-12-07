@@ -12,7 +12,8 @@ module.exports = {
           },
           key: "id",
         },
-        allowNull: false,
+        onDelete: "cascade",
+        onUpdate: "cascade",
       },
       lesson_id: {
         type: Sequelize.UUID,
