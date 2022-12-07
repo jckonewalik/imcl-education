@@ -10,9 +10,12 @@ import {
   CreateClassRegistryUseCase,
   UpdateClassRegistryUseCase,
 } from "@/usecases/class-registry";
+import { DeleteClassRegistryUseCase } from "@/usecases/class-registry/delete-class-registry";
 import {
   Body,
   Controller,
+  Delete,
+  HttpCode,
   HttpStatus,
   Inject,
   Param,
@@ -22,6 +25,8 @@ import {
 import {
   ApiBadRequestResponse,
   ApiInternalServerErrorResponse,
+  ApiNotFoundResponse,
+  ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
 import moment from "moment";
@@ -36,6 +41,7 @@ export class ClassRegistriesController {
   constructor(
     private readonly createUseCase: CreateClassRegistryUseCase,
     private readonly updateUseCase: UpdateClassRegistryUseCase,
+    private readonly deleteUseCase: DeleteClassRegistryUseCase,
     @Inject("FindStudentClassRepository")
     private readonly findStudentClassRepo: FindStudentClassRepository,
     @Inject("FindCourseRepository")
@@ -92,6 +98,25 @@ export class ClassRegistriesController {
       HttpStatus.OK,
       await this.createClassRegistryDto(registry)
     );
+  }
+
+  @Delete(":classRegistryId")
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiResponse({
+    status: 204,
+  })
+  @ApiNotFoundResponse({
+    status: 404,
+    type: ErrorResponseDto,
+  })
+  @ApiInternalServerErrorResponse({
+    status: 500,
+    type: ErrorResponseDto,
+  })
+  async delete(
+    @Param("classRegistryId") classRegistryId: string
+  ): Promise<void> {
+    await this.deleteUseCase.delete(classRegistryId);
   }
 
   private async createClassRegistryDto(registry: ClassRegistry) {

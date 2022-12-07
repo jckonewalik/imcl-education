@@ -1,4 +1,5 @@
 import {
+  DeleteClassRegistryRepository,
   FindClassRegistryRepository,
   FindClassRegitryByDateRepository,
   UpdateClassRegistryRepository,
@@ -11,6 +12,7 @@ import {
   SequelizeCreateClassRegistryRepository,
   SequelizeFindClassRegitryByDateRepository,
 } from "@/infra/db/sequelize/class-registry/repository";
+import { SequelizeDeleteClassRegistryRepository } from "@/infra/db/sequelize/class-registry/repository/delete-class-registry.repository";
 import { SequelizeFindClassRegistryRepository } from "@/infra/db/sequelize/class-registry/repository/find-class-registry.repository";
 import { SequelizeUpdateClassRegistryRepository } from "@/infra/db/sequelize/class-registry/repository/update-class-registry.repository";
 import { AllExceptionsFilter } from "@/presentation/@shared/filters";
@@ -19,6 +21,7 @@ import {
   CreateClassRegistryUseCase,
   UpdateClassRegistryUseCase,
 } from "@/usecases/class-registry";
+import { DeleteClassRegistryUseCase } from "@/usecases/class-registry/delete-class-registry";
 import { Module, ValidationPipe } from "@nestjs/common";
 import { APP_FILTER, APP_PIPE } from "@nestjs/core";
 import { SharedModule } from "./shared.module";
@@ -50,6 +53,10 @@ import { SharedModule } from "./shared.module";
     {
       provide: "UpdateClassRegistryRepository",
       useClass: SequelizeUpdateClassRegistryRepository,
+    },
+    {
+      provide: "DeleteClassRegistryRepository",
+      useClass: SequelizeDeleteClassRegistryRepository,
     },
     {
       provide: CreateClassRegistryUseCase,
@@ -102,6 +109,16 @@ import { SharedModule } from "./shared.module";
           findStudentClass,
           findCourse
         );
+      },
+    },
+    {
+      provide: DeleteClassRegistryUseCase,
+      inject: ["FindClassRegistryRepository", "DeleteClassRegistryRepository"],
+      useFactory: (
+        findRepo: FindClassRegistryRepository,
+        deleteRepo: DeleteClassRegistryRepository
+      ) => {
+        return new DeleteClassRegistryUseCase(findRepo, deleteRepo);
       },
     },
   ],
