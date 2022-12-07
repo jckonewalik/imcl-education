@@ -21,6 +21,36 @@ import { Sequelize } from "sequelize-typescript";
 import request from "supertest";
 import { v4 as uuid } from "uuid";
 import { ClassRegistryDto } from "../../dto";
+
+const makeClassRegistry = async () => {
+  const { course, studentClass, teacher1, teacher2, student1, student2 } =
+    await makeModels();
+
+  const id = uuid();
+  const registry = await ClassRegistryModel.create({
+    id,
+    studentClassId: studentClass.id,
+    teacherId: teacher1.id,
+    date: new Date(),
+  });
+  await ClassRegistryStudentModel.create({
+    studentId: student1.id,
+    classRegistryId: id,
+  });
+  await ClassRegistryLessonModel.create({
+    classRegistryId: id,
+    lessonId: course.lessons[0].id,
+  });
+  return {
+    course,
+    studentClass,
+    teacher1,
+    teacher2,
+    student1,
+    student2,
+    registry,
+  };
+};
 describe("Class Registries Controller Tests", () => {
   let app: INestApplication;
 
@@ -105,24 +135,9 @@ describe("Class Registries Controller Tests", () => {
   });
 
   it(`/PUT class-registries`, async () => {
-    const { course, studentClass, teacher1, teacher2, student1, student2 } =
-      await makeModels();
+    const { teacher2, student1, student2, registry } =
+      await makeClassRegistry();
 
-    const id = uuid();
-    const registry = await ClassRegistryModel.create({
-      id,
-      studentClassId: studentClass.id,
-      teacherId: teacher1.id,
-      date: new Date(),
-    });
-    await ClassRegistryStudentModel.create({
-      studentId: student1.id,
-      classRegistryId: id,
-    });
-    await ClassRegistryLessonModel.create({
-      classRegistryId: id,
-      lessonId: course.lessons[0].id,
-    });
     const newDate = new Date();
     newDate.setDate(newDate.getDate() - 1);
 
@@ -166,6 +181,30 @@ describe("Class Registries Controller Tests", () => {
         teacherId: uuid(),
         students: [],
       })
+      .then((result) => {
+        expect(result.statusCode).toEqual(404);
+        expect(result._body.message).toEqual(Messages.INVALID_CLASS_REGISTRY);
+      });
+  });
+
+  it(`/DELETE class registry by ID`, async () => {
+    const { registry } = await makeClassRegistry();
+
+    await request(app.getHttpServer())
+      .delete(`/class-registries/${registry.id}`)
+      .then((result) => {
+        expect(result.statusCode).toEqual(204);
+      });
+
+    const exists = await ClassRegistryModel.findOne({
+      where: { id: registry.id },
+    });
+    expect(exists).toBeNull();
+  });
+
+  it(`/DELETE class registry with invalid registry`, async () => {
+    await request(app.getHttpServer())
+      .delete(`/class-registries/${uuid()}`)
       .then((result) => {
         expect(result.statusCode).toEqual(404);
         expect(result._body.message).toEqual(Messages.INVALID_CLASS_REGISTRY);
