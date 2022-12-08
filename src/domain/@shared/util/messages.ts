@@ -68,4 +68,5 @@ export default class Messages {
   static STUDENT_NOT_ASSOCIATED = "O aluno não faz parte da turma";
   static INVALID_DATE_FORMAT = "O formato da data deve ser YYYY-MM-DD";
   static INVALID_CLASS_REGISTRY = "A aula informada não é válida";
+  static MISSING_ATTENDANCE_DATE = "Informe a data de conclusão da aula";
 }
