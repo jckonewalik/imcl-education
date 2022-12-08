@@ -20,3 +20,7 @@ export interface DeleteClassRegistryRepository extends DeleteRepository {}
 export interface FindClassRegitryByDateRepository {
   find(studentClassId: string, date: Date): Promise<ClassRegistry | undefined>;
 }
+
+export interface FindClassRegitryByStudentClassRepository {
+  find(studentClassId: string): Promise<ClassRegistry[]>;
+}
