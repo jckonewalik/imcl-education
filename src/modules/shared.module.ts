@@ -1,3 +1,5 @@
+import { FindClassRegitryByStudentClassRepository } from "@/domain/class-registry/repository";
+import { SequelizeFindClassRegitryByStudentClassRepository } from "@/infra/db/sequelize/class-registry/repository/find-class-registry-by-student-class.repository";
 import { SequelizeFindCourseRepository } from "@/infra/db/sequelize/course/repository/find-course.repository";
 import { SequelizeFindInCoursesRepository } from "@/infra/db/sequelize/course/repository/find-in-courses.repository";
 import { SequelizeFindStudentClassRepository } from "@/infra/db/sequelize/student-class/repository/find-student-class.repository";
@@ -9,6 +11,7 @@ import {
   SequelizeFindInTeachersRepository,
   SequelizeFindTeacherRepository,
 } from "@/infra/db/sequelize/teacher/repository";
+import { GetStudentAttendancesUseCase } from "@/usecases/class-registry/get-student-attendances";
 import { Module } from "@nestjs/common";
 
 @Module({
@@ -45,6 +48,17 @@ import { Module } from "@nestjs/common";
       provide: "FindStudentClassRepository",
       useClass: SequelizeFindStudentClassRepository,
     },
+    {
+      provide: "FindClassRegitryByStudentClassRepository",
+      useClass: SequelizeFindClassRegitryByStudentClassRepository,
+    },
+    {
+      inject: ["FindClassRegitryByStudentClassRepository"],
+      provide: GetStudentAttendancesUseCase,
+      useFactory: (findRepo: FindClassRegitryByStudentClassRepository) => {
+        return new GetStudentAttendancesUseCase(findRepo);
+      },
+    },
   ],
   exports: [
     "FindCourseRepository",
@@ -54,6 +68,7 @@ import { Module } from "@nestjs/common";
     "FindInStudentsRepository",
     "FindInCoursesRepository",
     "FindStudentClassRepository",
+    GetStudentAttendancesUseCase,
   ],
 })
 export class SharedModule {}

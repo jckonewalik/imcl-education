@@ -1,21 +1,29 @@
 import { Page } from "@/domain/@shared/types/page";
+import Messages from "@/domain/@shared/util/messages";
+import { StudentAttendance } from "@/domain/class-registry/entity/student-attendance";
 import {
   FindCourseRepository,
   FindInCoursesRepository,
 } from "@/domain/course/repository";
 import { StudentClass } from "@/domain/student-class/entity";
 import { FindAllStudentClassesRepository } from "@/domain/student-class/repository";
-import { FindInStudentsRepository } from "@/domain/student/repository";
+import {
+  FindInStudentsRepository,
+  FindStudentRepository,
+} from "@/domain/student/repository";
 import { FindInTeachersRepository } from "@/domain/teacher/repository";
 import { ApiPageResponseDto } from "@/presentation/@shared/decorators/api-page-response-dto";
 import { ApiResponseDto } from "@/presentation/@shared/decorators/api-response-dto";
 import { ErrorResponseDto } from "@/presentation/@shared/dto/error-response.dto";
 import { ResponseDto } from "@/presentation/@shared/dto/response.dto";
+import { StudentAttendancesDto } from "@/presentation/class-registry/dto";
+import { GetStudentAttendancesUseCase } from "@/usecases/class-registry/get-student-attendances";
 import { GetStudentClassUseCase } from "@/usecases/student-class";
 import { CreateStudentClassUseCase } from "@/usecases/student-class/create-student-class";
 import { DeleteStudentClassUseCase } from "@/usecases/student-class/delete-student-class";
 import { UpdateStudentClassUseCase } from "@/usecases/student-class/update-student-class";
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -49,6 +57,7 @@ export class StudentClassesController {
     private readonly updateUseCase: UpdateStudentClassUseCase,
     private readonly getUseCase: GetStudentClassUseCase,
     private readonly deleteUseCase: DeleteStudentClassUseCase,
+    private readonly getAttendancesUseCase: GetStudentAttendancesUseCase,
     @Inject("FindCourseRepository")
     private readonly findCourseRepo: FindCourseRepository,
     @Inject("FindInTeachersRepository")
@@ -58,7 +67,9 @@ export class StudentClassesController {
     @Inject("FindAllStudentClassesRepository")
     private readonly findAllRepo: FindAllStudentClassesRepository,
     @Inject("FindInCoursesRepository")
-    private readonly findInCoursesRepo: FindInCoursesRepository
+    private readonly findInCoursesRepo: FindInCoursesRepository,
+    @Inject("FindStudentRepository")
+    private readonly findStudentRepo: FindStudentRepository
   ) {}
 
   @Post()
@@ -150,17 +161,6 @@ export class StudentClassesController {
     await this.deleteUseCase.delete(studentClassId);
   }
 
-  private async createStudentClassDto(studentClass: StudentClass) {
-    const course = await this.findCourseRepo.find(studentClass.courseId);
-    const teachersIds = studentClass.teacherIds;
-    const teachers = await this.findInTeachersRepo.find(teachersIds);
-
-    const studentIds = studentClass.enrollments.map((e) => e.studentId);
-    const students = await this.findInStudentsRepo.find(studentIds);
-
-    return StudentClassDto.create(studentClass, course!, teachers, students);
-  }
-
   @Post("search")
   @HttpCode(200)
   @ApiPageResponseDto(SimpleStudentClassDto)
@@ -193,5 +193,68 @@ export class StudentClassesController {
         )
       ),
     });
+  }
+
+  @Get(":studentClassId/students/:studentId")
+  @ApiResponseDto(StudentAttendancesDto, { status: 200 })
+  @ApiNotFoundResponse({
+    status: 404,
+    type: ErrorResponseDto,
+  })
+  @ApiInternalServerErrorResponse({
+    status: 500,
+    type: ErrorResponseDto,
+  })
+  async getAttendances(
+    @Param("studentClassId") studentClassId: string,
+    @Param("studentId") studentId: string
+  ): Promise<ResponseDto<StudentAttendancesDto>> {
+    const attendances = await this.getAttendancesUseCase.get(
+      studentClassId,
+      studentId
+    );
+    return new ResponseDto(
+      HttpStatus.OK,
+      await this.createStudentAttendancesDto(
+        studentClassId,
+        studentId,
+        attendances
+      )
+    );
+  }
+
+  private async createStudentClassDto(studentClass: StudentClass) {
+    const course = await this.findCourseRepo.find(studentClass.courseId);
+    const teachersIds = studentClass.teacherIds;
+    const teachers = await this.findInTeachersRepo.find(teachersIds);
+
+    const studentIds = studentClass.enrollments.map((e) => e.studentId);
+    const students = await this.findInStudentsRepo.find(studentIds);
+
+    return StudentClassDto.create(studentClass, course!, teachers, students);
+  }
+
+  private async createStudentAttendancesDto(
+    studentClassId: string,
+    studentId: string,
+    attendances: StudentAttendance[]
+  ): Promise<StudentAttendancesDto> {
+    const studentClass = await this.getUseCase.get(studentClassId);
+    const student = await this.findStudentRepo.find(studentId);
+    if (!student) {
+      throw new BadRequestException(Messages.INVALID_STUDENT);
+    }
+    const course = await this.findCourseRepo.find(studentClass.courseId);
+    if (!course) {
+      throw new BadRequestException(Messages.INVALID_COURSE);
+    }
+    const studentAttendances = StudentAttendancesDto.create({
+      course,
+      studentClass,
+      student,
+      attendances,
+    });
+
+    return studentAttendances;
   }
 }
