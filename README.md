@@ -30,7 +30,7 @@ This project is a backend server responsible to provide the APIs to clients to e
 
 - [x] Students Registration
 - [x] Teachers Registration
-- [ ] Frequence control
+- [x] Frequence control
 
 ---
 
