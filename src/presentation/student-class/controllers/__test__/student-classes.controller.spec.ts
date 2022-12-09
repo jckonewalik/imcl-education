@@ -1,5 +1,11 @@
 import { Gender } from "@/domain/@shared/enums/gender";
 import Messages from "@/domain/@shared/util/messages";
+import {
+  ClassRegistryLessonModel,
+  ClassRegistryModel,
+  ClassRegistryStudentModel,
+} from "@/infra/db/sequelize/class-registry/model";
+import { makeModels } from "@/infra/db/sequelize/class-registry/repository/__test__/util";
 import { CourseModel, LessonModel } from "@/infra/db/sequelize/course/model";
 import {
   EnrollmentModel,
@@ -9,6 +15,7 @@ import {
 import { StudentModel } from "@/infra/db/sequelize/student/model";
 import { TeacherModel } from "@/infra/db/sequelize/teacher/model";
 import { StudentClassesModule } from "@/modules/student-classes.module";
+import { StudentAttendancesDto } from "@/presentation/class-registry/dto";
 import { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
 import faker from "faker";
@@ -47,6 +54,52 @@ const createStudent = async (): Promise<StudentModel> => {
   return student;
 };
 
+const makeClassRegistries = async () => {
+  const { course, studentClass, teacher1, teacher2, student1, student2 } =
+    await makeModels();
+
+  const registry1 = await ClassRegistryModel.create({
+    id: uuid(),
+    studentClassId: studentClass.id,
+    teacherId: teacher1.id,
+    date: new Date(),
+  });
+  await ClassRegistryStudentModel.create({
+    studentId: student1.id,
+    classRegistryId: registry1.id,
+  });
+  await ClassRegistryLessonModel.create({
+    classRegistryId: registry1.id,
+    lessonId: course.lessons[0].id,
+  });
+
+  const registry2 = await ClassRegistryModel.create({
+    id: uuid(),
+    studentClassId: studentClass.id,
+    teacherId: teacher1.id,
+    date: new Date(),
+  });
+  await ClassRegistryStudentModel.create({
+    studentId: student2.id,
+    classRegistryId: registry2.id,
+  });
+  await ClassRegistryLessonModel.create({
+    classRegistryId: registry2.id,
+    lessonId: course.lessons[1].id,
+  });
+
+  return {
+    course,
+    studentClass,
+    teacher1,
+    teacher2,
+    student1,
+    student2,
+    registry1,
+    registry2,
+  };
+};
+
 describe("Student Classes Controller Tests", () => {
   let app: INestApplication;
 
@@ -69,6 +122,9 @@ describe("Student Classes Controller Tests", () => {
           StudentClassTeacherModel,
           TeacherModel,
           StudentModel,
+          ClassRegistryModel,
+          ClassRegistryLessonModel,
+          ClassRegistryStudentModel,
         ]);
         await sequelize.sync();
       },
@@ -249,5 +305,26 @@ describe("Student Classes Controller Tests", () => {
         expect(result._body?.body?.data?.length).toEqual(1);
         expect(result._body.body.data[0]?.id).toEqual(studentClass.id);
       });
+  });
+
+  it(`/GET student attendances`, async () => {
+    const { studentClass, student2 } = await makeClassRegistries();
+
+    const response = await request(app.getHttpServer()).get(
+      `/student-classes/${studentClass.id}/students/${student2.id}`
+    );
+
+    expect(response.statusCode).toBe(200);
+    const body: StudentAttendancesDto = response._body.body;
+    expect(body.student).toBeDefined();
+    expect(body.student?.id).toBe(student2.id);
+    expect(body.student?.name).toBe(student2.name);
+    expect(body.student?.active).toBe(student2.active);
+    expect(body.studentClass).toBeDefined();
+    expect(body.studentClass?.id).toBe(studentClass.id);
+    expect(body.studentClass?.name).toBe(studentClass.name);
+    expect(body.studentClass?.year).toBe(studentClass.year);
+    expect(body.studentClass?.active).toBe(studentClass.active);
+    expect(body.lessons.length).toBe(2);
   });
 });
