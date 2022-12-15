@@ -69,4 +69,10 @@ export default class Messages {
   static INVALID_DATE_FORMAT = "O formato da data deve ser YYYY-MM-DD";
   static INVALID_CLASS_REGISTRY = "A aula informada não é válida";
   static MISSING_ATTENDANCE_DATE = "Informe a data de conclusão da aula";
+  static MISSING_USER_ID = "Informe o ID do usuário";
+  static MISSING_USER_NAME = "Informe o nome do usuário";
+  static USER_ALREADY_ACTIVE = "O usuário já esta ativo";
+  static USER_ALREADY_INACTIVE = "O usuário já esta inativo";
+  static DUPLICATED_ROLE = "O usuário já possui essa ROLE";
+  static INVALID_USER_ROLE = "O usuário não possui essa ROLE";
 }
