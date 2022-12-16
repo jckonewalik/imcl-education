@@ -75,4 +75,8 @@ export default class Messages {
   static USER_ALREADY_INACTIVE = "O usuário já esta inativo";
   static DUPLICATED_ROLE = "O usuário já possui essa ROLE";
   static INVALID_USER_ROLE = "O usuário não possui essa ROLE";
+  static USER_EMAIL_ALREADY_IN_USE = "O email já está em uso por outro usuário";
+  static INVALID_PASSWORD_CONFIRMATION = "Confirmação da senha incorreta";
+  static CREATE_USER_FAILED =
+    "Falha ao criar usuário. Tente novamente mais tarde";
 }
