@@ -34,18 +34,16 @@ export class RegisterUserUseCase {
       throw new BadRequestException(Messages.USER_EMAIL_ALREADY_IN_USE);
     }
 
-    if (password !== passwordConfirmation) {
-      throw new BadRequestException(Messages.INVALID_PASSWORD_CONFIRMATION);
-    }
+    const user = new User({ id: uuid(), name, email: emailVO, active: true });
 
     const credsCreated = await this.createCredentials.create({
       email: emailVO,
       password,
+      passwordConfirmation,
     });
     if (!credsCreated) {
       throw new BadRequestException(Messages.CREATE_USER_FAILED);
     }
-    const user = new User({ id: uuid(), name, email: emailVO, active: true });
     this.createUserRepo.create(user);
 
     return user;

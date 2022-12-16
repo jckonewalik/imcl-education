@@ -104,22 +104,6 @@ describe("Register User Use Case", () => {
     await expect(t).rejects.toThrow(Messages.USER_EMAIL_ALREADY_IN_USE);
   });
 
-  it("Fail registering a new user if password confirmation doesnt match", async () => {
-    const { sut } = makeSuts({});
-    const password = faker.internet.password();
-
-    const t = async () => {
-      await sut.register({
-        name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-        email: faker.internet.email(),
-        password,
-        passwordConfirmation: faker.random.word(),
-      });
-    };
-    await expect(t).rejects.toThrow(BadRequestException);
-    await expect(t).rejects.toThrow(Messages.INVALID_PASSWORD_CONFIRMATION);
-  });
-
   it("Fail registering a new user if credentials not created successfully", async () => {
     const { sut } = makeSuts({ createCredentialsResult: false });
     const password = faker.internet.password();
@@ -157,6 +141,7 @@ describe("Register User Use Case", () => {
     expect(spyCreateCreds).toHaveBeenCalledWith({
       email: new Email(user.email),
       password,
+      passwordConfirmation: password,
     });
     expect(spyCreateUser).toHaveBeenCalledWith(result);
   });
