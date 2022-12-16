@@ -79,4 +79,5 @@ export default class Messages {
   static INVALID_PASSWORD_CONFIRMATION = "Confirmação da senha incorreta";
   static CREATE_USER_FAILED =
     "Falha ao criar usuário. Tente novamente mais tarde";
+  static MISSING_PASSWORD = "Informe a senha do usuário";
 }
