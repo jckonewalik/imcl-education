@@ -1,11 +1,15 @@
-require("dotenv").config();
+require("dotenv").config({
+  path: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : "",
+});
 
 import { AppModule } from "@/modules/app.module";
 import { NestFactory } from "@nestjs/core";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
+import { initializeFirebase } from "./firebase-initialize";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  initializeFirebase();
   const config = new DocumentBuilder()
     .setTitle("ICML Ensino")
     .setDescription("APIs para gerenciamento do ministério de ensino da IMCL")
