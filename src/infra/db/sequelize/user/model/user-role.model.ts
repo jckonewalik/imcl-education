@@ -6,14 +6,17 @@ import {
   DataType,
   ForeignKey,
   Model,
+  PrimaryKey,
   Table,
 } from "sequelize-typescript";
 import { UserModel } from "./user.model";
 
 @Table({
   tableName: "user_roles",
+  timestamps: false,
 })
 export class UserRoleModel extends Model {
+  @PrimaryKey
   @ForeignKey(() => UserModel)
   @Column({
     field: "user_id",
@@ -24,6 +27,7 @@ export class UserRoleModel extends Model {
   @BelongsTo(() => UserModel)
   user: UserModel;
 
+  @PrimaryKey
   @Column
   role: string;
 
