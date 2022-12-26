@@ -18,6 +18,10 @@ export class UserDTO {
     description: "Identificação de status ativo do usuário",
   })
   active: boolean;
+  @ApiProperty({
+    description: "Permissões do usuário",
+  })
+  roles: string[];
 
   private constructor() {}
 
@@ -27,6 +31,8 @@ export class UserDTO {
     dto.name = entity.name;
     dto.email = entity.email.value;
     dto.active = entity.active;
+
+    dto.roles = entity.roles.map((role) => role.role);
     return dto;
   }
 }
