@@ -6,6 +6,7 @@ import { SequelizeCreateUserRepository } from "@/infra/db/sequelize/user/reposit
 import { SequelizeFindUserRepository } from "@/infra/db/sequelize/user/repository/find-user-repository";
 import { FirebaseAuthenticateUseCase } from "@/infra/firebase/auth/authenticate";
 import { FirebaseCreateCredentialsUseCase } from "@/infra/firebase/auth/create-credentials";
+import { JwtTokenImpl } from "@/infra/jwt/token-impl";
 import { AllExceptionsFilter } from "@/presentation/@shared/filters";
 import { AuthController } from "@/presentation/auth/controllers";
 import { CreateCredentialsUseCase } from "@/usecases/auth";
@@ -39,6 +40,14 @@ import { APP_FILTER, APP_PIPE } from "@nestjs/core";
     {
       provide: "CreateUserRepository",
       useClass: SequelizeCreateUserRepository,
+    },
+    {
+      provide: "GenerateToken",
+      useClass: JwtTokenImpl,
+    },
+    {
+      provide: "ValidateToken",
+      useClass: JwtTokenImpl,
     },
     {
       inject: [

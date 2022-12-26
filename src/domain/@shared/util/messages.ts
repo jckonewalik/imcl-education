@@ -84,4 +84,5 @@ export default class Messages {
   static INVALID_USER = "Usuário inválido";
   static INVALID_CREDENTIALS = "Credenciais inválidas";
   static USER_INACTIVE = "Usuário inativo";
+  static INVALID_TOKEN = "Token inválido";
 }

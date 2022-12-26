@@ -7,7 +7,14 @@ import { NestFactory } from "@nestjs/core";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { initializeFirebase } from "./firebase-initialize";
 
+function checkEnvs() {
+  if (!process.env.JWT_SECRET) {
+    throw new Error("Missing JWT_SECRET environment variable");
+  }
+}
+
 async function bootstrap() {
+  checkEnvs();
   const app = await NestFactory.create(AppModule);
   initializeFirebase();
   const config = new DocumentBuilder()
