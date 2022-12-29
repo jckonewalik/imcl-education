@@ -1,5 +1,7 @@
+import { User } from "@/domain/user/entity/user";
+
 export interface GenerateToken {
-  generate(login: string): string;
+  generate(user: User): string;
 }
 
 export interface ValidateToken {
