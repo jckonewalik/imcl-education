@@ -1,5 +1,5 @@
+import { ApiResponseDto } from "@/infra/decorators";
 import { GenerateToken } from "@/infra/protocols";
-import { ApiResponseDto } from "@/presentation/@shared/decorators/api-response-dto";
 import { ErrorResponseDto } from "@/presentation/@shared/dto/error-response.dto";
 import { ResponseDto } from "@/presentation/@shared/dto/response.dto";
 import { AuthenticateUseCase } from "@/usecases/auth/authenticate";

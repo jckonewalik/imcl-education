@@ -5,8 +5,8 @@ import {
   ApiResponseOptions,
   getSchemaPath,
 } from "@nestjs/swagger";
-import { BaseDto } from "../dto/base.dto";
-import { ResponseDto } from "../dto/response.dto";
+import { BaseDto } from "../../presentation/@shared/dto/base.dto";
+import { ResponseDto } from "../../presentation/@shared/dto/response.dto";
 
 export const ApiResponseDto = <DataDto extends typeof BaseDto>(
   dataDto: DataDto,
