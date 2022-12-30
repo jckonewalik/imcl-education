@@ -16,11 +16,12 @@ import { GetCourseUseCase } from "@/usecases/course/get-course";
 import { UpdateCourseUseCase } from "@/usecases/course/update-course";
 import { Module, ValidationPipe } from "@nestjs/common";
 import { APP_FILTER, APP_PIPE } from "@nestjs/core";
+import { AuthModule } from "./auth.module";
 import { SharedModule } from "./shared.module";
 
 @Module({
   controllers: [CoursesController],
-  imports: [SharedModule],
+  imports: [SharedModule, AuthModule],
   providers: [
     {
       provide: APP_FILTER,
