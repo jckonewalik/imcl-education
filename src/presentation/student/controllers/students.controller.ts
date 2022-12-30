@@ -23,6 +23,7 @@ import {
 } from "@nestjs/common";
 import {
   ApiBadRequestResponse,
+  ApiHeader,
   ApiInternalServerErrorResponse,
   ApiNotFoundResponse,
   ApiResponse,
@@ -58,6 +59,11 @@ export class StudentsController {
     status: 500,
     type: ErrorResponseDto,
   })
+  @ApiHeader({
+    name: "Authorization",
+    required: true,
+    description: "Bearer token para autenticação",
+  })
   async create(
     @Body() dto: CreateStudentDto
   ): Promise<ResponseDto<StudentDto>> {
@@ -83,6 +89,11 @@ export class StudentsController {
     status: 500,
     type: ErrorResponseDto,
   })
+  @ApiHeader({
+    name: "Authorization",
+    required: true,
+    description: "Bearer token para autenticação",
+  })
   async update(
     @Param("studentId") studentId: string,
     @Body() dto: UpdateStudentDto
@@ -106,6 +117,11 @@ export class StudentsController {
     status: 500,
     type: ErrorResponseDto,
   })
+  @ApiHeader({
+    name: "Authorization",
+    required: true,
+    description: "Bearer token para autenticação",
+  })
   async get(
     @Param("studentId") studentId: string
   ): Promise<ResponseDto<StudentDto>> {
@@ -123,6 +139,11 @@ export class StudentsController {
   @ApiInternalServerErrorResponse({
     status: 500,
     type: ErrorResponseDto,
+  })
+  @ApiHeader({
+    name: "Authorization",
+    required: true,
+    description: "Bearer token para autenticação",
   })
   async search(
     @Body() dto: SearchStudentDto
@@ -151,6 +172,11 @@ export class StudentsController {
   @ApiInternalServerErrorResponse({
     status: 500,
     type: ErrorResponseDto,
+  })
+  @ApiHeader({
+    name: "Authorization",
+    required: true,
+    description: "Bearer token para autenticação",
   })
   async delete(@Param("studentId") studentId: string): Promise<void> {
     await this.deleteUseCase.delete(studentId);

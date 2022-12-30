@@ -28,6 +28,7 @@ import {
 } from "@nestjs/common";
 import {
   ApiBadRequestResponse,
+  ApiHeader,
   ApiInternalServerErrorResponse,
   ApiNotFoundResponse,
   ApiResponse,
@@ -68,6 +69,11 @@ export class ClassRegistriesController {
     status: 500,
     type: ErrorResponseDto,
   })
+  @ApiHeader({
+    name: "Authorization",
+    required: true,
+    description: "Bearer token para autenticação",
+  })
   async create(
     @Body() dto: CreateClassRegistryDto
   ): Promise<ResponseDto<ClassRegistryDto | undefined>> {
@@ -90,6 +96,11 @@ export class ClassRegistriesController {
   @ApiInternalServerErrorResponse({
     status: 500,
     type: ErrorResponseDto,
+  })
+  @ApiHeader({
+    name: "Authorization",
+    required: true,
+    description: "Bearer token para autenticação",
   })
   async update(
     @Param("classRegistryId") classRegistryId: string,
@@ -119,6 +130,11 @@ export class ClassRegistriesController {
     status: 500,
     type: ErrorResponseDto,
   })
+  @ApiHeader({
+    name: "Authorization",
+    required: true,
+    description: "Bearer token para autenticação",
+  })
   async delete(
     @Param("classRegistryId") classRegistryId: string
   ): Promise<void> {
@@ -130,6 +146,11 @@ export class ClassRegistriesController {
   @ApiInternalServerErrorResponse({
     status: 500,
     type: ErrorResponseDto,
+  })
+  @ApiHeader({
+    name: "Authorization",
+    required: true,
+    description: "Bearer token para autenticação",
   })
   async find(
     @Query("studentClassId") studentClassId: string,

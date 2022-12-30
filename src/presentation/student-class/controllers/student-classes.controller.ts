@@ -36,6 +36,7 @@ import {
 } from "@nestjs/common";
 import {
   ApiBadRequestResponse,
+  ApiHeader,
   ApiInternalServerErrorResponse,
   ApiNotFoundResponse,
   ApiResponse,
@@ -81,6 +82,11 @@ export class StudentClassesController {
     status: 500,
     type: ErrorResponseDto,
   })
+  @ApiHeader({
+    name: "Authorization",
+    required: true,
+    description: "Bearer token para autenticação",
+  })
   async create(
     @Body() dto: CreateStudentClassDto
   ): Promise<ResponseDto<StudentClassDto>> {
@@ -104,6 +110,11 @@ export class StudentClassesController {
   @ApiInternalServerErrorResponse({
     status: 500,
     type: ErrorResponseDto,
+  })
+  @ApiHeader({
+    name: "Authorization",
+    required: true,
+    description: "Bearer token para autenticação",
   })
   async update(
     @Param("studentClassId") studentClassId: string,
@@ -133,6 +144,11 @@ export class StudentClassesController {
     status: 500,
     type: ErrorResponseDto,
   })
+  @ApiHeader({
+    name: "Authorization",
+    required: true,
+    description: "Bearer token para autenticação",
+  })
   async get(
     @Param("studentClassId") studentClassId: string
   ): Promise<ResponseDto<StudentClassDto>> {
@@ -156,6 +172,11 @@ export class StudentClassesController {
     status: 500,
     type: ErrorResponseDto,
   })
+  @ApiHeader({
+    name: "Authorization",
+    required: true,
+    description: "Bearer token para autenticação",
+  })
   async delete(@Param("studentClassId") studentClassId: string): Promise<void> {
     await this.deleteUseCase.delete(studentClassId);
   }
@@ -170,6 +191,11 @@ export class StudentClassesController {
   @ApiInternalServerErrorResponse({
     status: 500,
     type: ErrorResponseDto,
+  })
+  @ApiHeader({
+    name: "Authorization",
+    required: true,
+    description: "Bearer token para autenticação",
   })
   async search(
     @Body() dto: SearchStudentClassDto
@@ -203,6 +229,11 @@ export class StudentClassesController {
   @ApiInternalServerErrorResponse({
     status: 500,
     type: ErrorResponseDto,
+  })
+  @ApiHeader({
+    name: "Authorization",
+    required: true,
+    description: "Bearer token para autenticação",
   })
   async getAttendances(
     @Param("studentClassId") studentClassId: string,

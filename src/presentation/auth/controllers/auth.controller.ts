@@ -16,6 +16,7 @@ import {
 } from "@nestjs/common";
 import {
   ApiBadRequestResponse,
+  ApiHeader,
   ApiInternalServerErrorResponse,
   ApiTags,
 } from "@nestjs/swagger";
@@ -43,6 +44,11 @@ export class AuthController {
   @ApiInternalServerErrorResponse({
     status: 500,
     type: ErrorResponseDto,
+  })
+  @ApiHeader({
+    name: "Authorization",
+    required: true,
+    description: "Bearer token para autenticação",
   })
   async signup(
     @Body() dto: CreateUserDTO
