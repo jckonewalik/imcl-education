@@ -2,6 +2,7 @@ import { Gender } from "@/domain/@shared/enums/gender";
 import Messages from "@/domain/@shared/util/messages";
 import { TeacherModel } from "@/infra/db/sequelize/teacher/model";
 import { TeachersModule } from "@/modules/teachers.module";
+import { makeJwtToken } from "@/__test__/@shared/util";
 import { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
 import faker from "faker";
@@ -46,6 +47,9 @@ describe("Teachers Controller Tests", () => {
     const name = `${faker.name.firstName()} ${faker.name.lastName()}`;
     await request(app.getHttpServer())
       .post("/teachers")
+      .set({
+        Authorization: `Bearer ${makeJwtToken({})}`,
+      })
       .send({
         name,
         gender: "M",
@@ -61,6 +65,9 @@ describe("Teachers Controller Tests", () => {
   it(`/POST teachers with bad request`, () => {
     return request(app.getHttpServer())
       .post("/teachers")
+      .set({
+        Authorization: `Bearer ${makeJwtToken({})}`,
+      })
       .send({
         name: `${faker.name.firstName()} ${faker.name.lastName()}`,
         email: faker.internet.email(),
@@ -81,6 +88,9 @@ describe("Teachers Controller Tests", () => {
     });
     await request(app.getHttpServer())
       .put(`/teachers/${teacher.id}`)
+      .set({
+        Authorization: `Bearer ${makeJwtToken({})}`,
+      })
       .send({
         name: teacher.name,
         email: teacher.email,
@@ -96,6 +106,9 @@ describe("Teachers Controller Tests", () => {
   it(`/PUT teachers with invalid teacher`, async () => {
     await request(app.getHttpServer())
       .put(`/teachers/${uuid()}`)
+      .set({
+        Authorization: `Bearer ${makeJwtToken({})}`,
+      })
       .send({
         name: `${faker.name.firstName()} ${faker.name.lastName()}`,
         email: faker.internet.email(),
@@ -117,6 +130,9 @@ describe("Teachers Controller Tests", () => {
     });
     await request(app.getHttpServer())
       .get(`/teachers/${teacher.id}`)
+      .set({
+        Authorization: `Bearer ${makeJwtToken({})}`,
+      })
       .then((result) => {
         expect(result.statusCode).toEqual(200);
         expect(result._body.body.id).toEqual(teacher.id);
@@ -141,6 +157,9 @@ describe("Teachers Controller Tests", () => {
 
     await request(app.getHttpServer())
       .post("/teachers/search")
+      .set({
+        Authorization: `Bearer ${makeJwtToken({})}`,
+      })
       .send({
         name: teacher1.name,
       })
@@ -161,6 +180,9 @@ describe("Teachers Controller Tests", () => {
     });
     await request(app.getHttpServer())
       .delete(`/teachers/${teacher.id}`)
+      .set({
+        Authorization: `Bearer ${makeJwtToken({})}`,
+      })
       .then((result) => {
         expect(result.statusCode).toEqual(204);
       });
@@ -172,6 +194,9 @@ describe("Teachers Controller Tests", () => {
   it(`/DELETE teachers with invalid teacher`, async () => {
     await request(app.getHttpServer())
       .delete(`/teachers/${uuid()}`)
+      .set({
+        Authorization: `Bearer ${makeJwtToken({})}`,
+      })
       .then((result) => {
         expect(result.statusCode).toEqual(404);
         expect(result._body.message).toEqual(Messages.INVALID_TEACHER);
