@@ -15,6 +15,7 @@ import {
 import { StudentModel } from "@/infra/db/sequelize/student/model";
 import { TeacherModel } from "@/infra/db/sequelize/teacher/model";
 import { ClassRegistriesModule } from "@/modules/class-registries.module";
+import { makeJwtToken } from "@/__test__/@shared/util";
 import { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
 import { Sequelize } from "sequelize-typescript";
@@ -99,6 +100,9 @@ describe("Class Registries Controller Tests", () => {
     const { course, student1, studentClass, teacher1 } = await makeModels();
     const response = await request(app.getHttpServer())
       .post("/class-registries")
+      .set({
+        Authorization: `Bearer ${makeJwtToken({})}`,
+      })
       .send({
         studentClassId: studentClass.id,
         teacherId: teacher1.id,
@@ -124,6 +128,9 @@ describe("Class Registries Controller Tests", () => {
   it(`/POST class-registries with bad request`, () => {
     return request(app.getHttpServer())
       .post("/class-registries")
+      .set({
+        Authorization: `Bearer ${makeJwtToken({})}`,
+      })
       .send({
         date: DateUtils.toSimpleDate(new Date()),
         teacherId: uuid(),
@@ -143,6 +150,9 @@ describe("Class Registries Controller Tests", () => {
 
     const response = await request(app.getHttpServer())
       .put(`/class-registries/${registry.id}`)
+      .set({
+        Authorization: `Bearer ${makeJwtToken({})}`,
+      })
       .send({
         date: newDate,
         teacherId: teacher2.id,
@@ -176,6 +186,9 @@ describe("Class Registries Controller Tests", () => {
   it(`404 /PUT class-registries with invalid registry`, async () => {
     await request(app.getHttpServer())
       .put(`/class-registries/${uuid()}`)
+      .set({
+        Authorization: `Bearer ${makeJwtToken({})}`,
+      })
       .send({
         date: new Date(),
         teacherId: uuid(),
@@ -192,6 +205,9 @@ describe("Class Registries Controller Tests", () => {
 
     await request(app.getHttpServer())
       .delete(`/class-registries/${registry.id}`)
+      .set({
+        Authorization: `Bearer ${makeJwtToken({})}`,
+      })
       .then((result) => {
         expect(result.statusCode).toEqual(204);
       });
@@ -205,6 +221,9 @@ describe("Class Registries Controller Tests", () => {
   it(`/DELETE class registry with invalid registry`, async () => {
     await request(app.getHttpServer())
       .delete(`/class-registries/${uuid()}`)
+      .set({
+        Authorization: `Bearer ${makeJwtToken({})}`,
+      })
       .then((result) => {
         expect(result.statusCode).toEqual(404);
         expect(result._body.message).toEqual(Messages.INVALID_CLASS_REGISTRY);
@@ -214,9 +233,13 @@ describe("Class Registries Controller Tests", () => {
   it(`/GET registry by class and date`, async () => {
     const { registry, student1, course } = await makeClassRegistry();
     const date = DateUtils.toIsoDate(registry.date);
-    const response = await request(app.getHttpServer()).get(
-      `/class-registries?studentClassId=${registry.studentClassId}&date=${date}`
-    );
+    const response = await request(app.getHttpServer())
+      .get(
+        `/class-registries?studentClassId=${registry.studentClassId}&date=${date}`
+      )
+      .set({
+        Authorization: `Bearer ${makeJwtToken({})}`,
+      });
 
     expect(response.statusCode).toBe(200);
 

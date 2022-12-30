@@ -10,7 +10,7 @@ type makeJwtTokenProps = {
 };
 export const makeJwtToken = ({
   login = faker.internet.email(),
-  roles = [Role.ROLE_USER],
+  roles = [],
 }: makeJwtTokenProps) => {
   const user = new User({
     id: uuid(),
