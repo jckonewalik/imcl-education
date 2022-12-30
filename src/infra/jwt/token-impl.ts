@@ -16,7 +16,7 @@ export class JwtTokenImpl implements GenerateToken, ValidateToken {
   generate(user: User): string {
     const secret = process.env.JWT_SECRET;
     // 30 minutes
-    const expiresIn = 1000 * 60 * 30;
+    const expiresIn = 60 * 30;
 
     const token = jwt.sign(
       { user: user.email.value, roles: user.roles.map((r) => r.role) },
