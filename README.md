@@ -71,6 +71,7 @@ The fallow tecnologies were used to build this project:
 - **[NestJS](https://nestjs.com/)**
 - **[Swagger](https://swagger.io/)**
 - **[Docker](https://www.docker.com/)**
+- **[JWT](https://jwt.io/)**
 
 ---
 
