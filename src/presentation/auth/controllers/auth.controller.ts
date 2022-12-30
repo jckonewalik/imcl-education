@@ -1,4 +1,5 @@
-import { ApiResponseDto } from "@/infra/decorators";
+import { Role } from "@/domain/user/entity/role";
+import { ApiResponseDto, Public, Roles } from "@/infra/decorators";
 import { GenerateToken } from "@/infra/protocols";
 import { ErrorResponseDto } from "@/presentation/@shared/dto/error-response.dto";
 import { ResponseDto } from "@/presentation/@shared/dto/response.dto";
@@ -33,6 +34,7 @@ export class AuthController {
   ) {}
 
   @Post("/signup")
+  @Roles(Role.ROLE_ADMIN)
   @ApiResponseDto(UserDTO, { status: 201 })
   @ApiBadRequestResponse({
     status: 400,
@@ -50,6 +52,7 @@ export class AuthController {
   }
 
   @Post("/signin")
+  @Public()
   @HttpCode(200)
   @ApiResponseDto(UserDTO, { status: 200 })
   @ApiBadRequestResponse({
@@ -62,7 +65,7 @@ export class AuthController {
   })
   async login(@Body() dto: LoginDTO, @Res() res: Response): Promise<void> {
     const user = await this.authUseCase.auth(dto);
-    const token = this.generateToken.generate(dto.login);
+    const token = this.generateToken.generate(user);
     res
       .set({ Authorization: token })
       .status(HttpStatus.OK)

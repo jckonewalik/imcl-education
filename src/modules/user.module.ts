@@ -17,9 +17,11 @@ import {
 } from "@/usecases/user";
 import { Module, ValidationPipe } from "@nestjs/common";
 import { APP_FILTER, APP_PIPE } from "@nestjs/core";
+import { AuthModule } from "./auth.module";
 
 @Module({
   controllers: [AuthController],
+  imports: [AuthModule],
   providers: [
     {
       provide: APP_FILTER,

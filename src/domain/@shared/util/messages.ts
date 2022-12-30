@@ -85,4 +85,7 @@ export default class Messages {
   static INVALID_CREDENTIALS = "Credenciais inválidas";
   static USER_INACTIVE = "Usuário inativo";
   static INVALID_TOKEN = "Token inválido";
+  static UNAUTHORIZED_USER = "Usuário não está autenticado";
+  static FORBIDDEN_RESOURCE =
+    "Usuário não está autorizado a acessar esse recurso";
 }

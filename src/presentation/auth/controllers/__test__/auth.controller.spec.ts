@@ -2,6 +2,7 @@ import Messages from "@/domain/@shared/util/messages";
 import { Role } from "@/domain/user/entity/role";
 import { UserModel, UserRoleModel } from "@/infra/db/sequelize/user/model";
 import { UserModule } from "@/modules/user.module";
+import { makeJwtToken } from "@/__test__/@shared/util";
 import { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
 import faker from "faker";
@@ -85,6 +86,11 @@ describe("Auth Controller Tests", () => {
 
     await request(app.getHttpServer())
       .post("/auth/signup")
+      .set({
+        Authorization: `Bearer ${makeJwtToken({
+          roles: [Role.ROLE_ADMIN],
+        })}`,
+      })
       .send({
         email,
         name,
@@ -101,6 +107,11 @@ describe("Auth Controller Tests", () => {
   it(`/POST signup with bad request`, () => {
     return request(app.getHttpServer())
       .post("/auth/signup")
+      .set({
+        Authorization: `Bearer ${makeJwtToken({
+          roles: [Role.ROLE_ADMIN],
+        })}`,
+      })
       .send({
         name: `${faker.name.firstName()} ${faker.name.lastName()}`,
         email: faker.internet.email(),
@@ -108,6 +119,24 @@ describe("Auth Controller Tests", () => {
       .then((result) => {
         expect(result.statusCode).toEqual(400);
         expect(result._body.message).toEqual(Messages.MISSING_PASSWORD);
+      });
+  });
+
+  it(`/POST signup with unauthorized user`, () => {
+    return request(app.getHttpServer())
+      .post("/auth/signup")
+      .set({
+        Authorization: `Bearer ${makeJwtToken({
+          roles: [],
+        })}`,
+      })
+      .send({
+        name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+        email: faker.internet.email(),
+      })
+      .then((result) => {
+        expect(result.statusCode).toEqual(403);
+        expect(result._body.message).toEqual(Messages.FORBIDDEN_RESOURCE);
       });
   });
 

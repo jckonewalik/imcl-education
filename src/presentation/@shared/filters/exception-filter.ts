@@ -9,8 +9,10 @@ import {
   BadRequestException,
   Catch,
   ExceptionFilter,
+  ForbiddenException,
   HttpStatus,
   Logger,
+  UnauthorizedException,
 } from "@nestjs/common";
 import { HttpAdapterHost } from "@nestjs/core";
 
@@ -37,18 +39,22 @@ export class AllExceptionsFilter implements ExceptionFilter {
     } else if (exception instanceof BadRequestException) {
       httpStatus = HttpStatus.BAD_REQUEST;
       message = exception.getResponse()["message"][0];
+    } else if (exception instanceof UnauthorizedException) {
+      httpStatus = HttpStatus.UNAUTHORIZED;
+      message = Messages.UNAUTHORIZED_USER;
+    } else if (exception instanceof ForbiddenException) {
+      httpStatus = HttpStatus.FORBIDDEN;
+      message = Messages.FORBIDDEN_RESOURCE;
     } else {
       httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+      message = Messages.SOMETHING_WRONG_HAPPEND;
     }
 
     const responseBody = {
       statusCode: httpStatus,
       timestamp: new Date().toISOString(),
       path: httpAdapter.getRequestUrl(ctx.getRequest()),
-      message:
-        httpStatus === HttpStatus.INTERNAL_SERVER_ERROR
-          ? Messages.SOMETHING_WRONG_HAPPEND
-          : message,
+      message,
     };
 
     this.logger.log(responseBody, exception);
