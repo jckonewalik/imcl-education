@@ -1,7 +1,6 @@
 import { Page } from "@/domain/@shared/types/page";
 import { FindAllCoursesRepository } from "@/domain/course/repository";
-import { ApiPageResponseDto } from "@/presentation/@shared/decorators/api-page-response-dto";
-import { ApiResponseDto } from "@/presentation/@shared/decorators/api-response-dto";
+import { ApiPageResponseDto, ApiResponseDto } from "@/infra/decorators";
 import { ErrorResponseDto } from "@/presentation/@shared/dto/error-response.dto";
 import { ResponseDto } from "@/presentation/@shared/dto/response.dto";
 import CreateCourseUseCase from "@/usecases/course/create-course";

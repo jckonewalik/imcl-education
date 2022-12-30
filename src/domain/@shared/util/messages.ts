@@ -69,4 +69,23 @@ export default class Messages {
   static INVALID_DATE_FORMAT = "O formato da data deve ser YYYY-MM-DD";
   static INVALID_CLASS_REGISTRY = "A aula informada não é válida";
   static MISSING_ATTENDANCE_DATE = "Informe a data de conclusão da aula";
+  static MISSING_USER_ID = "Informe o ID do usuário";
+  static MISSING_USER_NAME = "Informe o nome do usuário";
+  static USER_ALREADY_ACTIVE = "O usuário já esta ativo";
+  static USER_ALREADY_INACTIVE = "O usuário já esta inativo";
+  static DUPLICATED_ROLE = "O usuário já possui essa ROLE";
+  static INVALID_USER_ROLE = "O usuário não possui essa ROLE";
+  static USER_EMAIL_ALREADY_IN_USE = "O email já está em uso por outro usuário";
+  static INVALID_PASSWORD_CONFIRMATION = "Confirmação da senha incorreta";
+  static CREATE_USER_FAILED =
+    "Falha ao criar usuário. Tente novamente mais tarde";
+  static MISSING_LOGIN = "Informe o login do usuário";
+  static MISSING_PASSWORD = "Informe a senha do usuário";
+  static INVALID_USER = "Usuário inválido";
+  static INVALID_CREDENTIALS = "Credenciais inválidas";
+  static USER_INACTIVE = "Usuário inativo";
+  static INVALID_TOKEN = "Token inválido";
+  static UNAUTHORIZED_USER = "Usuário não está autenticado";
+  static FORBIDDEN_RESOURCE =
+    "Usuário não está autorizado a acessar esse recurso";
 }

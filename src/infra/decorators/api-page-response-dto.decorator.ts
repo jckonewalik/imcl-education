@@ -1,8 +1,8 @@
 import { applyDecorators } from "@nestjs/common";
 import { ApiExtraModels, ApiOkResponse, getSchemaPath } from "@nestjs/swagger";
-import { BaseDto } from "../dto/base.dto";
-import { PageResponseDto } from "../dto/page-response.dto";
-import { ResponseDto } from "../dto/response.dto";
+import { BaseDto } from "../../presentation/@shared/dto/base.dto";
+import { PageResponseDto } from "../../presentation/@shared/dto/page-response.dto";
+import { ResponseDto } from "../../presentation/@shared/dto/response.dto";
 
 export const ApiPageResponseDto = <DataDto extends typeof BaseDto>(
   dataDto: DataDto

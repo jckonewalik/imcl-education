@@ -16,6 +16,7 @@ import { StudentModel } from "@/infra/db/sequelize/student/model";
 import { TeacherModel } from "@/infra/db/sequelize/teacher/model";
 import { StudentClassesModule } from "@/modules/student-classes.module";
 import { StudentAttendancesDto } from "@/presentation/class-registry/dto";
+import { makeJwtToken } from "@/__test__/@shared/util";
 import { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
 import faker from "faker";
@@ -149,6 +150,9 @@ describe("Student Classes Controller Tests", () => {
     const name = faker.random.word();
     await request(app.getHttpServer())
       .post("/student-classes")
+      .set({
+        Authorization: `Bearer ${makeJwtToken({})}`,
+      })
       .send({
         courseId: course.id,
         name,
@@ -166,6 +170,9 @@ describe("Student Classes Controller Tests", () => {
   it(`/POST student-classes with bad request`, () => {
     return request(app.getHttpServer())
       .post("/student-classes")
+      .set({
+        Authorization: `Bearer ${makeJwtToken({})}`,
+      })
       .send({
         name: faker.random.word(),
       })
@@ -189,6 +196,9 @@ describe("Student Classes Controller Tests", () => {
 
     const response = await request(app.getHttpServer())
       .put(`/student-classes/${studentClass.id}`)
+      .set({
+        Authorization: `Bearer ${makeJwtToken({})}`,
+      })
       .send({
         name: newName,
         active: true,
@@ -225,6 +235,9 @@ describe("Student Classes Controller Tests", () => {
   it(`404 /PUT student-classes with invalid student class`, async () => {
     await request(app.getHttpServer())
       .put(`/student-classes/${uuid()}`)
+      .set({
+        Authorization: `Bearer ${makeJwtToken({})}`,
+      })
       .send({
         name: faker.random.word(),
         active: false,
@@ -243,9 +256,11 @@ describe("Student Classes Controller Tests", () => {
       name: faker.random.word(),
       active: true,
     });
-    const response = await request(app.getHttpServer()).get(
-      `/student-classes/${studentClass.id}`
-    );
+    const response = await request(app.getHttpServer())
+      .get(`/student-classes/${studentClass.id}`)
+      .set({
+        Authorization: `Bearer ${makeJwtToken({})}`,
+      });
 
     expect(response.statusCode).toBe(200);
     const body: StudentClassDto = response._body.body;
@@ -262,6 +277,9 @@ describe("Student Classes Controller Tests", () => {
     });
     await request(app.getHttpServer())
       .delete(`/student-classes/${studentClass.id}`)
+      .set({
+        Authorization: `Bearer ${makeJwtToken({})}`,
+      })
       .then((result) => {
         expect(result.statusCode).toEqual(204);
       });
@@ -275,6 +293,9 @@ describe("Student Classes Controller Tests", () => {
   it(`/DELETE student class with invalid class`, async () => {
     await request(app.getHttpServer())
       .delete(`/student-classes/${uuid()}`)
+      .set({
+        Authorization: `Bearer ${makeJwtToken({})}`,
+      })
       .then((result) => {
         expect(result.statusCode).toEqual(404);
         expect(result._body.message).toEqual(Messages.INVALID_STUDENT_CLASS);
@@ -297,6 +318,9 @@ describe("Student Classes Controller Tests", () => {
     });
     await request(app.getHttpServer())
       .post("/student-classes/search")
+      .set({
+        Authorization: `Bearer ${makeJwtToken({})}`,
+      })
       .send({
         name: studentClass.name,
       })
@@ -310,9 +334,11 @@ describe("Student Classes Controller Tests", () => {
   it(`/GET student attendances`, async () => {
     const { studentClass, student2 } = await makeClassRegistries();
 
-    const response = await request(app.getHttpServer()).get(
-      `/student-classes/${studentClass.id}/students/${student2.id}`
-    );
+    const response = await request(app.getHttpServer())
+      .get(`/student-classes/${studentClass.id}/students/${student2.id}`)
+      .set({
+        Authorization: `Bearer ${makeJwtToken({})}`,
+      });
 
     expect(response.statusCode).toBe(200);
     const body: StudentAttendancesDto = response._body.body;

@@ -20,11 +20,12 @@ import {
 import { UpdateStudentUseCase } from "@/usecases/student/update-student";
 import { Module, ValidationPipe } from "@nestjs/common";
 import { APP_FILTER, APP_PIPE } from "@nestjs/core";
+import { AuthModule } from "./auth.module";
 import { SharedModule } from "./shared.module";
 
 @Module({
   controllers: [StudentsController],
-  imports: [SharedModule],
+  imports: [SharedModule, AuthModule],
   providers: [
     {
       provide: APP_FILTER,

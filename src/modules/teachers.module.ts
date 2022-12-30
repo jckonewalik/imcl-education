@@ -22,11 +22,12 @@ import { DeleteTeacherUseCase } from "@/usecases/teacher/delete-teacher";
 import { GetTeacherUseCase } from "@/usecases/teacher/get-teacher";
 import { Module, ValidationPipe } from "@nestjs/common";
 import { APP_FILTER, APP_PIPE } from "@nestjs/core";
+import { AuthModule } from "./auth.module";
 import { SharedModule } from "./shared.module";
 
 @Module({
   controllers: [TeachersController],
-  imports: [SharedModule],
+  imports: [SharedModule, AuthModule],
   providers: [
     {
       provide: APP_FILTER,

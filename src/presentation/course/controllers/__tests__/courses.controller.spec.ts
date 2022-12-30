@@ -1,6 +1,7 @@
 import Messages from "@/domain/@shared/util/messages";
 import { CourseModel, LessonModel } from "@/infra/db/sequelize/course/model";
 import { CoursesModule } from "@/modules/courses.module";
+import { makeJwtToken } from "@/__test__/@shared/util";
 import { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
 import faker from "faker";
@@ -44,6 +45,9 @@ describe("Courses Controller Tests", () => {
     const name = faker.random.word();
     await request(app.getHttpServer())
       .post("/courses")
+      .set({
+        Authorization: `Bearer ${makeJwtToken({})}`,
+      })
       .send({
         name,
       })
@@ -58,6 +62,9 @@ describe("Courses Controller Tests", () => {
   it(`/POST courses with bad request`, () => {
     return request(app.getHttpServer())
       .post("/courses")
+      .set({
+        Authorization: `Bearer ${makeJwtToken({})}`,
+      })
       .send({})
       .then((result) => {
         expect(result.statusCode).toEqual(400);
@@ -74,6 +81,9 @@ describe("Courses Controller Tests", () => {
     const newName = faker.random.word();
     await request(app.getHttpServer())
       .put(`/courses/${course.id}`)
+      .set({
+        Authorization: `Bearer ${makeJwtToken({})}`,
+      })
       .send({
         name: newName,
         active: true,
@@ -99,6 +109,9 @@ describe("Courses Controller Tests", () => {
   it(`/PUT courses with invalid course`, async () => {
     await request(app.getHttpServer())
       .put(`/courses/${uuid()}`)
+      .set({
+        Authorization: `Bearer ${makeJwtToken({})}`,
+      })
       .send({
         name: faker.random.word(),
         active: false,
@@ -117,6 +130,9 @@ describe("Courses Controller Tests", () => {
     });
     await request(app.getHttpServer())
       .get(`/courses/${course.id}`)
+      .set({
+        Authorization: `Bearer ${makeJwtToken({})}`,
+      })
       .then((result) => {
         expect(result.statusCode).toEqual(200);
         expect(result._body.body.id).toEqual(course.id);
@@ -137,6 +153,9 @@ describe("Courses Controller Tests", () => {
 
     await request(app.getHttpServer())
       .post("/courses/search")
+      .set({
+        Authorization: `Bearer ${makeJwtToken({})}`,
+      })
       .send({
         name: course1.name,
       })
@@ -155,6 +174,9 @@ describe("Courses Controller Tests", () => {
     });
     await request(app.getHttpServer())
       .delete(`/courses/${course.id}`)
+      .set({
+        Authorization: `Bearer ${makeJwtToken({})}`,
+      })
       .then((result) => {
         expect(result.statusCode).toEqual(204);
       });
@@ -166,6 +188,9 @@ describe("Courses Controller Tests", () => {
   it(`/DELETE courses with invalid course`, async () => {
     await request(app.getHttpServer())
       .delete(`/courses/${uuid()}`)
+      .set({
+        Authorization: `Bearer ${makeJwtToken({})}`,
+      })
       .then((result) => {
         expect(result.statusCode).toEqual(404);
         expect(result._body.message).toEqual(Messages.INVALID_COURSE);
