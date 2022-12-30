@@ -2,6 +2,7 @@ import { Gender } from "@/domain/@shared/enums/gender";
 import Messages from "@/domain/@shared/util/messages";
 import { StudentModel } from "@/infra/db/sequelize/student/model";
 import { StudentsModule } from "@/modules/students.module";
+import { makeJwtToken } from "@/__test__/@shared/util";
 import { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
 import faker from "faker";
@@ -45,6 +46,9 @@ describe("Students Controller Tests", () => {
     const name = faker.random.word();
     await request(app.getHttpServer())
       .post("/students")
+      .set({
+        Authorization: `Bearer ${makeJwtToken({})}`,
+      })
       .send({
         name,
         gender: "M",
@@ -61,6 +65,9 @@ describe("Students Controller Tests", () => {
     const name = faker.random.word();
     return request(app.getHttpServer())
       .post("/students")
+      .set({
+        Authorization: `Bearer ${makeJwtToken({})}`,
+      })
       .send({
         name,
         gender: "X",
@@ -81,6 +88,9 @@ describe("Students Controller Tests", () => {
     const phoneNumber = "99999999999";
     await request(app.getHttpServer())
       .put(`/students/${student.id}`)
+      .set({
+        Authorization: `Bearer ${makeJwtToken({})}`,
+      })
       .send({
         name: student.name,
         active: false,
@@ -100,6 +110,9 @@ describe("Students Controller Tests", () => {
   it(`/PUT students with invalid student`, async () => {
     await request(app.getHttpServer())
       .put(`/students/${uuid()}`)
+      .set({
+        Authorization: `Bearer ${makeJwtToken({})}`,
+      })
       .send({
         name: `${faker.name.firstName()} ${faker.name.lastName()}`,
         active: false,
@@ -121,6 +134,9 @@ describe("Students Controller Tests", () => {
     });
     await request(app.getHttpServer())
       .get(`/students/${student.id}`)
+      .set({
+        Authorization: `Bearer ${makeJwtToken({})}`,
+      })
       .then((result) => {
         expect(result.statusCode).toEqual(200);
         expect(result._body.body.id).toEqual(student.id);
@@ -150,6 +166,9 @@ describe("Students Controller Tests", () => {
 
     await request(app.getHttpServer())
       .post("/students/search")
+      .set({
+        Authorization: `Bearer ${makeJwtToken({})}`,
+      })
       .send({
         name: student1.name,
       })
@@ -168,6 +187,9 @@ describe("Students Controller Tests", () => {
     });
     await request(app.getHttpServer())
       .delete(`/students/${student.id}`)
+      .set({
+        Authorization: `Bearer ${makeJwtToken({})}`,
+      })
       .then((result) => {
         expect(result.statusCode).toEqual(204);
       });
@@ -179,6 +201,9 @@ describe("Students Controller Tests", () => {
   it(`/DELETE students with invalid student`, async () => {
     await request(app.getHttpServer())
       .delete(`/students/${uuid()}`)
+      .set({
+        Authorization: `Bearer ${makeJwtToken({})}`,
+      })
       .then((result) => {
         expect(result.statusCode).toEqual(404);
         expect(result._body.message).toEqual(Messages.INVALID_STUDENT);
