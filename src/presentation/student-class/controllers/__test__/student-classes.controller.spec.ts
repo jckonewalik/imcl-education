@@ -1,3 +1,4 @@
+import { makeJwtToken } from "@/__test__/@shared/util";
 import { Gender } from "@/domain/@shared/enums/gender";
 import Messages from "@/domain/@shared/util/messages";
 import {
@@ -16,7 +17,6 @@ import { StudentModel } from "@/infra/db/sequelize/student/model";
 import { TeacherModel } from "@/infra/db/sequelize/teacher/model";
 import { StudentClassesModule } from "@/modules/student-classes.module";
 import { StudentAttendancesDto } from "@/presentation/class-registry/dto";
-import { makeJwtToken } from "@/__test__/@shared/util";
 import { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
 import faker from "faker";
