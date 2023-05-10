@@ -28,6 +28,7 @@ export class SequelizeFindAllCoursesRepository
     const order: Order = [];
     if (Object.keys(CourseModel.getAttributes()).includes(sortBy)) {
       order.push([sortBy, sortOrder]);
+      order.push(["id", "ASC"]);
     }
     const result = await CourseModel.findAndCountAll({
       where,

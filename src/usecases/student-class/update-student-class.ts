@@ -50,12 +50,12 @@ export class UpdateStudentClassUseCase {
       studentClass.changeYear(data.year);
     }
 
-    await this.updateEnrollments(studentClass, data);
-    await this.updateTeachers(studentClass, data);
-
     if (studentClass.active !== data.active) {
       data.active ? studentClass.activate() : studentClass.inactivate();
     }
+
+    await this.updateEnrollments(studentClass, data);
+    await this.updateTeachers(studentClass, data);
 
     await this.updateRepo.update(studentClass);
     return studentClass;

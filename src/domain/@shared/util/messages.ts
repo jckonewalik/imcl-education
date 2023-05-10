@@ -24,14 +24,11 @@ export default class Messages {
   static STUDENT_CLASS_INACTIVE = "A turma não está mais ativa";
   static STUDENT_INACTIVE = "O aluno não está mais ativo";
   static MISSING_ENROLLMENT_ID = "Informe o ID da matricula";
-  static STUDENT_ALREADY_ENROLLED = "O aluno já está matriculado nessa turma";
-  static STUDENT_NOT_ENROLLED = "O aluno não esta matriculado";
   static INVALID_STUDENT = "O aluno informado não é válido";
   static MISSING_TEACHER_ID = "Informe o ID do professor";
   static MISSING_TEACHER_NAME = "Informe o nome do professor";
   static INVALID_EMAIL = "Email inválido";
   static TEACHER_INACTIVE = "O professor não está mais ativo";
-  static TEACHER_ALREADY_INCLUDED = "O professor já foi incluído";
   static TEACHER_NOT_PRESENT = "O professor não faz parte da turma";
   static INVALID_TEACHER = "O professor informado não é válido";
   static TEACHER_EMAIL_ALREADY_IN_USE =
@@ -57,11 +54,7 @@ export default class Messages {
     "A data da aula não pode ser maior que a data atual";
   static CLASS_REGISTRY_WITH_NO_STUDENTS =
     "A aula tem que ter ao menos um aluno";
-  static LESSON_ALREADY_INCLUDED = "A lição já foi incluída";
   static LESSON_INACTIVE = "A lição está inativa";
-  static LESSON_NOT_INCLUDED = "A lição não foi incluída";
-  static STUDENT_ALREADY_INCLUDED = "O aluno já foi incluído";
-  static STUDENT_NOT_INCLUDED = "O aluno não foi incluído";
   static DUPLICATED_CLASS_REGISTRY =
     "Já existe um registro de aula para essa turma e data";
   static INVALID_LESSON = "A lição informada não é válida para essa turma";

@@ -17,5 +17,5 @@ export class ErrorResponseDto {
   @ApiProperty({
     description: "Mensagem de erro",
   })
-  private mensagem: string;
+  private message: string;
 }

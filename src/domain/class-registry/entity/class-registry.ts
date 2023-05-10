@@ -66,7 +66,7 @@ export class ClassRegistry {
 
   addStudent(student: Student) {
     if (this._studentIds.includes(student.id)) {
-      throw new BadRequestException(Messages.STUDENT_ALREADY_INCLUDED);
+      return;
     }
     if (!student.active) {
       throw new BadRequestException(Messages.STUDENT_INACTIVE);
@@ -76,14 +76,14 @@ export class ClassRegistry {
 
   removeStudent(student: Student) {
     if (!this._studentIds.includes(student.id)) {
-      throw new BadRequestException(Messages.STUDENT_NOT_INCLUDED);
+      return;
     }
     this._studentIds = this._studentIds.filter((id) => id !== student.id);
   }
 
   public addLesson(lesson: Lesson) {
     if (this._lessonIds.includes(lesson.id)) {
-      throw new BadRequestException(Messages.LESSON_ALREADY_INCLUDED);
+      return;
     }
     if (!lesson.active) {
       throw new BadRequestException(Messages.LESSON_INACTIVE);
@@ -93,7 +93,7 @@ export class ClassRegistry {
 
   removeLesson(lesson: Lesson) {
     if (!this._lessonIds.includes(lesson.id)) {
-      throw new BadRequestException(Messages.LESSON_NOT_INCLUDED);
+      return;
     }
     this._lessonIds = this._lessonIds.filter((id) => id !== lesson.id);
   }

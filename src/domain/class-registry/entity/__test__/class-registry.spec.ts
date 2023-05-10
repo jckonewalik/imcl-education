@@ -84,7 +84,7 @@ describe("Class Registry Unit tests", () => {
     expect(t).toThrow(Messages.CLASS_REGISTRY_WITH_NO_STUDENTS);
   });
 
-  it("Fail add duplicated lesson on class registry", () => {
+  it("Not add duplicated lesson on class registry", () => {
     const lessonId = uuid();
     const lesson = new Lesson(lessonId, uuid(), 1, faker.random.word(), true);
     const classRegistry = new ClassRegistry({
@@ -95,11 +95,10 @@ describe("Class Registry Unit tests", () => {
       studentIds: [uuid()],
       lessonIds: [lessonId],
     });
-    const t = () => {
-      classRegistry.addLesson(lesson);
-    };
-    expect(t).toThrow(BadRequestException);
-    expect(t).toThrow(Messages.LESSON_ALREADY_INCLUDED);
+
+    classRegistry.addLesson(lesson);
+
+    expect(classRegistry.lessonIds.length).toBe(1);
   });
   it("Fail add inactive lesson on class registry", () => {
     const lesson = new Lesson(uuid(), uuid(), 1, faker.random.word(), false);
@@ -129,21 +128,6 @@ describe("Class Registry Unit tests", () => {
     expect(classRegistry.lessonIds.length).toBe(1);
   });
 
-  it("Fail remove not inclued lesson on class registry", () => {
-    const lesson = new Lesson(uuid(), uuid(), 1, faker.random.word(), true);
-    const classRegistry = new ClassRegistry({
-      id: uuid(),
-      studentClassId: uuid(),
-      date: new Date(),
-      teacherId: uuid(),
-      studentIds: [uuid()],
-    });
-    const t = () => {
-      classRegistry.removeLesson(lesson);
-    };
-    expect(t).toThrow(BadRequestException);
-    expect(t).toThrow(Messages.LESSON_NOT_INCLUDED);
-  });
   it("Remove lesson on class registry", () => {
     const lesson = new Lesson(uuid(), uuid(), 1, faker.random.word(), true);
     const classRegistry = new ClassRegistry({
@@ -158,7 +142,7 @@ describe("Class Registry Unit tests", () => {
     expect(classRegistry.lessonIds.length).toBe(0);
   });
 
-  it("Fail add duplicated student on class registry", () => {
+  it("Not add duplicated student on class registry", () => {
     const studentId = uuid();
     const student = new Student(studentId, uuid(), Gender.F, true);
     const classRegistry = new ClassRegistry({
@@ -168,11 +152,10 @@ describe("Class Registry Unit tests", () => {
       teacherId: uuid(),
       studentIds: [studentId],
     });
-    const t = () => {
-      classRegistry.addStudent(student);
-    };
-    expect(t).toThrow(BadRequestException);
-    expect(t).toThrow(Messages.STUDENT_ALREADY_INCLUDED);
+
+    classRegistry.addStudent(student);
+
+    expect(classRegistry.studentIds.length).toBe(1);
   });
   it("Fail add inactive student on class registry", () => {
     const student = new Student(uuid(), uuid(), Gender.F, false);
@@ -201,21 +184,7 @@ describe("Class Registry Unit tests", () => {
     classRegistry.addStudent(student);
     expect(classRegistry.studentIds.length).toBe(2);
   });
-  it("Fail remove not inclued student on class registry", () => {
-    const student = new Student(uuid(), uuid(), Gender.F, true);
-    const classRegistry = new ClassRegistry({
-      id: uuid(),
-      studentClassId: uuid(),
-      date: new Date(),
-      teacherId: uuid(),
-      studentIds: [uuid()],
-    });
-    const t = () => {
-      classRegistry.removeStudent(student);
-    };
-    expect(t).toThrow(BadRequestException);
-    expect(t).toThrow(Messages.STUDENT_NOT_INCLUDED);
-  });
+
   it("Remove student on class registry", () => {
     const student = new Student(uuid(), uuid(), Gender.F, true);
     const classRegistry = new ClassRegistry({

@@ -34,6 +34,7 @@ export class SequelizeFindAllStudentsRepository
     const order: Order = [];
     if (Object.keys(StudentModel.getAttributes()).includes(sortBy)) {
       order.push([sortBy, sortOrder]);
+      order.push(["id", "ASC"]);
     }
 
     const result = await StudentModel.findAndCountAll({

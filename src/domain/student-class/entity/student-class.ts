@@ -74,7 +74,7 @@ export class StudentClass {
       throw new BadRequestException(Messages.STUDENT_INACTIVE);
     }
     if (this._enrollments.find((e) => e.studentId === student.id)) {
-      throw new BadRequestException(Messages.STUDENT_ALREADY_ENROLLED);
+      return;
     }
     const newEnrollment = new Enrollment(uuid(), this._id, student.id);
     this._enrollments.push(newEnrollment);
@@ -82,7 +82,7 @@ export class StudentClass {
 
   unenrollStudent(student: Student) {
     if (!this._enrollments.find((e) => e.studentId === student.id)) {
-      throw new BadRequestException(Messages.STUDENT_NOT_ENROLLED);
+      return;
     }
     this._enrollments = this._enrollments.filter(
       (e) => e.studentId !== student.id
@@ -97,14 +97,14 @@ export class StudentClass {
       throw new BadRequestException(Messages.TEACHER_INACTIVE);
     }
     if (this._teacherIds.find((id) => id === teacher.id)) {
-      throw new BadRequestException(Messages.TEACHER_ALREADY_INCLUDED);
+      return;
     }
     this._teacherIds.push(teacher.id);
   }
 
   removeTeacher(teacher: Teacher) {
     if (!this._teacherIds.find((id) => id === teacher.id)) {
-      throw new BadRequestException(Messages.TEACHER_NOT_PRESENT);
+      return;
     }
     this._teacherIds = this._teacherIds.filter((id) => id !== teacher.id);
   }

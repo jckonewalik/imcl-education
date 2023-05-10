@@ -140,17 +140,13 @@ describe("Student Class Unit tests", () => {
     expect(studentClass.enrollments.length).toBe(1);
   });
 
-  it("Fail when Enroll a student twice", () => {
+  it("Not Enroll a student twice", () => {
     const studentClass = makeStudentClass({});
     const student = makeStudent({});
     studentClass.enrollStudent(student);
+    studentClass.enrollStudent(student);
 
-    const t = () => {
-      studentClass.enrollStudent(student);
-    };
-
-    expect(t).toThrow(BadRequestException);
-    expect(t).toThrow(Messages.STUDENT_ALREADY_ENROLLED);
+    expect(studentClass.enrollments.length).toBe(1);
   });
 
   it("Unenroll a student", () => {
@@ -160,16 +156,6 @@ describe("Student Class Unit tests", () => {
     expect(studentClass.enrollments.length).toBe(1);
     studentClass.unenrollStudent(student);
     expect(studentClass.enrollments.length).toBe(0);
-  });
-
-  it("Fail Unenrolling a student not enrolled", () => {
-    const studentClass = makeStudentClass({});
-    const student = makeStudent({});
-    const t = () => {
-      studentClass.unenrollStudent(student);
-    };
-    expect(t).toThrow(BadRequestException);
-    expect(t).toThrow(Messages.STUDENT_NOT_ENROLLED);
   });
 
   it("Fail adding a new teacher if the class is inactive", () => {
@@ -204,17 +190,12 @@ describe("Student Class Unit tests", () => {
     expect(studentClass.teacherIds.length).toBe(1);
   });
 
-  it("Fail adding a teacher twice", () => {
+  it("Not add a teacher twice", () => {
     const studentClass = makeStudentClass({});
     const teacher = makeTeacher({});
     studentClass.addTeacher(teacher);
-
-    const t = () => {
-      studentClass.addTeacher(teacher);
-    };
-
-    expect(t).toThrow(BadRequestException);
-    expect(t).toThrow(Messages.TEACHER_ALREADY_INCLUDED);
+    studentClass.addTeacher(teacher);
+    expect(studentClass.teacherIds.length).toBe(1);
   });
 
   it("Remove a teacher", () => {
@@ -224,14 +205,5 @@ describe("Student Class Unit tests", () => {
     expect(studentClass.teacherIds.length).toBe(1);
     studentClass.removeTeacher(teacher);
     expect(studentClass.teacherIds.length).toBe(0);
-  });
-  it("Fail removing a teacher not part of the class", () => {
-    const studentClass = makeStudentClass({});
-    const teacher = makeTeacher({});
-    const t = () => {
-      studentClass.removeTeacher(teacher);
-    };
-    expect(t).toThrow(BadRequestException);
-    expect(t).toThrow(Messages.TEACHER_NOT_PRESENT);
   });
 });

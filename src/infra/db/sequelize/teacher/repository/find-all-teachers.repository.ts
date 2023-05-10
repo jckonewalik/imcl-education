@@ -39,6 +39,7 @@ export class SequelizeFindAllTeachersRepository
     const order: Order = [];
     if (Object.keys(TeacherModel.getAttributes()).includes(sortBy)) {
       order.push([sortBy, sortOrder]);
+      order.push(["id", "ASC"]);
     }
 
     const result = await TeacherModel.findAndCountAll({
