@@ -14,12 +14,14 @@ export class GetStudentAttendancesUseCase {
     const registriesIn = registries.filter((registry) =>
       registry.studentIds.includes(studentId)
     );
-    const lessonsMissing = new Set(
-      registries
-        .filter((registry) => !registry.studentIds.includes(studentId))
-        .map((registry) => registry.lessonIds)
-        .flatMap((id) => id)
-    );
+    const lessonsMissing = [
+      ...new Set(
+        registries
+          .filter((registry) => !registry.studentIds.includes(studentId))
+          .map((registry) => registry.lessonIds)
+          .flatMap((id) => id)
+      ),
+    ];
 
     const attendaces: StudentAttendance[] = [];
     for (const registry of registriesIn) {
@@ -35,16 +37,18 @@ export class GetStudentAttendancesUseCase {
         );
       });
     }
-    lessonsMissing.forEach((lessonId) =>
-      attendaces.push(
-        new StudentAttendance({
-          studentClassId,
-          studentId,
-          lessonId,
-          finished: false,
-        })
-      )
-    );
+    lessonsMissing
+      .filter((lessonId) => !attendaces.find((a) => a.lessonId === lessonId))
+      .forEach((lessonId) =>
+        attendaces.push(
+          new StudentAttendance({
+            studentClassId,
+            studentId,
+            lessonId,
+            finished: false,
+          })
+        )
+      );
 
     return attendaces;
   }
