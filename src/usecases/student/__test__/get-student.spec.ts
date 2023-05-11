@@ -15,8 +15,18 @@ type Suts = {
 };
 
 const makeStudents = () => {
-  const student1 = new Student(uuid(), faker.name.firstName(), Gender.F, true);
-  const student2 = new Student(uuid(), faker.name.firstName(), Gender.F, true);
+  const student1 = new Student({
+    id: uuid(),
+    name: faker.name.firstName(),
+    gender: Gender.F,
+    active: true,
+  });
+  const student2 = new Student({
+    id: uuid(),
+    name: faker.name.firstName(),
+    gender: Gender.F,
+    active: true,
+  });
 
   const studentsMap = new Map<string, Student>();
   studentsMap.set(student1.id, student1);

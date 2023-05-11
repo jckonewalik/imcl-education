@@ -13,5 +13,5 @@ export const makeStudent = ({
   if (withPhone) {
     phone = new PhoneNumber("9999999999", true);
   }
-  return new Student(uuid(), name, gender, active, phone);
+  return new Student({ id: uuid(), name, gender, active, phone });
 };

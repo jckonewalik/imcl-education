@@ -1,8 +1,15 @@
+import { makeJwtToken } from "@/__test__/@shared/util";
 import { Gender } from "@/domain/@shared/enums/gender";
 import Messages from "@/domain/@shared/util/messages";
+import { CourseModel, LessonModel } from "@/infra/db/sequelize/course/model";
+import {
+  EnrollmentModel,
+  StudentClassModel,
+  StudentClassTeacherModel,
+} from "@/infra/db/sequelize/student-class/model";
 import { StudentModel } from "@/infra/db/sequelize/student/model";
+import { TeacherModel } from "@/infra/db/sequelize/teacher/model";
 import { StudentsModule } from "@/modules/students.module";
-import { makeJwtToken } from "@/__test__/@shared/util";
 import { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
 import faker from "faker";
@@ -23,7 +30,15 @@ describe("Students Controller Tests", () => {
           sync: { force: true },
         });
 
-        await sequelize.addModels([StudentModel]);
+        await sequelize.addModels([
+          StudentModel,
+          EnrollmentModel,
+          StudentClassModel,
+          CourseModel,
+          StudentClassTeacherModel,
+          TeacherModel,
+          LessonModel,
+        ]);
         await sequelize.sync();
       },
     },

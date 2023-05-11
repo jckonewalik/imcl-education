@@ -3,6 +3,7 @@ import Messages from "@/domain/@shared/util/messages";
 import { StudentModel } from "@/infra/db/sequelize/student/model";
 import faker from "faker";
 import { Sequelize } from "sequelize-typescript";
+import { EnrollmentModel } from "../../../student-class/model";
 import { SequelizeFindStudentRepository } from "../find-student.repository";
 import { makeStudent } from "./util";
 describe("Sequelize Find Student Repository", () => {
@@ -16,7 +17,7 @@ describe("Sequelize Find Student Repository", () => {
       sync: { force: true },
     });
 
-    await sequelize.addModels([StudentModel]);
+    await sequelize.addModels([StudentModel, EnrollmentModel]);
     await sequelize.sync();
   });
 

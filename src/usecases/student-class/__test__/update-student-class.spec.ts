@@ -1,20 +1,20 @@
-import { v4 as uuid } from "uuid";
-import faker from "faker";
+import { Gender } from "@/domain/@shared/enums/gender";
 import {
   BadRequestException,
   EntityNotFoundException,
 } from "@/domain/@shared/exceptions";
 import Messages from "@/domain/@shared/util/messages";
-import { StudentClass } from "@/domain/student-class/entity";
-import { UpdateStudentClassUseCase } from "../update-student-class";
-import { Course } from "@/domain/course/entity";
-import StudentClassService from "@/domain/student-class/services/student-class.service";
-import { UpdateStudentClassRepository } from "@/domain/student-class/repository";
-import { Student } from "@/domain/student/entity/student";
-import { Gender } from "@/domain/@shared/enums/gender";
-import { UpdateAction } from "@/usecases/@shared/enums";
-import { Teacher } from "@/domain/teacher/entity";
 import { Email } from "@/domain/@shared/value-objects";
+import { Course } from "@/domain/course/entity";
+import { StudentClass } from "@/domain/student-class/entity";
+import { UpdateStudentClassRepository } from "@/domain/student-class/repository";
+import StudentClassService from "@/domain/student-class/services/student-class.service";
+import { Student } from "@/domain/student/entity/student";
+import { Teacher } from "@/domain/teacher/entity";
+import { UpdateAction } from "@/usecases/@shared/enums";
+import faker from "faker";
+import { v4 as uuid } from "uuid";
+import { UpdateStudentClassUseCase } from "../update-student-class";
 
 type SutsProps = {
   studentClass?: StudentClass;
@@ -36,8 +36,18 @@ const makeStudentClass = (): StudentClass => {
 };
 
 const makeStudents = () => {
-  const student1 = new Student(uuid(), faker.name.firstName(), Gender.F, true);
-  const student2 = new Student(uuid(), faker.name.firstName(), Gender.F, true);
+  const student1 = new Student({
+    id: uuid(),
+    name: faker.name.firstName(),
+    gender: Gender.F,
+    active: true,
+  });
+  const student2 = new Student({
+    id: uuid(),
+    name: faker.name.firstName(),
+    gender: Gender.F,
+    active: true,
+  });
 
   const studentsMap = new Map<string, Student>();
   studentsMap.set(student1.id, student1);

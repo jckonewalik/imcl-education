@@ -54,7 +54,7 @@ const makeStudent = ({
   gender = Gender.M,
   active = true,
 }) => {
-  return new Student(id, name, gender, active);
+  return new Student({ id, name, gender, active });
 };
 const makeCourse = ({ name = faker.random.word(), active = true }) => {
   const course = new Course(uuid(), name, active);

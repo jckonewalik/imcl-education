@@ -36,7 +36,7 @@ const makeStudent = ({
   gender = Gender.M,
   active = true,
 }) => {
-  return new Student(id, name, gender, active);
+  return new Student({ id, name, gender, active });
 };
 
 describe("Student Class Unit tests", () => {

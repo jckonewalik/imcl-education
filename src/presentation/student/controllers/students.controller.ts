@@ -1,4 +1,7 @@
 import { Page } from "@/domain/@shared/types/page";
+import { FindInCoursesRepository } from "@/domain/course/repository";
+import { FindInStudentClassesRepository } from "@/domain/student-class/repository";
+import { Student } from "@/domain/student/entity";
 import { FindAllStudentsRepository } from "@/domain/student/repository";
 import { ApiPageResponseDto, ApiResponseDto } from "@/infra/decorators";
 import { ErrorResponseDto } from "@/presentation/@shared/dto/error-response.dto";
@@ -46,7 +49,11 @@ export class StudentsController {
     private readonly getUseCase: GetStudentUseCase,
     private readonly deleteUseCase: DeleteStudentUseCase,
     @Inject("FindAllStudentsRepository")
-    private readonly findAllRepo: FindAllStudentsRepository
+    private readonly findAllRepo: FindAllStudentsRepository,
+    @Inject("FindInStudentClassesRepository")
+    private readonly findInStudentClasses: FindInStudentClassesRepository,
+    @Inject("FindInCoursesRepository")
+    private readonly findInCourses: FindInCoursesRepository
   ) {}
 
   @Post()
@@ -72,7 +79,10 @@ export class StudentsController {
       gender: dto.gender,
       phone: dto.phone,
     });
-    return new ResponseDto(HttpStatus.CREATED, StudentDto.fromEntity(student));
+    return new ResponseDto(
+      HttpStatus.CREATED,
+      await this.createStudentDto(student)
+    );
   }
 
   @Put(":studentId")
@@ -104,7 +114,7 @@ export class StudentsController {
       phone: dto.phone,
       active: dto.active,
     });
-    return new ResponseDto(HttpStatus.OK, StudentDto.fromEntity(student));
+    return new ResponseDto(HttpStatus.OK, await this.createStudentDto(student));
   }
 
   @Get(":studentId")
@@ -126,7 +136,7 @@ export class StudentsController {
     @Param("studentId") studentId: string
   ): Promise<ResponseDto<StudentDto>> {
     const student = await this.getUseCase.get(studentId);
-    return new ResponseDto(HttpStatus.OK, StudentDto.fromEntity(student));
+    return new ResponseDto(HttpStatus.OK, await this.createStudentDto(student));
   }
 
   @Post("search")
@@ -180,5 +190,15 @@ export class StudentsController {
   })
   async delete(@Param("studentId") studentId: string): Promise<void> {
     await this.deleteUseCase.delete(studentId);
+  }
+
+  private async createStudentDto(student: Student) {
+    const studentClassIds = student.enrollments.map((e) => e.classId);
+    const studentClasses = await this.findInStudentClasses.find(
+      studentClassIds
+    );
+    const courseIds = [...new Set(studentClasses.map((s) => s.courseId))];
+    const courses = await this.findInCourses.find(courseIds);
+    return StudentDto.create(student, studentClasses, courses);
   }
 }

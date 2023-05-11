@@ -1,12 +1,12 @@
-import { Student } from "@/domain/student/entity/student";
-import { UpdateStudentRepository } from "@/domain/student/repository";
-import { UpdateStudentUseCase } from "../update-student";
-import { v4 as uuid } from "uuid";
-import faker from "faker";
 import { Gender } from "@/domain/@shared/enums/gender";
-import { PhoneNumber } from "@/domain/@shared/value-objects";
 import { EntityNotFoundException } from "@/domain/@shared/exceptions";
 import Messages from "@/domain/@shared/util/messages";
+import { PhoneNumber } from "@/domain/@shared/value-objects";
+import { Student } from "@/domain/student/entity/student";
+import { UpdateStudentRepository } from "@/domain/student/repository";
+import faker from "faker";
+import { v4 as uuid } from "uuid";
+import { UpdateStudentUseCase } from "../update-student";
 
 type SutsProps = {
   student?: Student;
@@ -27,7 +27,7 @@ const makeStudent = ({
   },
 }): Student => {
   const phoneNumber = new PhoneNumber(phone.number, phone.isWhatsapp);
-  const student = new Student(id, name, gender, active, phoneNumber);
+  const student = new Student({ id, name, gender, active, phone: phoneNumber });
   return student;
 };
 

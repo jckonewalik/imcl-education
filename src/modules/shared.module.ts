@@ -2,6 +2,7 @@ import { FindClassRegitryByStudentClassRepository } from "@/domain/class-registr
 import { SequelizeFindClassRegitryByStudentClassRepository } from "@/infra/db/sequelize/class-registry/repository/find-class-registry-by-student-class.repository";
 import { SequelizeFindCourseRepository } from "@/infra/db/sequelize/course/repository/find-course.repository";
 import { SequelizeFindInCoursesRepository } from "@/infra/db/sequelize/course/repository/find-in-courses.repository";
+import { SequelizeFindInStudentClassesRepository } from "@/infra/db/sequelize/student-class/repository/find-in-student-classes.repository";
 import { SequelizeFindStudentClassRepository } from "@/infra/db/sequelize/student-class/repository/find-student-class.repository";
 import {
   SequelizeFindInStudentsRepository,
@@ -53,6 +54,10 @@ import { Module } from "@nestjs/common";
       useClass: SequelizeFindClassRegitryByStudentClassRepository,
     },
     {
+      provide: "FindInStudentClassesRepository",
+      useClass: SequelizeFindInStudentClassesRepository,
+    },
+    {
       inject: ["FindClassRegitryByStudentClassRepository"],
       provide: GetStudentAttendancesUseCase,
       useFactory: (findRepo: FindClassRegitryByStudentClassRepository) => {
@@ -68,6 +73,7 @@ import { Module } from "@nestjs/common";
     "FindInStudentsRepository",
     "FindInCoursesRepository",
     "FindStudentClassRepository",
+    "FindInStudentClassesRepository",
     GetStudentAttendancesUseCase,
   ],
 })

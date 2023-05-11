@@ -5,20 +5,24 @@ import {
 } from "@/domain/@shared/exceptions";
 import Messages from "@/domain/@shared/util/messages";
 import { PhoneNumber } from "@/domain/@shared/value-objects";
+import { Enrollment } from "@/domain/student-class/entity";
 
+type Props = {
+  id: string;
+  name: string;
+  gender: Gender;
+  active: boolean;
+  enrollments?: Enrollment[];
+  phone?: PhoneNumber;
+};
 export class Student {
   private _id: string;
   private _name: string;
   private _gender: Gender;
   private _phone?: PhoneNumber;
   private _active: boolean;
-  constructor(
-    id: string,
-    name: string,
-    gender: Gender,
-    active: boolean,
-    phone?: PhoneNumber
-  ) {
+  private _enrollments: Enrollment[] = [];
+  constructor({ id, name, gender, active, enrollments = [], phone }: Props) {
     if (!id) {
       throw new InvalidValueException(Messages.MISSING_STUDENT_ID);
     }
@@ -30,6 +34,7 @@ export class Student {
     this._gender = gender;
     this._phone = phone;
     this._active = active;
+    this._enrollments = enrollments;
   }
 
   get id(): string {
@@ -50,6 +55,11 @@ export class Student {
 
   get active(): boolean {
     return this._active;
+  }
+
+  get enrollments(): Enrollment[] {
+    const copy: Enrollment[] = [];
+    return copy.concat(this._enrollments);
   }
 
   activate(): void {

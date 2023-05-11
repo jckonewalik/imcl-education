@@ -21,7 +21,13 @@ export class RegisterStudentUseCase {
     if (data.phone) {
       phone = new PhoneNumber(data.phone.number, data.phone.isWhatsapp);
     }
-    const student = new Student(uuid(), data.name, data.gender, true, phone);
+    const student = new Student({
+      id: uuid(),
+      name: data.name,
+      gender: data.gender,
+      active: true,
+      phone,
+    });
 
     await this.createRepo.create(student);
 

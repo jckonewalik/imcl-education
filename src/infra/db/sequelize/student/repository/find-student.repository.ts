@@ -12,6 +12,7 @@ export class SequelizeFindStudentRepository implements FindStudentRepository {
 
     const studentModel = await StudentModel.findOne({
       where: { id },
+      include: ["enrollments"],
     });
 
     if (!studentModel) {

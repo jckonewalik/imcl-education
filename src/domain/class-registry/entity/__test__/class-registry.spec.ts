@@ -144,7 +144,12 @@ describe("Class Registry Unit tests", () => {
 
   it("Not add duplicated student on class registry", () => {
     const studentId = uuid();
-    const student = new Student(studentId, uuid(), Gender.F, true);
+    const student = new Student({
+      id: studentId,
+      name: faker.name.firstName(),
+      gender: Gender.F,
+      active: true,
+    });
     const classRegistry = new ClassRegistry({
       id: uuid(),
       studentClassId: uuid(),
@@ -158,7 +163,12 @@ describe("Class Registry Unit tests", () => {
     expect(classRegistry.studentIds.length).toBe(1);
   });
   it("Fail add inactive student on class registry", () => {
-    const student = new Student(uuid(), uuid(), Gender.F, false);
+    const student = new Student({
+      id: uuid(),
+      name: faker.name.firstName(),
+      gender: Gender.F,
+      active: false,
+    });
     const classRegistry = new ClassRegistry({
       id: uuid(),
       studentClassId: uuid(),
@@ -173,7 +183,12 @@ describe("Class Registry Unit tests", () => {
     expect(t).toThrow(Messages.STUDENT_INACTIVE);
   });
   it("Add student on class registry", () => {
-    const student = new Student(uuid(), uuid(), Gender.F, true);
+    const student = new Student({
+      id: uuid(),
+      name: faker.name.firstName(),
+      gender: Gender.F,
+      active: true,
+    });
     const classRegistry = new ClassRegistry({
       id: uuid(),
       studentClassId: uuid(),
@@ -186,7 +201,12 @@ describe("Class Registry Unit tests", () => {
   });
 
   it("Remove student on class registry", () => {
-    const student = new Student(uuid(), uuid(), Gender.F, true);
+    const student = new Student({
+      id: uuid(),
+      name: faker.name.firstName(),
+      gender: Gender.F,
+      active: true,
+    });
     const classRegistry = new ClassRegistry({
       id: uuid(),
       studentClassId: uuid(),

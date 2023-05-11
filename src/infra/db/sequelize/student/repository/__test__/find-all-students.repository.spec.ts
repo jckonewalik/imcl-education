@@ -3,6 +3,7 @@ import { Student } from "@/domain/student/entity";
 import { FindAllStudentsRepository } from "@/domain/student/repository";
 import { StudentModel } from "@/infra/db/sequelize/student/model";
 import { Sequelize } from "sequelize-typescript";
+import { EnrollmentModel } from "../../../student-class/model";
 import { SequelizeFindAllStudentsRepository } from "../find-all-students.repository";
 import { makeStudent } from "./util";
 
@@ -56,7 +57,7 @@ describe("Sequelize Find All Students Repository", () => {
       sync: { force: true },
     });
 
-    await sequelize.addModels([StudentModel]);
+    await sequelize.addModels([StudentModel, EnrollmentModel]);
     await sequelize.sync();
   });
 

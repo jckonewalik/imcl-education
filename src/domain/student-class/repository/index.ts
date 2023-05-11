@@ -20,3 +20,7 @@ export interface DeleteStudentClassRepository extends DeleteRepository {}
 
 export interface FindAllStudentClassesRepository
   extends FindAllRepository<StudentClass> {}
+
+export interface FindInStudentClassesRepository {
+  find(ids: string[]): Promise<StudentClass[]>;
+}
