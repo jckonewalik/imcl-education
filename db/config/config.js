@@ -1,4 +1,6 @@
-require("dotenv").config();
+require("dotenv").config({
+  path: process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : "",
+});
 module.exports = {
   development: {
     username: process.env.DB_USER,
@@ -20,5 +22,10 @@ module.exports = {
     database: process.env.DB_NAME,
     host: process.env.DB_SERVER,
     dialect: "postgres",
+    dialectOptions: {
+      ssl: {
+          rejectUnauthorized: false
+      }
+    }
   },
 };
