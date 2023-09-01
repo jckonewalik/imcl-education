@@ -22,6 +22,8 @@ import {
 } from "@nestjs/swagger";
 import { Response } from "express";
 import { CreateUserDTO, LoginDTO, UserDTO } from "../dto";
+import { ResetPasswordUseCase } from "@/usecases/auth/reset-password";
+import { ResetPasswordDTO } from "../dto/reset-password.dto";
 
 @ApiTags("auth")
 @Controller("auth")
@@ -31,8 +33,10 @@ export class AuthController {
     @Inject("AuthenticateUseCase")
     readonly authUseCase: AuthenticateUseCase,
     @Inject("GenerateToken")
-    readonly generateToken: GenerateToken
-  ) {}
+    readonly generateToken: GenerateToken,
+    @Inject("ResetPasswordUseCase")
+    readonly resetPasswordUseCase: ResetPasswordUseCase
+  ) { }
 
   @Post("/signup")
   @Roles(Role.ROLE_ADMIN)
@@ -76,6 +80,26 @@ export class AuthController {
       .set({ Authorization: token })
       .status(HttpStatus.OK)
       .json(new ResponseDto(HttpStatus.OK, UserDTO.fromEntity(user)))
+      .send();
+  }
+
+  @Post("/reset-password")
+  @Public()
+  @HttpCode(200)
+  @ApiResponseDto(String, { status: 200 })
+  @ApiBadRequestResponse({
+    status: 400,
+    type: ErrorResponseDto,
+  })
+  @ApiInternalServerErrorResponse({
+    status: 500,
+    type: ErrorResponseDto,
+  })
+  async resetPassword(@Body() dto: ResetPasswordDTO, @Res() res: Response): Promise<void> {
+    const response = await this.resetPasswordUseCase.execute({ email: dto.login });
+    res
+      .status(HttpStatus.OK)
+      .json({ message: response })
       .send();
   }
 }
