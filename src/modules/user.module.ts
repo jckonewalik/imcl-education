@@ -5,6 +5,7 @@ import {
 import { SequelizeCreateUserRepository } from "@/infra/db/sequelize/user/repository/create-user-repository";
 import { SequelizeFindUserRepository } from "@/infra/db/sequelize/user/repository/find-user-repository";
 import { FirebaseAuthenticateUseCase } from "@/infra/firebase/auth/authenticate";
+import { FirebaseResetPasswordUseCase } from "@/infra/firebase/auth/reset-password";
 import { FirebaseCreateCredentialsUseCase } from "@/infra/firebase/auth/create-credentials";
 import { JwtTokenImpl } from "@/infra/jwt/token-impl";
 import { AllExceptionsFilter } from "@/presentation/@shared/filters";
@@ -80,6 +81,10 @@ import { AuthModule } from "./auth.module";
         return new FirebaseAuthenticateUseCase(getUseCase);
       },
     },
+    {
+      provide: "ResetPasswordUseCase",
+      useClass: FirebaseResetPasswordUseCase,
+    }
   ],
 })
-export class UserModule {}
+export class UserModule { }

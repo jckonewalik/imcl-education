@@ -81,4 +81,6 @@ export default class Messages {
   static UNAUTHORIZED_USER = "Usuário não está autenticado";
   static FORBIDDEN_RESOURCE =
     "Usuário não está autorizado a acessar esse recurso";
+  static ERROR_DURING_PASSWORD_RESET = "Não foi possível realizar o reset da senha";
+  static RESET_PASSWORD_EMAIL_SENT = "Um email com instruções para reset da senha foi enviado"
 }
