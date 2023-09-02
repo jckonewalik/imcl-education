@@ -99,7 +99,7 @@ export class AuthController {
     const response = await this.resetPasswordUseCase.execute({ email: dto.login });
     res
       .status(HttpStatus.OK)
-      .json({ message: response })
+      .json(new ResponseDto(HttpStatus.OK, { message: response }))
       .send();
   }
 }
