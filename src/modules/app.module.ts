@@ -20,15 +20,18 @@ import { StudentClassesModule } from "./student-classes.module";
 import { StudentsModule } from "./students.module";
 import { TeachersModule } from "./teachers.module";
 import { UserModule } from "./user.module";
+
+const dialectOptions = process.env.NODE_ENV === 'production' ? {
+  ssl: {
+    rejectUnauthorized: false
+  }
+} : {}
+
 @Module({
   imports: [
     SequelizeModule.forRoot({
       dialect: "postgres",
-      dialectOptions: {
-        ssl: {
-            rejectUnauthorized: false
-        }
-      },
+      dialectOptions,
       logging: false,
       host: process.env.DB_SERVER,
       port: +(process.env.DB_PORT || 0),
@@ -58,4 +61,4 @@ import { UserModule } from "./user.module";
     UserModule,
   ],
 })
-export class AppModule {}
+export class AppModule { }
