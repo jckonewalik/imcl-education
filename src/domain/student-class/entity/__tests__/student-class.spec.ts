@@ -35,8 +35,9 @@ const makeStudent = ({
   name = faker.name.firstName(),
   gender = Gender.M,
   active = true,
+  studentClassId = faker.datatype.uuid()
 }) => {
-  return new Student({ id, name, gender, active });
+  return new Student({ id, name, gender, active, studentClassId });
 };
 
 describe("Student Class Unit tests", () => {

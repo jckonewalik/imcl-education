@@ -3,7 +3,6 @@ import Messages from "@/domain/@shared/util/messages";
 import { StudentModel } from "@/infra/db/sequelize/student/model";
 import faker from "faker";
 import { Sequelize } from "sequelize-typescript";
-import { EnrollmentModel } from "../../../student-class/model";
 import { SequelizeFindInStudentsRepository } from "../find-in-students.repository";
 import { makeStudent } from "./util";
 describe("Sequelize Find In Students Repository", () => {
@@ -17,7 +16,7 @@ describe("Sequelize Find In Students Repository", () => {
       sync: { force: true },
     });
 
-    await sequelize.addModels([StudentModel, EnrollmentModel]);
+    await sequelize.addModels([StudentModel]);
     await sequelize.sync();
   });
 
@@ -39,6 +38,7 @@ describe("Sequelize Find In Students Repository", () => {
     const student2 = makeStudent({});
     await StudentModel.create({
       id: student1.id,
+      studentClassId: student1.studentClassId,
       name: student1.name,
       gender: student1.gender.toString(),
       active: student1.active,
@@ -47,6 +47,7 @@ describe("Sequelize Find In Students Repository", () => {
     });
     await StudentModel.create({
       id: student2.id,
+      studentClassId: student2.studentClassId,
       name: student2.name,
       gender: student2.gender.toString(),
       active: student2.active,

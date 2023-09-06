@@ -30,16 +30,16 @@ export class StudentDto {
   })
   phone: PhoneNumberDto;
   @ApiProperty({
-    description: "Turmas do aluno",
+    description: "Turma do aluno",
   })
-  studentClasses: SimpleStudentClassDto[];
+  studentClass: SimpleStudentClassDto;
 
   private constructor() {}
 
   static create(
     student: Student,
-    studentClasses: StudentClass[] = [],
-    course: Course[] = []
+    studentClass: StudentClass,
+    course: Course
   ): StudentDto {
     const dto = new StudentDto();
     dto.id = student.id;
@@ -52,12 +52,7 @@ export class StudentDto {
         isWhatsapp: student.phone.isWhatsapp,
       };
     }
-    dto.studentClasses = studentClasses.map((studentClass) =>
-      SimpleStudentClassDto.create(
-        studentClass,
-        course.find((c) => c.id === studentClass.courseId)
-      )
-    );
+    dto.studentClass = SimpleStudentClassDto.create(studentClass, course);
 
     return dto;
   }

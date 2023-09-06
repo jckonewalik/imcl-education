@@ -8,10 +8,11 @@ export const makeStudent = ({
   gender = Gender.M,
   active = true,
   withPhone = true,
+  studentClassId = faker.datatype.uuid(),
 }): Student => {
   let phone: PhoneNumber | undefined;
   if (withPhone) {
     phone = new PhoneNumber("9999999999", true);
   }
-  return new Student({ id: uuid(), name, gender, active, phone });
+  return new Student({ id: uuid(), name, gender, active, phone, studentClassId });
 };

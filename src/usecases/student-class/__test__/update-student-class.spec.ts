@@ -38,12 +38,14 @@ const makeStudentClass = (): StudentClass => {
 const makeStudents = () => {
   const student1 = new Student({
     id: uuid(),
+    studentClassId: faker.datatype.uuid(),
     name: faker.name.firstName(),
     gender: Gender.F,
     active: true,
   });
   const student2 = new Student({
     id: uuid(),
+    studentClassId: faker.datatype.uuid(),
     name: faker.name.firstName(),
     gender: Gender.F,
     active: true,
@@ -86,7 +88,7 @@ const makeSuts = (props: SutsProps): Suts => {
     },
   };
   const updateRepo = {
-    async update(studentClass: StudentClass): Promise<void> {},
+    async update(studentClass: StudentClass): Promise<void> { },
   };
   const findStudentRepo = {
     async find(id: string): Promise<Student | undefined> {

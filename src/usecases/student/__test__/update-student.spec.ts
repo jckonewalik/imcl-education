@@ -25,9 +25,10 @@ const makeStudent = ({
     number: "9999999999",
     isWhatsapp: true,
   },
+  studentClassId = faker.datatype.uuid()
 }): Student => {
   const phoneNumber = new PhoneNumber(phone.number, phone.isWhatsapp);
-  const student = new Student({ id, name, gender, active, phone: phoneNumber });
+  const student = new Student({ id, name, gender, active, phone: phoneNumber, studentClassId });
   return student;
 };
 
@@ -38,7 +39,7 @@ const makeSuts = (props: SutsProps): Suts => {
     },
   };
   const updateRepo = {
-    async update(student: Student): Promise<void> {},
+    async update(student: Student): Promise<void> { },
   };
   return {
     updateRepo,

@@ -58,6 +58,7 @@ describe("Students Controller Tests", () => {
   });
 
   it(`/POST students`, async () => {
+    const { studentClass } = await makeEntities();
     const name = faker.random.word();
     await request(app.getHttpServer())
       .post("/students")
@@ -67,6 +68,7 @@ describe("Students Controller Tests", () => {
       .send({
         name,
         gender: "M",
+        studentClassId: studentClass.id
       })
       .expect(201);
 
@@ -94,8 +96,10 @@ describe("Students Controller Tests", () => {
   });
 
   it(`/PUT students`, async () => {
+    const { studentClass } = await makeEntities()
     const student = await StudentModel.create({
       id: uuid(),
+      studentClassId: studentClass.id,
       name: `${faker.name.firstName()} ${faker.name.lastName()}`,
       gender: Gender.M.toString(),
       active: true,
@@ -139,8 +143,10 @@ describe("Students Controller Tests", () => {
   });
 
   it(`/GET students by ID`, async () => {
+    const { studentClass } = await makeEntities()
     const student = await StudentModel.create({
       id: uuid(),
+      studentClassId: studentClass.id,
       name: `${faker.name.firstName()} ${faker.name.lastName()}`,
       gender: Gender.M.toString(),
       phoneNumber: "99999999999",
@@ -166,14 +172,17 @@ describe("Students Controller Tests", () => {
   });
 
   it(`/POST students/search`, async () => {
+    const { studentClass } = await makeEntities();
     const student1 = await StudentModel.create({
       id: uuid(),
+      studentClassId: studentClass.id,
       name: `${faker.name.firstName()} ${faker.name.lastName()}`,
       gender: Gender.M.toString(),
       active: true,
     });
     await StudentModel.create({
       id: uuid(),
+      studentClassId: studentClass.id,
       name: `${faker.name.firstName()} ${faker.name.lastName()}`,
       email: faker.internet.email(),
       active: true,
@@ -195,8 +204,10 @@ describe("Students Controller Tests", () => {
   });
 
   it(`/DELETE students by ID`, async () => {
+    const { studentClass } = await makeEntities()
     const student = await StudentModel.create({
       id: uuid(),
+      studentClassId: studentClass.id,
       name: faker.random.word(),
       active: true,
     });
@@ -225,3 +236,19 @@ describe("Students Controller Tests", () => {
       });
   });
 });
+
+const makeEntities = async (): Promise<{ course: CourseModel, studentClass: StudentClassModel }> => {
+  const course = await CourseModel.create({
+    id: uuid(),
+    name: faker.name.firstName(),
+    active: true
+  })
+  const studentClass = await StudentClassModel.create({
+    id: uuid(),
+    name: faker.name.firstName(),
+    courseId: course.id,
+    year: faker.datatype.number(),
+    active: true,
+  })
+  return { course, studentClass }
+}

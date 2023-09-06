@@ -83,4 +83,5 @@ export default class Messages {
     "Usuário não está autorizado a acessar esse recurso";
   static ERROR_DURING_PASSWORD_RESET = "Não foi possível realizar o reset da senha";
   static RESET_PASSWORD_EMAIL_SENT = "Um email com instruções para reset da senha foi enviado"
+  static REQUIRES_ACTIVE_STUDENT_CLASS = "Informe um turma ativa";
 }

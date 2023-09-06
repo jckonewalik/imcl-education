@@ -53,20 +53,6 @@ export const makeModels = async () => {
     active: true,
   });
 
-  const student1 = await StudentModel.create({
-    id: uuid(),
-    name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-    gender: Gender.M,
-    active: true,
-  });
-
-  const student2 = await StudentModel.create({
-    id: uuid(),
-    name: `${faker.name.firstName()} ${faker.name.lastName()}`,
-    gender: Gender.M,
-    active: true,
-  });
-
   const studentClass = await StudentClassModel.create({
     id: uuid(),
     courseId: course.id,
@@ -74,6 +60,24 @@ export const makeModels = async () => {
     year: new Date().getFullYear(),
     active: true,
   });
+
+
+  const student1 = await StudentModel.create({
+    id: uuid(),
+    studentClassId: studentClass.id,
+    name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+    gender: Gender.M,
+    active: true,
+  });
+
+  const student2 = await StudentModel.create({
+    id: uuid(),
+    studentClassId: studentClass.id,
+    name: `${faker.name.firstName()} ${faker.name.lastName()}`,
+    gender: Gender.M,
+    active: true,
+  });
+
 
   await EnrollmentModel.create({
     id: uuid(),

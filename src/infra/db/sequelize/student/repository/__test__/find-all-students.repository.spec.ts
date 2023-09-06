@@ -3,7 +3,6 @@ import { Student } from "@/domain/student/entity";
 import { FindAllStudentsRepository } from "@/domain/student/repository";
 import { StudentModel } from "@/infra/db/sequelize/student/model";
 import { Sequelize } from "sequelize-typescript";
-import { EnrollmentModel } from "../../../student-class/model";
 import { SequelizeFindAllStudentsRepository } from "../find-all-students.repository";
 import { makeStudent } from "./util";
 
@@ -19,6 +18,7 @@ const makeSut = async (): Promise<Sut> => {
 
   await StudentModel.create({
     id: student1.id,
+    studentClassId: student1.studentClassId,
     name: student1.name,
     gender: student1.gender.toString(),
     active: student1.active,
@@ -27,6 +27,7 @@ const makeSut = async (): Promise<Sut> => {
   });
   await StudentModel.create({
     id: student2.id,
+    studentClassId: student2.studentClassId,
     name: student2.name,
     gender: student2.gender.toString(),
     active: student2.active,
@@ -35,6 +36,7 @@ const makeSut = async (): Promise<Sut> => {
   });
   await StudentModel.create({
     id: student3.id,
+    studentClassId: student3.studentClassId,
     name: student3.name,
     gender: student3.gender.toString(),
     active: student3.active,
@@ -57,7 +59,7 @@ describe("Sequelize Find All Students Repository", () => {
       sync: { force: true },
     });
 
-    await sequelize.addModels([StudentModel, EnrollmentModel]);
+    await sequelize.addModels([StudentModel]);
     await sequelize.sync();
   });
 

@@ -45,9 +45,10 @@ const createTeacher = async (): Promise<TeacherModel> => {
   return teacher;
 };
 
-const createStudent = async (): Promise<StudentModel> => {
+const createStudent = async ({ studentClass }): Promise<StudentModel> => {
   const student = await StudentModel.create({
     id: uuid(),
+    studentClassId: studentClass.id,
     name: `${faker.name.firstName()} ${faker.name.lastName()}`,
     gender: Gender.M,
     active: true,
@@ -184,7 +185,6 @@ describe("Student Classes Controller Tests", () => {
 
   it(`/PUT student-classes`, async () => {
     const course = await createCourse();
-    const student = await createStudent();
     const teacher = await createTeacher();
     const studentClass = await StudentClassModel.create({
       id: uuid(),
@@ -192,6 +192,7 @@ describe("Student Classes Controller Tests", () => {
       name: faker.random.word(),
       active: true,
     });
+    const student = await createStudent({ studentClass });
     const newName = faker.random.word();
 
     const response = await request(app.getHttpServer())

@@ -41,7 +41,7 @@ describe("Sequelize Create Student Class Repository", () => {
   });
 
   it("Create a student class", async () => {
-    const { course, student, teacher } = await makeModels();
+    const { course, teacher } = await makeModels();
 
     const repository = new SequelizeCreateStudentClassRepository();
 
@@ -53,7 +53,6 @@ describe("Sequelize Create Student Class Repository", () => {
     )
       .year(2022)
       .build();
-    studentClass.enrollStudent(student.toEntity());
     studentClass.addTeacher(teacher.toEntity());
 
     await repository.create(studentClass);
@@ -68,16 +67,6 @@ describe("Sequelize Create Student Class Repository", () => {
     expect(studentClassModel?.name).toBe(studentClass.name);
     expect(studentClassModel?.year).toBe(2022);
     expect(studentClassModel?.active).toBe(studentClass.active);
-    expect(studentClassModel?.enrollments?.length).toBe(1);
-    expect(studentClassModel?.enrollments?.[0].id).toBe(
-      studentClass.enrollments[0].id
-    );
-    expect(studentClassModel?.enrollments?.[0].studentClassId).toBe(
-      studentClass.enrollments[0].classId
-    );
-    expect(studentClassModel?.enrollments?.[0].studentId).toBe(
-      studentClass.enrollments[0].studentId
-    );
     expect(studentClassModel?.teachers?.length).toBe(1);
     expect(studentClassModel?.teachers?.[0].id).toBe(teacher.id);
 

@@ -27,6 +27,8 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
     let httpStatus;
     let message;
+
+    console.log(exception)
     if (
       exception instanceof CustomBadRequestException ||
       exception instanceof InvalidValueException

@@ -29,18 +29,21 @@ export const makeClassRegistry = ({
 export const makeStudents = () => {
   const student1 = new Student({
     id: uuid(),
+    studentClassId: faker.datatype.uuid(),
     name: faker.name.firstName(),
     gender: Gender.F,
     active: true,
   });
   const student2 = new Student({
     id: uuid(),
+    studentClassId: faker.datatype.uuid(),
     name: faker.name.firstName(),
     gender: Gender.F,
     active: true,
   });
   const student3 = new Student({
     id: uuid(),
+    studentClassId: faker.datatype.uuid(),
     name: faker.name.firstName(),
     gender: Gender.F,
     active: true,

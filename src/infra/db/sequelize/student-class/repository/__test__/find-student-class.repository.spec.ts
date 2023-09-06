@@ -52,7 +52,7 @@ describe("Sequelize Find Student Class Repository", () => {
   });
 
   it("Find student class", async () => {
-    const { course, student, teacher } = await makeModels();
+    const { course, teacher } = await makeModels();
 
     const createRepository = new SequelizeCreateStudentClassRepository();
 
@@ -62,7 +62,6 @@ describe("Sequelize Find Student Class Repository", () => {
       faker.random.word(),
       true
     ).build();
-    studentClass.enrollStudent(student.toEntity());
     studentClass.addTeacher(teacher.toEntity());
 
     await createRepository.create(studentClass);

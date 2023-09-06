@@ -1,6 +1,12 @@
 import { Page } from "@/domain/@shared/types/page";
-import { FindInCoursesRepository } from "@/domain/course/repository";
-import { FindInStudentClassesRepository } from "@/domain/student-class/repository";
+import {
+  FindCourseRepository,
+  FindInCoursesRepository,
+} from "@/domain/course/repository";
+import {
+  FindInStudentClassesRepository,
+  FindStudentClassRepository,
+} from "@/domain/student-class/repository";
 import { Student } from "@/domain/student/entity";
 import { FindAllStudentsRepository } from "@/domain/student/repository";
 import { ApiPageResponseDto, ApiResponseDto } from "@/infra/decorators";
@@ -50,10 +56,10 @@ export class StudentsController {
     private readonly deleteUseCase: DeleteStudentUseCase,
     @Inject("FindAllStudentsRepository")
     private readonly findAllRepo: FindAllStudentsRepository,
-    @Inject("FindInStudentClassesRepository")
-    private readonly findInStudentClasses: FindInStudentClassesRepository,
-    @Inject("FindInCoursesRepository")
-    private readonly findInCourses: FindInCoursesRepository
+    @Inject("FindStudentClassRepository")
+    private readonly findStudentClassRepository: FindStudentClassRepository,
+    @Inject("FindCourseRepository")
+    private readonly findCourse: FindCourseRepository
   ) {}
 
   @Post()
@@ -78,6 +84,7 @@ export class StudentsController {
       name: dto.name,
       gender: dto.gender,
       phone: dto.phone,
+      studentClassId: dto.studentClassId,
     });
     return new ResponseDto(
       HttpStatus.CREATED,
@@ -193,12 +200,10 @@ export class StudentsController {
   }
 
   private async createStudentDto(student: Student) {
-    const studentClassIds = student.enrollments.map((e) => e.classId);
-    const studentClasses = await this.findInStudentClasses.find(
-      studentClassIds
+    const studentClass = await this.findStudentClassRepository.find(
+      student.studentClassId
     );
-    const courseIds = [...new Set(studentClasses.map((s) => s.courseId))];
-    const courses = await this.findInCourses.find(courseIds);
-    return StudentDto.create(student, studentClasses, courses);
+    const course = await this.findCourse.find(studentClass!.courseId);
+    return StudentDto.create(student, studentClass!, course!);
   }
 }

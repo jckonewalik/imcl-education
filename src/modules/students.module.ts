@@ -22,6 +22,7 @@ import { Module, ValidationPipe } from "@nestjs/common";
 import { APP_FILTER, APP_PIPE } from "@nestjs/core";
 import { AuthModule } from "./auth.module";
 import { SharedModule } from "./shared.module";
+import { FindStudentClassRepository } from "@/domain/student-class/repository";
 
 @Module({
   controllers: [StudentsController],
@@ -52,10 +53,10 @@ import { SharedModule } from "./shared.module";
       useClass: SequelizeDeleteStudentRepository,
     },
     {
-      inject: ["CreateStudentRepository"],
+      inject: ["CreateStudentRepository", "FindStudentClassRepository"],
       provide: RegisterStudentUseCase,
-      useFactory: (createStudentRepository: CreateStudentRepository) => {
-        return new RegisterStudentUseCase(createStudentRepository);
+      useFactory: (createStudentRepository: CreateStudentRepository, findStudentClassRepository: FindStudentClassRepository) => {
+        return new RegisterStudentUseCase(createStudentRepository, findStudentClassRepository);
       },
     },
     {
@@ -93,4 +94,4 @@ import { SharedModule } from "./shared.module";
     },
   ],
 })
-export class StudentsModule {}
+export class StudentsModule { }
