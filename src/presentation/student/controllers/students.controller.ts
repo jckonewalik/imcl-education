@@ -45,6 +45,8 @@ import {
   UpdateStudentDto,
 } from "../dto";
 import { StudentDto } from "../dto/student.dto";
+import { InvalidValueException } from "@/domain/@shared/exceptions";
+import Messages from "@/domain/@shared/util/messages";
 
 @ApiTags("students")
 @Controller("students")
@@ -166,6 +168,10 @@ export class StudentsController {
     @Body() dto: SearchStudentDto
   ): Promise<ResponseDto<Page<SimpleStudentDto>>> {
     const { page, lines, sortBy, sortOrder, ...criteria } = dto;
+
+    if (!dto.studentClassId) {
+      throw new InvalidValueException(Messages.MISSING_STUDENT_CLASS_ID);
+    }
     const { currentPage, data, totalItems, totalPages } =
       await this.findAllRepo.find(criteria, sortBy, sortOrder, lines, page);
 

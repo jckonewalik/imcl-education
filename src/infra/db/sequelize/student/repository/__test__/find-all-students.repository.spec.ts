@@ -5,16 +5,27 @@ import { StudentModel } from "@/infra/db/sequelize/student/model";
 import { Sequelize } from "sequelize-typescript";
 import { SequelizeFindAllStudentsRepository } from "../find-all-students.repository";
 import { makeStudent } from "./util";
+import { v4 as uuid } from "uuid";
 
 type Sut = {
+  studentClassId: string;
   students: Student[];
   sut: FindAllStudentsRepository;
 };
 
 const makeSut = async (): Promise<Sut> => {
-  const student1 = makeStudent({ name: "Paulo", active: false });
-  const student2 = makeStudent({ name: "Ana", gender: Gender.F });
-  const student3 = makeStudent({ name: "Jose" });
+  const studentClassId = uuid();
+  const student1 = makeStudent({
+    studentClassId,
+    name: "Paulo",
+    active: false,
+  });
+  const student2 = makeStudent({
+    studentClassId,
+    name: "Ana",
+    gender: Gender.F,
+  });
+  const student3 = makeStudent({ studentClassId, name: "Jose" });
 
   await StudentModel.create({
     id: student1.id,
@@ -46,7 +57,11 @@ const makeSut = async (): Promise<Sut> => {
 
   const repository = new SequelizeFindAllStudentsRepository();
 
-  return { students: [student1, student2, student3], sut: repository };
+  return {
+    studentClassId,
+    students: [student1, student2, student3],
+    sut: repository,
+  };
 };
 describe("Sequelize Find All Students Repository", () => {
   let sequelize: Sequelize;
@@ -68,9 +83,9 @@ describe("Sequelize Find All Students Repository", () => {
   });
 
   it("Find student by name", async () => {
-    const { students, sut } = await makeSut();
+    const { students, sut, studentClassId } = await makeSut();
     const result = await sut.find(
-      { name: students[0].name.substring(0, 5) },
+      { studentClassId, name: students[0].name.substring(0, 5) },
       "name",
       "ASC",
       1,
@@ -84,9 +99,9 @@ describe("Sequelize Find All Students Repository", () => {
   });
 
   it("Find student by gender", async () => {
-    const { students, sut } = await makeSut();
+    const { students, sut, studentClassId } = await makeSut();
     const result = await sut.find(
-      { gender: Gender.M.toString() },
+      { studentClassId, gender: Gender.M.toString() },
       "name",
       "ASC",
       1,
@@ -99,8 +114,14 @@ describe("Sequelize Find All Students Repository", () => {
     expect(result.data[0]).toStrictEqual(students[0]);
   });
   it("Find active students", async () => {
-    const { students, sut } = await makeSut();
-    const result = await sut.find({ active: true }, "name", "ASC", 2, 1);
+    const { students, sut, studentClassId } = await makeSut();
+    const result = await sut.find(
+      { studentClassId, active: true },
+      "name",
+      "ASC",
+      2,
+      1
+    );
 
     expect(result.currentPage).toBe(1);
     expect(result.totalItems).toBe(2);

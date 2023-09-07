@@ -14,11 +14,14 @@ export class SequelizeFindAllStudentsRepository
     lines: number = 10,
     page: number = 1
   ): Promise<Page<Student>> {
+    const studentClassId = criteria["studentClassId"];
     const name = criteria["name"];
     const active = criteria["active"];
     const gender = criteria["gender"];
 
-    const where: WhereOptions = {};
+    const where: WhereOptions = {
+      studentClassId: studentClassId,
+    };
     if (name) {
       where["name"] = { [Op.like]: `${name}%` };
     }

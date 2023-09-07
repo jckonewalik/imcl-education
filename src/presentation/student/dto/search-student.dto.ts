@@ -6,6 +6,11 @@ import { IsIn, ValidateIf } from "class-validator";
 
 export class SearchStudentDto extends SearchDto {
   @ApiProperty({
+    required: true,
+    description: "ID da turma",
+  })
+  studentClassId: string;
+  @ApiProperty({
     required: false,
     description: "Nome do aluno",
   })

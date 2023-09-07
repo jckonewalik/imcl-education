@@ -192,6 +192,7 @@ describe("Students Controller Tests", () => {
         Authorization: `Bearer ${makeJwtToken({})}`,
       })
       .send({
+        studentClassId: studentClass.id,
         name: student1.name,
       })
       .then((result) => {
