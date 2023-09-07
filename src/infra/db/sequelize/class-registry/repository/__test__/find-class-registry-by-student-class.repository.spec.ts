@@ -6,7 +6,6 @@ import { Sequelize } from "sequelize-typescript";
 import { v4 as uuid } from "uuid";
 import { CourseModel, LessonModel } from "../../../course/model";
 import {
-  EnrollmentModel,
   StudentClassModel,
   StudentClassTeacherModel,
 } from "../../../student-class/model";
@@ -33,7 +32,6 @@ describe("Sequelize Find Class Registry By Student Class Repository", () => {
     await sequelize.addModels([
       StudentClassModel,
       CourseModel,
-      EnrollmentModel,
       StudentClassTeacherModel,
       TeacherModel,
       LessonModel,

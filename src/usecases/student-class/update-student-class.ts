@@ -17,10 +17,6 @@ type UpateProps = {
   name: string;
   active: boolean;
   year?: number;
-  students?: {
-    studentId: string;
-    action: UpdateAction;
-  }[];
   teachers?: {
     teacherId: string;
     action: UpdateAction;
@@ -54,37 +50,10 @@ export class UpdateStudentClassUseCase {
       data.active ? studentClass.activate() : studentClass.inactivate();
     }
 
-    await this.updateEnrollments(studentClass, data);
     await this.updateTeachers(studentClass, data);
 
     await this.updateRepo.update(studentClass);
     return studentClass;
-  }
-
-  private async updateEnrollments(
-    studentClass: StudentClass,
-    data: UpateProps
-  ) {
-    const studentsToEnroll =
-      data.students?.filter((s) => s.action === UpdateAction.A) || [];
-    const studentsToUnenroll =
-      data.students?.filter((s) => s.action === UpdateAction.D) || [];
-
-    for (const s of studentsToEnroll) {
-      const student = await this.findStudent.find(s.studentId);
-      if (!student) {
-        throw new BadRequestException(Messages.INVALID_STUDENT);
-      }
-      studentClass.enrollStudent(student);
-    }
-
-    for (const s of studentsToUnenroll) {
-      const student = await this.findStudent.find(s.studentId);
-      if (!student) {
-        throw new BadRequestException(Messages.INVALID_STUDENT);
-      }
-      studentClass.unenrollStudent(student);
-    }
   }
 
   private async updateTeachers(studentClass: StudentClass, data: UpateProps) {

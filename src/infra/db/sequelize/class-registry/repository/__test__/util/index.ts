@@ -1,7 +1,6 @@
 import { Gender } from "@/domain/@shared/enums/gender";
 import { CourseModel } from "@/infra/db/sequelize/course/model";
 import {
-  EnrollmentModel,
   StudentClassModel,
   StudentClassTeacherModel,
 } from "@/infra/db/sequelize/student-class/model";
@@ -61,7 +60,6 @@ export const makeModels = async () => {
     active: true,
   });
 
-
   const student1 = await StudentModel.create({
     id: uuid(),
     studentClassId: studentClass.id,
@@ -76,19 +74,6 @@ export const makeModels = async () => {
     name: `${faker.name.firstName()} ${faker.name.lastName()}`,
     gender: Gender.M,
     active: true,
-  });
-
-
-  await EnrollmentModel.create({
-    id: uuid(),
-    studentClassId: studentClass.id,
-    studentId: student1.id,
-  });
-
-  await EnrollmentModel.create({
-    id: uuid(),
-    studentClassId: studentClass.id,
-    studentId: student2.id,
   });
 
   await StudentClassTeacherModel.create({

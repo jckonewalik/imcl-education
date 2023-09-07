@@ -9,7 +9,6 @@ import {
 import { makeModels } from "@/infra/db/sequelize/class-registry/repository/__test__/util";
 import { CourseModel, LessonModel } from "@/infra/db/sequelize/course/model";
 import {
-  EnrollmentModel,
   StudentClassModel,
   StudentClassTeacherModel,
 } from "@/infra/db/sequelize/student-class/model";
@@ -120,7 +119,6 @@ describe("Student Classes Controller Tests", () => {
           CourseModel,
           LessonModel,
           StudentClassModel,
-          EnrollmentModel,
           StudentClassTeacherModel,
           TeacherModel,
           StudentModel,
@@ -224,13 +222,12 @@ describe("Student Classes Controller Tests", () => {
 
     const result = await StudentClassModel.findOne({
       where: { id: studentClass.id },
-      include: ["teachers", "enrollments"],
+      include: ["teachers"],
     });
     expect(result).toBeDefined();
     expect(result?.name).toBe(newName);
     expect(result?.year).toBe(2022);
     expect(result?.teachers.length).toBe(1);
-    expect(result?.enrollments.length).toBe(1);
   });
 
   it(`404 /PUT student-classes with invalid student class`, async () => {

@@ -6,7 +6,6 @@ import { Sequelize } from "sequelize-typescript";
 import { v4 as uuid } from "uuid";
 import { CourseModel, LessonModel } from "../../../course/model";
 import {
-  EnrollmentModel,
   StudentClassModel,
   StudentClassTeacherModel,
 } from "../../../student-class/model";
@@ -35,7 +34,6 @@ describe("Sequelize Delete Class Registry Repository", () => {
     await sequelize.addModels([
       StudentClassModel,
       CourseModel,
-      EnrollmentModel,
       StudentClassTeacherModel,
       TeacherModel,
       LessonModel,

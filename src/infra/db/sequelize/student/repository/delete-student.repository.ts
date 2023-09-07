@@ -14,7 +14,7 @@ export class SequelizeDeleteStudentRepository implements DeleteRepository {
       });
     } catch (error: any) {
       if (error.name === "SequelizeForeignKeyConstraintError") {
-        throw new BadRequestException(Messages.STUDENT_ENROLLED);
+        throw new BadRequestException(Messages.SOMETHING_WRONG_HAPPEND);
       }
       throw error;
     }

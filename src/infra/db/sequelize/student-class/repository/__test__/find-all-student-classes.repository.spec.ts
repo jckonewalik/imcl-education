@@ -3,7 +3,6 @@ import Messages from "@/domain/@shared/util/messages";
 import { StudentClass } from "@/domain/student-class/entity";
 import { FindAllStudentClassesRepository } from "@/domain/student-class/repository";
 import {
-  EnrollmentModel,
   StudentClassModel,
   StudentClassTeacherModel,
 } from "@/infra/db/sequelize/student-class/model";
@@ -71,7 +70,6 @@ describe("Sequelize Find All Student Classes Repository", () => {
     await sequelize.addModels([
       CourseModel,
       LessonModel,
-      EnrollmentModel,
       StudentClassTeacherModel,
       TeacherModel,
       StudentModel,

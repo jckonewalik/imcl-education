@@ -18,7 +18,7 @@ import { HttpAdapterHost } from "@nestjs/core";
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
-  constructor(private readonly httpAdapterHost: HttpAdapterHost) { }
+  constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
   private readonly logger = new Logger(AllExceptionsFilter.name);
   catch(exception: any, host: ArgumentsHost) {
     const { httpAdapter } = this.httpAdapterHost;
@@ -27,8 +27,6 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
     let httpStatus;
     let message;
-
-    console.log(exception)
     if (
       exception instanceof CustomBadRequestException ||
       exception instanceof InvalidValueException

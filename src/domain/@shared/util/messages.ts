@@ -23,7 +23,6 @@ export default class Messages {
   static STUDENT_ALREADY_INACTIVE = "O aluno já esta inativo";
   static STUDENT_CLASS_INACTIVE = "A turma não está mais ativa";
   static STUDENT_INACTIVE = "O aluno não está mais ativo";
-  static MISSING_ENROLLMENT_ID = "Informe o ID da matricula";
   static INVALID_STUDENT = "O aluno informado não é válido";
   static MISSING_TEACHER_ID = "Informe o ID do professor";
   static MISSING_TEACHER_NAME = "Informe o nome do professor";
@@ -46,8 +45,6 @@ export default class Messages {
   static COURSE_IN_USE =
     "O curso esta em uso e não pode ser excluído. Favor inativa-lo";
   static INVALID_SORT_ORDER = "A ordem informada é inválida";
-  static STUDENT_ENROLLED =
-    "O aluno está matriculado e não pode ser excluído. Favor inativá-lo";
   static INVALID_ID = "O ID informado não é válido. Informe um UUID v4 válido";
   static MISSING_CLASS_REGISTRY_ID = "Informe o ID da aula";
   static CLASS_DATE_CANT_BE_IN_FUTURE =
@@ -81,7 +78,9 @@ export default class Messages {
   static UNAUTHORIZED_USER = "Usuário não está autenticado";
   static FORBIDDEN_RESOURCE =
     "Usuário não está autorizado a acessar esse recurso";
-  static ERROR_DURING_PASSWORD_RESET = "Não foi possível realizar o reset da senha";
-  static RESET_PASSWORD_EMAIL_SENT = "Um email com instruções para reset da senha foi enviado"
+  static ERROR_DURING_PASSWORD_RESET =
+    "Não foi possível realizar o reset da senha";
+  static RESET_PASSWORD_EMAIL_SENT =
+    "Um email com instruções para reset da senha foi enviado";
   static REQUIRES_ACTIVE_STUDENT_CLASS = "Informe um turma ativa";
 }

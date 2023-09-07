@@ -5,7 +5,6 @@ import {
 } from "@/infra/db/sequelize/class-registry/model";
 import { CourseModel, LessonModel } from "@/infra/db/sequelize/course/model";
 import {
-  EnrollmentModel,
   StudentClassModel,
   StudentClassTeacherModel,
 } from "@/infra/db/sequelize/student-class/model";
@@ -21,11 +20,14 @@ import { StudentsModule } from "./students.module";
 import { TeachersModule } from "./teachers.module";
 import { UserModule } from "./user.module";
 
-const dialectOptions = process.env.NODE_ENV === 'production' ? {
-  ssl: {
-    rejectUnauthorized: false
-  }
-} : {}
+const dialectOptions =
+  process.env.NODE_ENV === "production"
+    ? {
+        ssl: {
+          rejectUnauthorized: false,
+        },
+      }
+    : {};
 
 @Module({
   imports: [
@@ -42,7 +44,6 @@ const dialectOptions = process.env.NODE_ENV === 'production' ? {
         CourseModel,
         StudentModel,
         LessonModel,
-        EnrollmentModel,
         StudentClassModel,
         StudentClassTeacherModel,
         TeacherModel,
@@ -61,4 +62,4 @@ const dialectOptions = process.env.NODE_ENV === 'production' ? {
     UserModule,
   ],
 })
-export class AppModule { }
+export class AppModule {}

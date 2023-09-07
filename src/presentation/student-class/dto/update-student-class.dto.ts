@@ -60,12 +60,6 @@ export class UpdateStudentClassDto {
   })
   active: boolean;
   @ApiProperty({
-    description: "Atualização dos alunos",
-    required: false,
-    type: UpdateStudentClassStudentDto,
-  })
-  students?: UpdateStudentClassStudentDto[];
-  @ApiProperty({
     description: "Atualização dos professores",
     required: false,
     type: UpdateStudentClassTeacherDto,

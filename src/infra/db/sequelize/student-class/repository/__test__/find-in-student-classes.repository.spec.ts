@@ -8,11 +8,7 @@ import { Sequelize } from "sequelize-typescript";
 import { v4 as uuid } from "uuid";
 import { CourseModel, LessonModel } from "../../../course/model";
 import { TeacherModel } from "../../../teacher/model";
-import {
-  EnrollmentModel,
-  StudentClassModel,
-  StudentClassTeacherModel,
-} from "../../model";
+import { StudentClassModel, StudentClassTeacherModel } from "../../model";
 import { SequelizeFindInStudentClassesRepository } from "../find-in-student-classes.repository";
 import { makeModels } from "./util";
 type Sut = {
@@ -70,7 +66,6 @@ describe("Sequelize Find In Student Classes Repository", () => {
     await sequelize.addModels([
       CourseModel,
       LessonModel,
-      EnrollmentModel,
       StudentClassTeacherModel,
       TeacherModel,
       StudentModel,

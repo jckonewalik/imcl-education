@@ -3,7 +3,6 @@ import Messages from "@/domain/@shared/util/messages";
 import { StudentClass } from "@/domain/student-class/entity";
 import { CourseModel, LessonModel } from "@/infra/db/sequelize/course/model";
 import {
-  EnrollmentModel,
   StudentClassModel,
   StudentClassTeacherModel,
 } from "@/infra/db/sequelize/student-class/model";
@@ -31,7 +30,6 @@ describe("Sequelize Find Student Class Repository", () => {
       LessonModel,
       TeacherModel,
       StudentModel,
-      EnrollmentModel,
       StudentClassModel,
       StudentClassTeacherModel,
     ]);

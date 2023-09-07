@@ -125,7 +125,6 @@ export class StudentClassesController {
       name: dto.name,
       year: dto.year,
       active: dto.active,
-      students: dto.students,
       teachers: dto.teachers,
     });
     return new ResponseDto(
@@ -258,7 +257,7 @@ export class StudentClassesController {
     const teachersIds = studentClass.teacherIds;
     const teachers = await this.findInTeachersRepo.find(teachersIds);
 
-    const studentIds = studentClass.enrollments.map((e) => e.studentId);
+    const studentIds = studentClass.studentIds;
     const students = await this.findInStudentsRepo.find(studentIds);
 
     return StudentClassDto.create(studentClass, course!, teachers, students);

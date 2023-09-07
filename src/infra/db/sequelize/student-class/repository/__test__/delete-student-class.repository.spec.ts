@@ -6,11 +6,7 @@ import { v4 as uuid } from "uuid";
 import { CourseModel, LessonModel } from "../../../course/model";
 import { StudentModel } from "../../../student/model";
 import { TeacherModel } from "../../../teacher/model";
-import {
-  EnrollmentModel,
-  StudentClassModel,
-  StudentClassTeacherModel,
-} from "../../model";
+import { StudentClassModel, StudentClassTeacherModel } from "../../model";
 import { SequelizeDeleteStudentClassRepository } from "../delete-student-class.repository";
 import { makeModels } from "./util";
 describe("Sequelize Delete Student Class Repository", () => {
@@ -28,7 +24,6 @@ describe("Sequelize Delete Student Class Repository", () => {
       CourseModel,
       LessonModel,
       StudentClassModel,
-      EnrollmentModel,
       StudentClassTeacherModel,
       TeacherModel,
       StudentModel,

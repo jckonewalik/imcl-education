@@ -1,7 +1,6 @@
 import { StudentClass } from "@/domain/student-class/entity";
 import { CourseModel, LessonModel } from "@/infra/db/sequelize/course/model";
 import {
-  EnrollmentModel,
   StudentClassModel,
   StudentClassTeacherModel,
 } from "@/infra/db/sequelize/student-class/model";
@@ -29,7 +28,6 @@ describe("Sequelize Update Student Class Repository", () => {
       LessonModel,
       TeacherModel,
       StudentModel,
-      EnrollmentModel,
       StudentClassModel,
       StudentClassTeacherModel,
     ]);
@@ -70,7 +68,7 @@ describe("Sequelize Update Student Class Repository", () => {
 
     const studentClassModel = await StudentClassModel.findOne({
       where: { id: studentClass.id },
-      include: ["enrollments", "teachers"],
+      include: ["teachers"],
     });
 
     expect(studentClassModel).not.toBeNull();
