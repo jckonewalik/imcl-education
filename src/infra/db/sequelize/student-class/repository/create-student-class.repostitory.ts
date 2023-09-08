@@ -8,23 +8,13 @@ export class SequelizeCreateStudentClassRepository
   async create(entity: StudentClass): Promise<void> {
     const t = await StudentClassModel.sequelize?.transaction();
     try {
-      await StudentClassModel.create(
-        {
-          id: entity.id,
-          courseId: entity.courseId,
-          name: entity.name,
-          year: entity.year,
-          active: entity.active,
-          enrollments: entity.enrollments.map((enrollment) => ({
-            id: enrollment.id,
-            studentClassId: enrollment.classId,
-            studentId: enrollment.studentId,
-          })),
-        },
-        {
-          include: ["enrollments"],
-        }
-      );
+      await StudentClassModel.create({
+        id: entity.id,
+        courseId: entity.courseId,
+        name: entity.name,
+        year: entity.year,
+        active: entity.active,
+      });
       for (const teacher of entity.teacherIds) {
         await StudentClassTeacherModel.create({
           studentClassId: entity.id,

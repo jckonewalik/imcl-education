@@ -1,4 +1,4 @@
-import { Enrollment, StudentClass } from "@/domain/student-class/entity";
+import { StudentClass } from "@/domain/student-class/entity";
 import { CourseModel } from "@/infra/db/sequelize/course/model";
 import { TeacherModel } from "@/infra/db/sequelize/teacher/model";
 import {
@@ -14,7 +14,8 @@ import {
   Table,
   UpdatedAt,
 } from "sequelize-typescript";
-import { EnrollmentModel, StudentClassTeacherModel } from ".";
+import { StudentClassTeacherModel } from ".";
+import { StudentModel } from "../../student/model";
 
 @Table({
   tableName: "student_classes",
@@ -41,11 +42,11 @@ export class StudentClassModel extends Model {
   @Column
   active: boolean;
 
-  @HasMany(() => EnrollmentModel)
-  enrollments: EnrollmentModel[];
-
   @BelongsToMany(() => TeacherModel, () => StudentClassTeacherModel)
   teachers: TeacherModel[];
+
+  @HasMany(() => StudentModel)
+  students: StudentModel[];
 
   @CreatedAt
   @Column({ field: "creation_date" })
@@ -57,14 +58,7 @@ export class StudentClassModel extends Model {
 
   toEntity(): StudentClass {
     const teacherIds = this.teachers?.map((teacher) => teacher.id);
-    const enrollments = this.enrollments?.map(
-      (enrollment) =>
-        new Enrollment(
-          enrollment.id,
-          enrollment.studentClassId,
-          enrollment.studentId
-        )
-    );
+    const studentIds = this.students?.map((student) => student.id);
     return StudentClass.Builder.builder(
       this.id,
       this.courseId,
@@ -73,7 +67,7 @@ export class StudentClassModel extends Model {
     )
       .year(this.year || undefined)
       .teacherIds(teacherIds)
-      .enrollments(enrollments)
+      .studentIds(studentIds)
       .build();
   }
 }

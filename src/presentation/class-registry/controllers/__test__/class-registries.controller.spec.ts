@@ -8,7 +8,6 @@ import {
 import { makeModels } from "@/infra/db/sequelize/class-registry/repository/__test__/util";
 import { CourseModel, LessonModel } from "@/infra/db/sequelize/course/model";
 import {
-  EnrollmentModel,
   StudentClassModel,
   StudentClassTeacherModel,
 } from "@/infra/db/sequelize/student-class/model";
@@ -69,7 +68,6 @@ describe("Class Registries Controller Tests", () => {
         await sequelize.addModels([
           StudentClassModel,
           CourseModel,
-          EnrollmentModel,
           StudentClassTeacherModel,
           TeacherModel,
           LessonModel,

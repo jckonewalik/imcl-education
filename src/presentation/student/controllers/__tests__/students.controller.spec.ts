@@ -3,7 +3,6 @@ import { Gender } from "@/domain/@shared/enums/gender";
 import Messages from "@/domain/@shared/util/messages";
 import { CourseModel, LessonModel } from "@/infra/db/sequelize/course/model";
 import {
-  EnrollmentModel,
   StudentClassModel,
   StudentClassTeacherModel,
 } from "@/infra/db/sequelize/student-class/model";
@@ -32,7 +31,6 @@ describe("Students Controller Tests", () => {
 
         await sequelize.addModels([
           StudentModel,
-          EnrollmentModel,
           StudentClassModel,
           CourseModel,
           StudentClassTeacherModel,
@@ -58,6 +56,7 @@ describe("Students Controller Tests", () => {
   });
 
   it(`/POST students`, async () => {
+    const { studentClass } = await makeEntities();
     const name = faker.random.word();
     await request(app.getHttpServer())
       .post("/students")
@@ -67,6 +66,7 @@ describe("Students Controller Tests", () => {
       .send({
         name,
         gender: "M",
+        studentClassId: studentClass.id,
       })
       .expect(201);
 
@@ -74,6 +74,7 @@ describe("Students Controller Tests", () => {
     expect(result).toBeDefined();
     expect(result?.length).toBe(1);
     expect(result?.[0].name).toBe(name);
+    expect(result?.[0].studentClassId).toBe(studentClass.id);
   });
 
   it(`/POST students with bad request`, () => {
@@ -94,8 +95,10 @@ describe("Students Controller Tests", () => {
   });
 
   it(`/PUT students`, async () => {
+    const { studentClass } = await makeEntities();
     const student = await StudentModel.create({
       id: uuid(),
+      studentClassId: studentClass.id,
       name: `${faker.name.firstName()} ${faker.name.lastName()}`,
       gender: Gender.M.toString(),
       active: true,
@@ -119,6 +122,7 @@ describe("Students Controller Tests", () => {
     const result = await StudentModel.findOne({ where: { id: student.id } });
     expect(result).toBeDefined();
     expect(result?.phoneNumber).toBe(phoneNumber);
+    expect(result?.studentClassId).toBe(studentClass.id);
     expect(result?.phoneIsWhatsapp).toBeTruthy();
   });
 
@@ -139,8 +143,10 @@ describe("Students Controller Tests", () => {
   });
 
   it(`/GET students by ID`, async () => {
+    const { studentClass } = await makeEntities();
     const student = await StudentModel.create({
       id: uuid(),
+      studentClassId: studentClass.id,
       name: `${faker.name.firstName()} ${faker.name.lastName()}`,
       gender: Gender.M.toString(),
       phoneNumber: "99999999999",
@@ -166,14 +172,17 @@ describe("Students Controller Tests", () => {
   });
 
   it(`/POST students/search`, async () => {
+    const { studentClass } = await makeEntities();
     const student1 = await StudentModel.create({
       id: uuid(),
+      studentClassId: studentClass.id,
       name: `${faker.name.firstName()} ${faker.name.lastName()}`,
       gender: Gender.M.toString(),
       active: true,
     });
     await StudentModel.create({
       id: uuid(),
+      studentClassId: studentClass.id,
       name: `${faker.name.firstName()} ${faker.name.lastName()}`,
       email: faker.internet.email(),
       active: true,
@@ -185,6 +194,7 @@ describe("Students Controller Tests", () => {
         Authorization: `Bearer ${makeJwtToken({})}`,
       })
       .send({
+        studentClassId: studentClass.id,
         name: student1.name,
       })
       .then((result) => {
@@ -195,8 +205,10 @@ describe("Students Controller Tests", () => {
   });
 
   it(`/DELETE students by ID`, async () => {
+    const { studentClass } = await makeEntities();
     const student = await StudentModel.create({
       id: uuid(),
+      studentClassId: studentClass.id,
       name: faker.random.word(),
       active: true,
     });
@@ -225,3 +237,22 @@ describe("Students Controller Tests", () => {
       });
   });
 });
+
+const makeEntities = async (): Promise<{
+  course: CourseModel;
+  studentClass: StudentClassModel;
+}> => {
+  const course = await CourseModel.create({
+    id: uuid(),
+    name: faker.name.firstName(),
+    active: true,
+  });
+  const studentClass = await StudentClassModel.create({
+    id: uuid(),
+    name: faker.name.firstName(),
+    courseId: course.id,
+    year: faker.datatype.number(),
+    active: true,
+  });
+  return { course, studentClass };
+};

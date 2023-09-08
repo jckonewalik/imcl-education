@@ -1,18 +1,17 @@
 import { Gender } from "@/domain/@shared/enums/gender";
 import { PhoneNumber } from "@/domain/@shared/value-objects";
-import { Enrollment } from "@/domain/student-class/entity";
 import { Student } from "@/domain/student/entity/student";
 import {
   Column,
   CreatedAt,
   DataType,
-  HasMany,
+  ForeignKey,
   Model,
   PrimaryKey,
   Table,
   UpdatedAt,
 } from "sequelize-typescript";
-import { EnrollmentModel } from "../../student-class/model";
+import { StudentClassModel } from "../../student-class/model";
 
 @Table({
   tableName: "students",
@@ -42,8 +41,9 @@ export class StudentModel extends Model {
   @Column
   active: boolean;
 
-  @HasMany(() => EnrollmentModel)
-  enrollments: EnrollmentModel[];
+  @ForeignKey(() => StudentClassModel)
+  @Column({ type: DataType.UUID, field: "student_class_id" })
+  studentClassId: string;
 
   @CreatedAt
   @Column({ field: "creation_date" })
@@ -57,20 +57,13 @@ export class StudentModel extends Model {
     const phoneNumber = !!this.phoneNumber
       ? new PhoneNumber(this.phoneNumber, this.phoneIsWhatsapp)
       : undefined;
-    const enrollments = this.enrollments?.map(
-      (enrollment) =>
-        new Enrollment(
-          enrollment.id,
-          enrollment.studentClassId,
-          enrollment.studentId
-        )
-    );
+
     return new Student({
       id: this.id,
       name: this.name,
       gender: Gender[this.gender],
       active: this.active,
-      enrollments,
+      studentClassId: this.studentClassId,
       phone: phoneNumber,
     });
   }

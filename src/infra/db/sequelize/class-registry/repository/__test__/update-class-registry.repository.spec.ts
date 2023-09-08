@@ -2,7 +2,6 @@ import { DateUtils } from "@/domain/@shared/util/date-utils";
 import { ClassRegistry } from "@/domain/class-registry/entity";
 import { CourseModel, LessonModel } from "@/infra/db/sequelize/course/model";
 import {
-  EnrollmentModel,
   StudentClassModel,
   StudentClassTeacherModel,
 } from "@/infra/db/sequelize/student-class/model";
@@ -34,7 +33,6 @@ describe("Sequelize Update Class Registry Repository", () => {
       LessonModel,
       TeacherModel,
       StudentModel,
-      EnrollmentModel,
       StudentClassModel,
       StudentClassTeacherModel,
       ClassRegistryModel,

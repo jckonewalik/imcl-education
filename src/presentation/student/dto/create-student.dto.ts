@@ -24,4 +24,10 @@ export class CreateStudentDto {
     required: false,
   })
   phone?: PhoneNumberDto;
+
+  @ApiProperty({
+    description: "ID da turma",
+    required: true,
+  })
+  studentClassId: string;
 }

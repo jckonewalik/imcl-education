@@ -1,6 +1,5 @@
 import { StudentModel } from "@/infra/db/sequelize/student/model";
 import { Sequelize } from "sequelize-typescript";
-import { EnrollmentModel } from "../../../student-class/model";
 import { SequelizeUpdateStudentRepository } from "../update-student.repository";
 import { makeStudent } from "./util";
 
@@ -15,7 +14,7 @@ describe("Sequelize Update Student Repository", () => {
       sync: { force: true },
     });
 
-    await sequelize.addModels([StudentModel, EnrollmentModel]);
+    await sequelize.addModels([StudentModel]);
     await sequelize.sync();
   });
 

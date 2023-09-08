@@ -4,7 +4,6 @@ import faker from "faker";
 import { Sequelize } from "sequelize-typescript";
 import { v4 as uuid } from "uuid";
 import {
-  EnrollmentModel,
   StudentClassModel,
   StudentClassTeacherModel,
 } from "../../../student-class/model";
@@ -28,7 +27,6 @@ describe("Sequelize Delete Course Repository", () => {
       CourseModel,
       LessonModel,
       StudentClassModel,
-      EnrollmentModel,
       StudentClassTeacherModel,
       TeacherModel,
       StudentModel,

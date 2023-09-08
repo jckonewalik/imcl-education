@@ -1,7 +1,6 @@
 import { StudentClass } from "@/domain/student-class/entity";
 import { CourseModel, LessonModel } from "@/infra/db/sequelize/course/model";
 import {
-  EnrollmentModel,
   StudentClassModel,
   StudentClassTeacherModel,
 } from "@/infra/db/sequelize/student-class/model";
@@ -29,7 +28,6 @@ describe("Sequelize Update Student Class Repository", () => {
       LessonModel,
       TeacherModel,
       StudentModel,
-      EnrollmentModel,
       StudentClassModel,
       StudentClassTeacherModel,
     ]);
@@ -41,9 +39,9 @@ describe("Sequelize Update Student Class Repository", () => {
   });
 
   it("Update a student class", async () => {
-    const { course, student: student1, teacher: teacher1 } = await makeModels();
-    const { student: student2, teacher: teacher2 } = await makeModels();
-    const { student: student3, teacher: teacher3 } = await makeModels();
+    const { course, teacher: teacher1 } = await makeModels();
+    const { teacher: teacher2 } = await makeModels();
+    const { teacher: teacher3 } = await makeModels();
 
     const createRepository = new SequelizeCreateStudentClassRepository();
 
@@ -53,7 +51,6 @@ describe("Sequelize Update Student Class Repository", () => {
       faker.random.word(),
       true
     ).build();
-    studentClass.enrollStudent(student1.toEntity());
     studentClass.addTeacher(teacher1.toEntity());
 
     await createRepository.create(studentClass);
@@ -63,18 +60,15 @@ describe("Sequelize Update Student Class Repository", () => {
     const newName = faker.random.word();
     studentClass.changeName(newName);
     studentClass.changeYear(2022);
-    studentClass.unenrollStudent(student1.toEntity());
     studentClass.removeTeacher(teacher1.toEntity());
-    studentClass.enrollStudent(student2.toEntity());
     studentClass.addTeacher(teacher2.toEntity());
-    studentClass.enrollStudent(student3.toEntity());
     studentClass.addTeacher(teacher3.toEntity());
 
     await repository.update(studentClass);
 
     const studentClassModel = await StudentClassModel.findOne({
       where: { id: studentClass.id },
-      include: ["enrollments", "teachers"],
+      include: ["teachers"],
     });
 
     expect(studentClassModel).not.toBeNull();
@@ -82,11 +76,6 @@ describe("Sequelize Update Student Class Repository", () => {
     expect(studentClassModel?.name).toBe(newName);
     expect(studentClassModel?.year).toBe(2022);
     expect(studentClassModel?.active).toBe(studentClass.active);
-    expect(studentClassModel?.enrollments?.length).toBe(2);
-    expect(
-      studentClassModel?.enrollments?.filter((e) => e.studentId == student1.id)
-        .length
-    ).toBe(0);
 
     expect(studentClassModel?.teachers?.length).toBe(2);
     expect(

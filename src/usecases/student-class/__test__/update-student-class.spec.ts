@@ -38,12 +38,14 @@ const makeStudentClass = (): StudentClass => {
 const makeStudents = () => {
   const student1 = new Student({
     id: uuid(),
+    studentClassId: faker.datatype.uuid(),
     name: faker.name.firstName(),
     gender: Gender.F,
     active: true,
   });
   const student2 = new Student({
     id: uuid(),
+    studentClassId: faker.datatype.uuid(),
     name: faker.name.firstName(),
     gender: Gender.F,
     active: true,
@@ -154,7 +156,6 @@ describe("Update Student Class Use Case", () => {
     });
     const spyUpdate = jest.spyOn(updateRepo, "update");
 
-    const newName = faker.random.word();
     const updatedClass = await sut.update({
       id: studentClass.id,
       name: studentClass.name,
@@ -163,110 +164,6 @@ describe("Update Student Class Use Case", () => {
 
     expect(spyUpdate).toHaveBeenCalledWith(updatedClass);
     expect(updatedClass.active).toBe(false);
-  });
-
-  it("updating class adding new student", async () => {
-    const studentClass = makeStudentClass();
-    const { student1, student2, studentsMap } = makeStudents();
-    const { updateRepo, sut } = makeSuts({
-      studentClass,
-      students: studentsMap,
-    });
-    const spyUpdate = jest.spyOn(updateRepo, "update");
-
-    const updatedStudentClass = await sut.update({
-      id: studentClass.id,
-      name: studentClass.name,
-      active: studentClass.active,
-      students: [
-        {
-          studentId: student1.id,
-          action: UpdateAction.A,
-        },
-        {
-          studentId: student2.id,
-          action: UpdateAction.A,
-        },
-      ],
-    });
-    expect(spyUpdate).toHaveBeenCalledWith(updatedStudentClass);
-    expect(updatedStudentClass.enrollments.length).toBe(2);
-  });
-
-  it("Fail updating class adding invalid student", async () => {
-    const studentClass = makeStudentClass();
-    const { studentsMap } = makeStudents();
-    const { sut } = makeSuts({
-      studentClass,
-      students: studentsMap,
-    });
-
-    const t = async () => {
-      await sut.update({
-        id: studentClass.id,
-        name: studentClass.name,
-        active: studentClass.active,
-        students: [
-          {
-            studentId: uuid(),
-            action: UpdateAction.A,
-          },
-        ],
-      });
-    };
-    await expect(t).rejects.toThrow(BadRequestException);
-    await expect(t).rejects.toThrow(Messages.INVALID_STUDENT);
-  });
-
-  it("updating class removing a student", async () => {
-    const studentClass = makeStudentClass();
-    const { student1, student2, studentsMap } = makeStudents();
-    studentClass.enrollStudent(student1);
-    studentClass.enrollStudent(student2);
-    const { updateRepo, sut } = makeSuts({
-      studentClass,
-      students: studentsMap,
-    });
-    const spyUpdate = jest.spyOn(updateRepo, "update");
-
-    const updatedStudentClass = await sut.update({
-      id: studentClass.id,
-      name: studentClass.name,
-      active: studentClass.active,
-      students: [
-        {
-          studentId: student1.id,
-          action: UpdateAction.D,
-        },
-      ],
-    });
-    expect(spyUpdate).toHaveBeenCalledWith(updatedStudentClass);
-    expect(updatedStudentClass.enrollments.length).toBe(1);
-  });
-
-  it("Fail updating class removing invalid student", async () => {
-    const studentClass = makeStudentClass();
-    const { studentsMap } = makeStudents();
-    const { sut } = makeSuts({
-      studentClass,
-      students: studentsMap,
-    });
-
-    const t = async () => {
-      await sut.update({
-        id: studentClass.id,
-        name: studentClass.name,
-        active: studentClass.active,
-        students: [
-          {
-            studentId: uuid(),
-            action: UpdateAction.D,
-          },
-        ],
-      });
-    };
-    await expect(t).rejects.toThrow(BadRequestException);
-    await expect(t).rejects.toThrow(Messages.INVALID_STUDENT);
   });
 
   it("updating class adding new teacher", async () => {

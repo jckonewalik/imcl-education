@@ -32,9 +32,11 @@ const makeStudentClass = ({
   name = faker.random.word(),
   active = true,
   teacherIds = [] as string[],
+  studentIds = [] as string[],
 }) => {
   return StudentClass.Builder.builder(id, courseId, name, active)
     .teacherIds(teacherIds)
+    .studentIds(studentIds)
     .build();
 };
 
@@ -50,11 +52,12 @@ const makeTeacher = ({
 
 const makeStudent = ({
   id = uuid(),
+  studentClassId = faker.datatype.uuid(),
   name = faker.name.firstName(),
   gender = Gender.M,
   active = true,
 }) => {
-  return new Student({ id, name, gender, active });
+  return new Student({ id, name, gender, active, studentClassId });
 };
 const makeCourse = ({ name = faker.random.word(), active = true }) => {
   const course = new Course(uuid(), name, active);
@@ -259,8 +262,8 @@ describe("Create Class Registry Use Case", () => {
     const student = makeStudent({});
     const studentClass = makeStudentClass({
       teacherIds: [teacher.id],
+      studentIds: [student.id],
     });
-    studentClass.enrollStudent(student);
     const { sut } = makeSut({
       studentClass,
       teacher,
@@ -286,8 +289,9 @@ describe("Create Class Registry Use Case", () => {
     const student = makeStudent({});
     const studentClass = makeStudentClass({
       teacherIds: [teacher.id],
+      studentIds: [student.id],
     });
-    studentClass.enrollStudent(student);
+
     const { createRepo, sut } = makeSut({
       studentClass,
       teacher,

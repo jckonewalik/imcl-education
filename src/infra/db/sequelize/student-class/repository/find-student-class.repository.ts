@@ -13,7 +13,7 @@ export class SequelizeFindStudentClassRepository
     }
     const studentClass = await StudentClassModel.findOne({
       where: { id },
-      include: ["teachers", "enrollments"],
+      include: ["teachers", "students"],
     });
 
     if (!studentClass) {

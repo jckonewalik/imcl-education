@@ -16,6 +16,7 @@ describe("Student Unit tests", () => {
     const t = () => {
       new Student({
         id: "",
+        studentClassId: uuid(),
         name: faker.name.firstName(),
         gender: Gender.M,
         active: true,
@@ -28,15 +29,33 @@ describe("Student Unit tests", () => {
 
   it("Fail when create a student class without a name", () => {
     const t = () => {
-      new Student({ id: uuid(), name: "", gender: Gender.F, active: true });
+      new Student({ id: uuid(), name: "", studentClassId: uuid(), gender: Gender.F, active: true });
     };
     expect(t).toThrow(InvalidValueException);
     expect(t).toThrow(Messages.MISSING_STUDENT_NAME);
   });
 
+  it("Fail when create a student without a Student Class ID", () => {
+    const phoneNumber = new PhoneNumber("99999999999", true);
+
+    const t = () => {
+      new Student({
+        id: uuid(),
+        studentClassId: "",
+        name: faker.name.firstName(),
+        gender: Gender.M,
+        active: true,
+        phone: phoneNumber,
+      });
+    };
+    expect(t).toThrow(InvalidValueException);
+    expect(t).toThrow(Messages.MISSING_STUDENT_CLASS_ID);
+  });
+
   it("Fail activating a Student already active", () => {
     const student = new Student({
       id: uuid(),
+      studentClassId: uuid(),
       name: faker.name.firstName(),
       gender: Gender.F,
       active: true,
@@ -51,6 +70,7 @@ describe("Student Unit tests", () => {
   it("Activate a Student", () => {
     const student = new Student({
       id: uuid(),
+      studentClassId: uuid(),
       name: faker.name.firstName(),
       gender: Gender.F,
       active: false,
@@ -62,6 +82,7 @@ describe("Student Unit tests", () => {
   it("Fail inactivating a Student already inactive", () => {
     const student = new Student({
       id: uuid(),
+      studentClassId: uuid(),
       name: faker.name.firstName(),
       gender: Gender.F,
       active: false,
@@ -76,6 +97,7 @@ describe("Student Unit tests", () => {
   it("Inactivate a Student", () => {
     const student = new Student({
       id: uuid(),
+      studentClassId: uuid(),
       name: faker.name.firstName(),
       gender: Gender.F,
       active: true,
@@ -87,6 +109,7 @@ describe("Student Unit tests", () => {
   it("Fail changing name using an invalid name", () => {
     const student = new Student({
       id: uuid(),
+      studentClassId: uuid(),
       name: faker.name.firstName(),
       gender: Gender.F,
       active: true,
@@ -100,6 +123,7 @@ describe("Student Unit tests", () => {
   it("Changing name", () => {
     const student = new Student({
       id: uuid(),
+      studentClassId: uuid(),
       name: faker.name.firstName(),
       gender: Gender.F,
       active: true,

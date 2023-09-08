@@ -6,8 +6,6 @@ import {
 import Messages from "@/domain/@shared/util/messages";
 import { Student } from "@/domain/student/entity/student";
 import { Teacher } from "@/domain/teacher/entity";
-import { v4 as uuid } from "uuid";
-import { Enrollment } from "./enrollment";
 
 export class StudentClass {
   private _id: string;
@@ -16,7 +14,7 @@ export class StudentClass {
   private _year?: number;
   private _active: boolean;
   private _teacherIds: string[] = [];
-  private _enrollments: Enrollment[] = [];
+  private _studentIds: string[] = [];
 
   private constructor(
     id: string,
@@ -24,7 +22,7 @@ export class StudentClass {
     name: string,
     active: boolean,
     teacherIds: string[] = [],
-    enrollments: Enrollment[] = [],
+    studentIds: string[] = [],
     year?: number
   ) {
     if (!id) {
@@ -40,7 +38,7 @@ export class StudentClass {
     this._year = year;
     this._active = active;
     this._teacherIds = teacherIds;
-    this._enrollments = enrollments;
+    this._studentIds = studentIds;
   }
 
   activate() {
@@ -64,29 +62,6 @@ export class StudentClass {
 
   changeYear(year?: number) {
     this._year = year;
-  }
-
-  enrollStudent(student: Student) {
-    if (!this._active) {
-      throw new BadRequestException(Messages.STUDENT_CLASS_INACTIVE);
-    }
-    if (!student.active) {
-      throw new BadRequestException(Messages.STUDENT_INACTIVE);
-    }
-    if (this._enrollments.find((e) => e.studentId === student.id)) {
-      return;
-    }
-    const newEnrollment = new Enrollment(uuid(), this._id, student.id);
-    this._enrollments.push(newEnrollment);
-  }
-
-  unenrollStudent(student: Student) {
-    if (!this._enrollments.find((e) => e.studentId === student.id)) {
-      return;
-    }
-    this._enrollments = this._enrollments.filter(
-      (e) => e.studentId !== student.id
-    );
   }
 
   addTeacher(teacher: Teacher) {
@@ -135,9 +110,9 @@ export class StudentClass {
     return this._courseId;
   }
 
-  get enrollments(): Enrollment[] {
-    const copy: Enrollment[] = [];
-    return copy.concat(this._enrollments);
+  get studentIds(): string[] {
+    const copy: string[] = [];
+    return copy.concat(this._studentIds);
   }
 
   get teacherIds(): string[] {
@@ -152,7 +127,7 @@ export class StudentClass {
     _year?: number;
     _active: boolean = true;
     _teacherIds: string[] = [];
-    _enrollments: Enrollment[] = [];
+    _studentIds: string[] = [];
 
     static builder(
       id: string,
@@ -168,8 +143,8 @@ export class StudentClass {
       return builder;
     }
 
-    enrollments(enrollments: Enrollment[]) {
-      this._enrollments = enrollments;
+    studentIds(studentIds: string[]) {
+      this._studentIds = studentIds;
       return this;
     }
 
@@ -190,7 +165,7 @@ export class StudentClass {
         this._name,
         this._active,
         this._teacherIds,
-        this._enrollments,
+        this._studentIds,
         this._year
       );
     }

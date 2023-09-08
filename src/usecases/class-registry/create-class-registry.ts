@@ -57,9 +57,8 @@ export class CreateClassRegistryUseCase {
       throw new BadRequestException(Messages.TEACHER_NOT_PRESENT);
     }
 
-    const students = studentClass.enrollments.map((e) => e.studentId);
     for (const id of studentIds) {
-      if (!students.includes(id)) {
+      if (!studentClass.studentIds.includes(id)) {
         throw new BadRequestException(Messages.STUDENT_NOT_ASSOCIATED);
       }
     }

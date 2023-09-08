@@ -35,8 +35,9 @@ const makeStudent = ({
   name = faker.name.firstName(),
   gender = Gender.M,
   active = true,
+  studentClassId = faker.datatype.uuid(),
 }) => {
-  return new Student({ id, name, gender, active });
+  return new Student({ id, name, gender, active, studentClassId });
 };
 
 describe("Student Class Unit tests", () => {
@@ -106,56 +107,6 @@ describe("Student Class Unit tests", () => {
 
     studentClass.inactivate();
     expect(studentClass.active).toBe(false);
-  });
-
-  it("Fail when enroll a new student if the class is inactive", () => {
-    const studentClass = makeStudentClass({ active: false });
-    const student = makeStudent({});
-
-    const t = () => {
-      studentClass.enrollStudent(student);
-    };
-
-    expect(t).toThrow(BadRequestException);
-    expect(t).toThrow(Messages.STUDENT_CLASS_INACTIVE);
-  });
-
-  it("Fail when enroll a new student if the student is inactive", () => {
-    const studentClass = makeStudentClass({});
-    const student = makeStudent({ active: false });
-
-    const t = () => {
-      studentClass.enrollStudent(student);
-    };
-
-    expect(t).toThrow(BadRequestException);
-    expect(t).toThrow(Messages.STUDENT_INACTIVE);
-  });
-
-  it("Enroll a new student", () => {
-    const studentClass = makeStudentClass({});
-    const student = makeStudent({});
-    studentClass.enrollStudent(student);
-
-    expect(studentClass.enrollments.length).toBe(1);
-  });
-
-  it("Not Enroll a student twice", () => {
-    const studentClass = makeStudentClass({});
-    const student = makeStudent({});
-    studentClass.enrollStudent(student);
-    studentClass.enrollStudent(student);
-
-    expect(studentClass.enrollments.length).toBe(1);
-  });
-
-  it("Unenroll a student", () => {
-    const studentClass = makeStudentClass({});
-    const student = makeStudent({});
-    studentClass.enrollStudent(student);
-    expect(studentClass.enrollments.length).toBe(1);
-    studentClass.unenrollStudent(student);
-    expect(studentClass.enrollments.length).toBe(0);
   });
 
   it("Fail adding a new teacher if the class is inactive", () => {

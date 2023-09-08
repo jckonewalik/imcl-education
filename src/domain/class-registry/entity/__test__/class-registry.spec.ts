@@ -146,6 +146,7 @@ describe("Class Registry Unit tests", () => {
     const studentId = uuid();
     const student = new Student({
       id: studentId,
+      studentClassId: faker.datatype.uuid(),
       name: faker.name.firstName(),
       gender: Gender.F,
       active: true,
@@ -165,6 +166,7 @@ describe("Class Registry Unit tests", () => {
   it("Fail add inactive student on class registry", () => {
     const student = new Student({
       id: uuid(),
+      studentClassId: faker.datatype.uuid(),
       name: faker.name.firstName(),
       gender: Gender.F,
       active: false,
@@ -185,6 +187,7 @@ describe("Class Registry Unit tests", () => {
   it("Add student on class registry", () => {
     const student = new Student({
       id: uuid(),
+      studentClassId: faker.datatype.uuid(),
       name: faker.name.firstName(),
       gender: Gender.F,
       active: true,
@@ -203,6 +206,7 @@ describe("Class Registry Unit tests", () => {
   it("Remove student on class registry", () => {
     const student = new Student({
       id: uuid(),
+      studentClassId: faker.datatype.uuid(),
       name: faker.name.firstName(),
       gender: Gender.F,
       active: true,

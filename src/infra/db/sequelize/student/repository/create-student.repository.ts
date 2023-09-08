@@ -8,6 +8,7 @@ export class SequelizeCreateStudentRepository
   async create(entity: Student): Promise<void> {
     await StudentModel.create({
       id: entity.id,
+      studentClassId: entity.studentClassId,
       name: entity.name,
       gender: entity.gender.toString(),
       phoneNumber: entity.phone?.number,

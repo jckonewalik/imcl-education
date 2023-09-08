@@ -9,7 +9,6 @@ import {
 import { makeModels } from "@/infra/db/sequelize/class-registry/repository/__test__/util";
 import { CourseModel, LessonModel } from "@/infra/db/sequelize/course/model";
 import {
-  EnrollmentModel,
   StudentClassModel,
   StudentClassTeacherModel,
 } from "@/infra/db/sequelize/student-class/model";
@@ -45,9 +44,10 @@ const createTeacher = async (): Promise<TeacherModel> => {
   return teacher;
 };
 
-const createStudent = async (): Promise<StudentModel> => {
+const createStudent = async ({ studentClass }): Promise<StudentModel> => {
   const student = await StudentModel.create({
     id: uuid(),
+    studentClassId: studentClass.id,
     name: `${faker.name.firstName()} ${faker.name.lastName()}`,
     gender: Gender.M,
     active: true,
@@ -119,7 +119,6 @@ describe("Student Classes Controller Tests", () => {
           CourseModel,
           LessonModel,
           StudentClassModel,
-          EnrollmentModel,
           StudentClassTeacherModel,
           TeacherModel,
           StudentModel,
@@ -184,7 +183,6 @@ describe("Student Classes Controller Tests", () => {
 
   it(`/PUT student-classes`, async () => {
     const course = await createCourse();
-    const student = await createStudent();
     const teacher = await createTeacher();
     const studentClass = await StudentClassModel.create({
       id: uuid(),
@@ -192,6 +190,7 @@ describe("Student Classes Controller Tests", () => {
       name: faker.random.word(),
       active: true,
     });
+    const student = await createStudent({ studentClass });
     const newName = faker.random.word();
 
     const response = await request(app.getHttpServer())
@@ -223,13 +222,12 @@ describe("Student Classes Controller Tests", () => {
 
     const result = await StudentClassModel.findOne({
       where: { id: studentClass.id },
-      include: ["teachers", "enrollments"],
+      include: ["teachers"],
     });
     expect(result).toBeDefined();
     expect(result?.name).toBe(newName);
     expect(result?.year).toBe(2022);
     expect(result?.teachers.length).toBe(1);
-    expect(result?.enrollments.length).toBe(1);
   });
 
   it(`404 /PUT student-classes with invalid student class`, async () => {
