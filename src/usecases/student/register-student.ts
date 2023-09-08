@@ -1,5 +1,8 @@
 import { Gender } from "@/domain/@shared/enums/gender";
-import { EntityNotFoundException, InvalidValueException } from "@/domain/@shared/exceptions";
+import {
+  EntityNotFoundException,
+  InvalidValueException,
+} from "@/domain/@shared/exceptions";
 import Messages from "@/domain/@shared/util/messages";
 import { PhoneNumber } from "@/domain/@shared/value-objects";
 import { FindStudentClassRepository } from "@/domain/student-class/repository";
@@ -18,12 +21,15 @@ type RegisterProps = {
 };
 
 export class RegisterStudentUseCase {
-  constructor(private readonly createRepo: CreateStudentRepository,
-    private readonly findStudentClassRepo: FindStudentClassRepository) { }
+  constructor(
+    private readonly createRepo: CreateStudentRepository,
+    private readonly findStudentClassRepo: FindStudentClassRepository
+  ) {}
 
   async register(data: RegisterProps): Promise<Student> {
-
-    const studentClass = await this.findStudentClassRepo.find(data.studentClassId);
+    const studentClass = await this.findStudentClassRepo.find(
+      data.studentClassId
+    );
     if (!studentClass) {
       throw new EntityNotFoundException(Messages.INVALID_STUDENT_CLASS);
     }

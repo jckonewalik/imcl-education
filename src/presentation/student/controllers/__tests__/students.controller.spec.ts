@@ -74,6 +74,7 @@ describe("Students Controller Tests", () => {
     expect(result).toBeDefined();
     expect(result?.length).toBe(1);
     expect(result?.[0].name).toBe(name);
+    expect(result?.[0].studentClassId).toBe(studentClass.id);
   });
 
   it(`/POST students with bad request`, () => {
@@ -121,6 +122,7 @@ describe("Students Controller Tests", () => {
     const result = await StudentModel.findOne({ where: { id: student.id } });
     expect(result).toBeDefined();
     expect(result?.phoneNumber).toBe(phoneNumber);
+    expect(result?.studentClassId).toBe(studentClass.id);
     expect(result?.phoneIsWhatsapp).toBeTruthy();
   });
 
